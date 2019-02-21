@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Employees]
+﻿CREATE TABLE [InputData].[Employees]
 (
 	[IdEmployee] INT NOT NULL PRIMARY KEY IDENTITY, 
     [Name] NVARCHAR(99) NOT NULL, 

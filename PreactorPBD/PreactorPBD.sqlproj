@@ -60,6 +60,7 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Tables" />
+    <Folder Include="Schemas" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -83,6 +84,7 @@
     <Build Include="Tables\UseConstraint.sql" />
     <Build Include="Tables\Calendar.sql" />
     <Build Include="Tables\Specifications.sql" />
+    <Build Include="Schemas\InputData.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
