@@ -3,7 +3,7 @@
 	[IdSpecification] INT NOT NULL PRIMARY KEY UNIQUE IDENTITY, 
     [MaterialId] INT NOT NULL, 
     [Norma] FLOAT NOT NULL, 
-    [NomenclatureId] INT NOT NULL, 
+    [OperationId] INT NOT NULL, 
     CONSTRAINT [FK_Specifications_ToMaterial] FOREIGN KEY (MaterialId) REFERENCES [InputData].Material(IdMaterial), 
-    CONSTRAINT [FK_Specifications_ToNomenclature] FOREIGN KEY (NomenclatureId) REFERENCES [InputData].[Nomenclature](IdNomenclature)
+    CONSTRAINT [FK_Specifications_ToOperation] FOREIGN KEY ([OperationId]) REFERENCES [InputData].[Operations](IdOperation)
 )

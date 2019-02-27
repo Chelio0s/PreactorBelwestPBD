@@ -4,8 +4,9 @@
     [Title] NVARCHAR(99) NOT NULL, 
     [NumberOp] FLOAT NOT NULL, 
     [NomenclatureId] INT NOT NULL, 
-    [ProfessionGroupId] INT NOT NULL, 
-    [Type] BIT NOT NULL, 
-    CONSTRAINT [FK_Operations_ToProfGroup] FOREIGN KEY (ProfessionGroupId) REFERENCES [InputData].[ProfessionGroups](IdProfessionGroups), 
+    [ProfessionId] INT NOT NULL, 
+    [TypeTime] BIT NOT NULL, 
+    [CategoryProfession] INT NOT NULL, 
+    CONSTRAINT [FK_Operations_ToProfGroup] FOREIGN KEY ([ProfessionId]) REFERENCES [InputData].[Professions](IdProfession), 
     CONSTRAINT [FK_Operations_ToNomenclature] FOREIGN KEY ([NomenclatureId]) REFERENCES [InputData].[Nomenclature](IdNomenclature)
 )

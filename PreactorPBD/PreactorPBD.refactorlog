@@ -196,4 +196,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="NomenclatureId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="2c7a0240-f5b9-4301-93f5-161e52abd079" ChangeDateTime="02/27/2019 11:42:39">
+    <Property Name="ElementName" Value="[InputData].[Specifications].[NomenclatureId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Specifications]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OperationId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="99668f61-a34e-4947-8380-93ddca8a2940" ChangeDateTime="02/27/2019 11:49:42">
+    <Property Name="ElementName" Value="[InputData].[Operations].[Category]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CategoryProfession" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ad1467bf-e719-4241-a118-a7258f21c11d" ChangeDateTime="02/27/2019 11:49:47">
+    <Property Name="ElementName" Value="[InputData].[Operations].[ProfessionGroupId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ProfessionId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c64cbfed-a288-4fbe-888d-bb6a009bafe8" ChangeDateTime="02/27/2019 11:50:16">
+    <Property Name="ElementName" Value="[InputData].[Operations].[Type]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="TypeTime" />
+  </Operation>
 </Operations>
