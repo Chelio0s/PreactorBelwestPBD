@@ -72,8 +72,6 @@
     <Build Include="Tables\Nomenclature.sql" />
     <Build Include="Tables\Employees.sql" />
     <Build Include="Tables\Professions.sql" />
-    <Build Include="Tables\ProfessionGroups.sql" />
-    <Build Include="Tables\ProfessionsInGroup.sql" />
     <Build Include="Tables\EmployeesInProffesion.sql" />
     <Build Include="Tables\Material.sql" />
     <Build Include="Tables\SupplyOMTS.sql" />
