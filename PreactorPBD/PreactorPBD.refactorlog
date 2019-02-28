@@ -224,4 +224,53 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="TypeTime" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="5e50fb81-eb07-4ccd-a740-a9b29a0be11c" ChangeDateTime="02/28/2019 07:45:20">
+    <Property Name="ElementName" Value="[InputData].[Operations].[CategoryProfession]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CategoryOperation" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8aeaf543-8754-465b-a0ad-897af170ea16" ChangeDateTime="02/28/2019 08:34:28">
+    <Property Name="ElementName" Value="[InputData].[Operations].[CategoryOperation]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Category" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f8f39658-25ab-4da1-8fa2-12a1aadca5db" ChangeDateTime="02/28/2019 08:34:37">
+    <Property Name="ElementName" Value="[InputData].[Operations].[Category]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CategoryOperation" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ff79c178-4735-4125-b5a3-99e73352fe52" ChangeDateTime="02/28/2019 08:34:46">
+    <Property Name="ElementName" Value="[InputData].[Operations].[NomenclatureId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SemiProductID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="245feca3-0769-4c72-9226-f81939d083db" ChangeDateTime="02/28/2019 08:57:07">
+    <Property Name="ElementName" Value="[InputData].[EntrySemyProduct].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntrySemyProduct]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdSemyProduct" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f85f5af7-6376-4416-9a0f-8351255e0056" ChangeDateTime="02/28/2019 10:13:39">
+    <Property Name="ElementName" Value="[InputData].[EntrySemyProduct].[IdSemyProduct]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntrySemyProduct]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdSemiProduct" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0d41f4bd-9531-47b1-aa16-e715d33e936f" ChangeDateTime="02/28/2019 10:13:42">
+    <Property Name="ElementName" Value="[InputData].[EntrySemyProduct].[IdSemyProductChild]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntrySemyProduct]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdSemiProductChild" />
+  </Operation>
 </Operations>

@@ -83,6 +83,8 @@
     <Build Include="Tables\Calendar.sql" />
     <Build Include="Tables\Specifications.sql" />
     <Build Include="Schemas\InputData.sql" />
+    <Build Include="Tables\SemiProduct.sql" />
+    <Build Include="Tables\EntrySemyProduct.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
