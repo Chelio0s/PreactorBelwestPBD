@@ -1,0 +1,6 @@
+﻿CREATE TABLE [InputData].[Areas]
+(
+	[IdArea] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Code] NVARCHAR(50) NOT NULL, 
+    [Title] NVARCHAR(99) NOT NULL
+)

@@ -273,4 +273,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdSemiProductChild" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="73452fb1-b684-41fc-8214-7ca01b0e71e7" ChangeDateTime="03/04/2019 06:33:35">
+    <Property Name="ElementName" Value="[InputData].[Areas].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Areas]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdArea" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fa9276d3-074e-4431-834b-f7f82484a8ee" ChangeDateTime="03/04/2019 06:37:01">
+    <Property Name="ElementName" Value="[InputData].[FK_EmployeesInProffesion_ToProfession]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[InputData].[EmployeesInProfession]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_EmployeesInProfession_ToProfession]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4a50926b-68a2-4a9e-95af-a4acddb80f17" ChangeDateTime="03/04/2019 06:39:12">
+    <Property Name="ElementName" Value="[InputData].[FK_EmployeesInProffesion_ToEmployee]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[InputData].[EmployeesInProfession]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_EmployeesInProfession_ToEmployee]" />
+  </Operation>
 </Operations>

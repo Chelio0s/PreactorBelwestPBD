@@ -25,6 +25,8 @@
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <DefaultSchema>InputData</DefaultSchema>
     <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
+    <Trustworthy>True</Trustworthy>
+    <PermissionSet>UNSAFE</PermissionSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -61,6 +63,9 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="Schemas" />
+    <Folder Include="Maintenance" />
+    <Folder Include="CLR" />
+    <Folder Include="Users" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -72,7 +77,7 @@
     <Build Include="Tables\Nomenclature.sql" />
     <Build Include="Tables\Employees.sql" />
     <Build Include="Tables\Professions.sql" />
-    <Build Include="Tables\EmployeesInProffesion.sql" />
+    <Build Include="Tables\EmployeesInProfession.sql" />
     <Build Include="Tables\Material.sql" />
     <Build Include="Tables\SupplyOMTS.sql" />
     <Build Include="Tables\BalanceOMTS.sql" />
@@ -84,9 +89,28 @@
     <Build Include="Tables\Specifications.sql" />
     <Build Include="Schemas\InputData.sql" />
     <Build Include="Tables\SemiProduct.sql" />
-    <Build Include="Tables\EntrySemyProduct.sql" />
+    <Build Include="Tables\EntrySemiProduct.sql" />
+    <Build Include="Tables\Areas.sql" />
+    <Build Include="Users\Login_kovalkov.sql" />
+    <Build Include="Users\ServerRoleMembership_kovalkov.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PreactorPBD.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CLR\OracleSetting.cs" />
+    <Compile Include="CLR\pc_Select_Oralce_SAP.cs" />
+    <Compile Include="CLR\pc_Select_Oralce_MPU.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\..\SQLCLR\Assemblies\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
