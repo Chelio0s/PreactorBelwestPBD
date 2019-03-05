@@ -11,7 +11,7 @@ public partial class StoredProcedures
     [Microsoft.SqlServer.Server.SqlProcedure]
     public static void pc_Select_Oralce_MPU (SqlString selectCommandText)
     {
-        using (OracleConnection con = new OracleConnection(OracleSettings.GetConnectionString(OracleDataBase.SAP)))
+        using (OracleConnection con = new OracleConnection(OracleSettings.GetConnectionString(OracleDataBase.MPU)))
         {
             con.Open();
 
@@ -68,6 +68,7 @@ public partial class StoredProcedures
                     if (first)
                     {
                         SqlContext.Pipe.SendResultsStart(record);
+                        SqlContext.Pipe.SendResultsRow(record);
                         first = false;
                     }
                     else
@@ -75,7 +76,12 @@ public partial class StoredProcedures
                         SqlContext.Pipe.SendResultsRow(record);
                     }
                 }
-                SqlContext.Pipe.SendResultsEnd();
+
+                if (SqlContext.Pipe.IsSendingResults)
+                {
+                    SqlContext.Pipe.SendResultsEnd();
+                }
+                
             }
             catch (Exception e)
             {

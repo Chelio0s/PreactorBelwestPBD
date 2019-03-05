@@ -66,6 +66,9 @@
     <Folder Include="Maintenance" />
     <Folder Include="CLR" />
     <Folder Include="Users" />
+    <Folder Include="Views" />
+    <Folder Include="Functions" />
+    <Folder Include="Entity" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -104,6 +107,7 @@
     <Compile Include="CLR\OracleSetting.cs" />
     <Compile Include="CLR\pc_Select_Oralce_SAP.cs" />
     <Compile Include="CLR\pc_Select_Oralce_MPU.cs" />
+    <Compile Include="CLR\ctvf_GetMkz_Art.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
