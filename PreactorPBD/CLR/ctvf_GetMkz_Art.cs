@@ -7,7 +7,7 @@ using PreactorPBD;
 public partial class UserDefinedFunctions
 {
     [Microsoft.SqlServer.Server.SqlFunction(
-        FillRowMethodName = "FillRow", SystemDataAccess = SystemDataAccessKind.Read,
+        FillRowMethodName = "FillRowMkz_Art", SystemDataAccess = SystemDataAccessKind.Read,
         DataAccess = DataAccessKind.Read,
         TableDefinition =
             "ID nvarchar(100), " +
@@ -16,9 +16,9 @@ public partial class UserDefinedFunctions
             "NUMBER_ART nvarchar(100)," +
             "COLOR nvarchar(150), " +
             "NAME_MATERIAL nvarchar(150), " +
-            "COLOR_EGLANDED varchar(150), "+
-            "MAT_UP varchar(150), "+
-            "SEASON varchar(150)")]
+            "COLOR_EGLANDED nvarchar(150), "+
+            "MAT_UP nvarchar(150), "+
+            "SEASON nvarchar(150)")]
 
     public static IEnumerable ctvf_GetMkz_Art()
     {
@@ -56,7 +56,7 @@ public partial class UserDefinedFunctions
         }
     }
 
-    public static void FillRow(object obj, out SqlString ID, out SqlString ID_Model, out SqlString ART, out SqlString NUMBER_ART,
+    public static void FillRowMkz_Art(object obj, out SqlString ID, out SqlString ID_Model, out SqlString ART, out SqlString NUMBER_ART,
         out SqlString COLOR,
         out SqlString NAME_MATERIAL, out SqlString COLOR_EGLANDED, out SqlString MAT_UP, out SqlString SEASON)
     {
