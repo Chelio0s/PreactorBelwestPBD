@@ -1,0 +1,9 @@
+﻿CREATE TABLE [SupportData].[DepartComposition]
+(
+	[IdDepComposition] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [DepartmentId] INT NOT NULL, 
+    [ResourcesGroupId] INT NOT NULL, 
+    CONSTRAINT [FK_DepartComposition_ToDepartments] FOREIGN KEY ([DepartmentId]) REFERENCES [InputData].[Departments]([IdDepartment])
+	ON UPDATE CASCADE, 
+    CONSTRAINT [FK_DepartComposition_ToResourcesGroup] FOREIGN KEY (ResourcesGroupId) REFERENCES [InputData].[ResourcesGroup](IdResourceGroup)
+)

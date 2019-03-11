@@ -294,4 +294,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[FK_EmployeesInProfession_ToEmployee]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="5fb682a3-924b-4a40-b9ee-91925f97ba8d" ChangeDateTime="03/06/2019 09:38:04">
+    <Property Name="ElementName" Value="[SupportData].[DepartComposition].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[DepartComposition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdDepComposition" />
+  </Operation>
 </Operations>
