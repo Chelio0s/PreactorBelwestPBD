@@ -69,6 +69,8 @@
     <Folder Include="Views" />
     <Folder Include="Functions" />
     <Folder Include="Entity" />
+    <Folder Include="Procedures" />
+    <Folder Include="Maintenance\Servers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -99,6 +101,9 @@
     <Build Include="Tables\EmployeesCalendar.sql" />
     <Build Include="Schemas\SupportData.sql" />
     <Build Include="Tables\DepartComposition.sql" />
+    <Build Include="Tables\GroupKOB.sql" />
+    <Build Include="Procedures\sp_IncludeEquipmentIntoGroups.sql" />
+    <Build Include="Maintenance\Servers\RKV.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

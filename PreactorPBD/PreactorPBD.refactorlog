@@ -301,4 +301,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdDepComposition" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="6576fad7-24e7-42a6-a6d9-ad0643829d6e" ChangeDateTime="03/11/2019 08:29:20">
+    <Property Name="ElementName" Value="[SupportData].[FK_GroupKOB_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[SupportData].[GroupKOB]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_GroupKOB_ToGroups]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e4126b61-5151-4c16-8815-a62d3644168c" ChangeDateTime="03/11/2019 08:37:05">
+    <Property Name="ElementName" Value="[SupportData].[GroupKOB].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[GroupKOB]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdGroupKOB" />
+  </Operation>
 </Operations>
