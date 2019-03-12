@@ -106,6 +106,8 @@
     <Build Include="Maintenance\Servers\RKV.sql" />
     <Build Include="Tables\GroupsOperations.sql" />
     <Build Include="Tables\GroupKTOP.sql" />
+    <Build Include="Tables\SequenceOperations.sql" />
+    <Build Include="Tables\SimpleProduct.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

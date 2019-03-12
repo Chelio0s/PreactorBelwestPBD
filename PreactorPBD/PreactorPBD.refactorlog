@@ -329,4 +329,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdGroupKTOP" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b87c0452-57d7-4d92-a5c1-e9ff87fc99ff" ChangeDateTime="03/12/2019 08:12:16">
+    <Property Name="ElementName" Value="[SupportData].[SequenceOperations].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[SequenceOperations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdSeqOperation" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2b155389-f61b-4f40-81e4-9e10713039c3" ChangeDateTime="03/12/2019 08:12:24">
+    <Property Name="ElementName" Value="[SupportData].[SequenceOperations].[[OperOrder]]]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[SequenceOperations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OperOrder" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4080df86-7674-407a-bf38-75b21c07b657" ChangeDateTime="03/12/2019 08:14:40">
+    <Property Name="ElementName" Value="[SupportData].[SimpleProduct].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[SimpleProduct]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdSimpleProduct" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="85ed9e2c-655c-4b16-b384-636571380dbd" ChangeDateTime="03/12/2019 08:15:05">
+    <Property Name="ElementName" Value="[SupportData].[FK_SequenceOperations_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[SupportData].[SequenceOperations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_SequenceOperations_ToSimpleProduct]" />
+  </Operation>
 </Operations>
