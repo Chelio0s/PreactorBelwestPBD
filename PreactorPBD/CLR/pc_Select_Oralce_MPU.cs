@@ -86,6 +86,7 @@ public partial class StoredProcedures
             catch (Exception e)
             {
                 SqlContext.Pipe.ExecuteAndSend(new SqlCommand(string.Format("RAISERROR ( '{0}', 11, 1)", e.Message)));
+               
             }
 
         }

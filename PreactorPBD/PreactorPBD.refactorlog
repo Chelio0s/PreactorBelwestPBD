@@ -315,4 +315,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdGroupKOB" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="a3145ad4-b07a-42e3-b6b6-7ab04e7b9e3d" ChangeDateTime="03/12/2019 07:28:42">
+    <Property Name="ElementName" Value="[SupportData].[GroupsOperations].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[GroupsOperations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdGroupOperations" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="326816e9-6abf-408e-a81e-e3b82f081fb2" ChangeDateTime="03/12/2019 07:30:29">
+    <Property Name="ElementName" Value="[InputData].[GroupKTOP].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[GroupKTOP]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdGroupKTOP" />
+  </Operation>
 </Operations>

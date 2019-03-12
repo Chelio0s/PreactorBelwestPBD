@@ -104,6 +104,8 @@
     <Build Include="Tables\GroupKOB.sql" />
     <Build Include="Procedures\sp_IncludeEquipmentIntoGroups.sql" />
     <Build Include="Maintenance\Servers\RKV.sql" />
+    <Build Include="Tables\GroupsOperations.sql" />
+    <Build Include="Tables\GroupKTOP.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
