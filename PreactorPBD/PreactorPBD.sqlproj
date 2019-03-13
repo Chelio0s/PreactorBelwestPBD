@@ -71,6 +71,8 @@
     <Folder Include="Entity" />
     <Folder Include="Procedures" />
     <Folder Include="Maintenance\Servers" />
+    <Folder Include="Triggers" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -108,6 +110,13 @@
     <Build Include="Tables\GroupKTOP.sql" />
     <Build Include="Tables\SequenceOperations.sql" />
     <Build Include="Tables\SimpleProduct.sql" />
+    <Build Include="Tables\Orgunit.sql" />
+    <Build Include="Tables\EntrySimpleProduct.sql" />
+    <Build Include="Functions\udf_GetRKVCodeProfession.sql" />
+    <Build Include="Functions\udf_GetSAPCodeProfession.sql" />
+    <Build Include="Triggers\tgr_DDLListChange.sql" />
+    <Build Include="Schemas\LogData.sql" />
+    <Build Include="Tables\Log.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -131,5 +140,8 @@
     <Reference Include="Oracle.ManagedDataAccess">
       <HintPath>..\..\SQLCLR\Assemblies\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\AddExtendedProp.sql" />
   </ItemGroup>
 </Project>

@@ -357,4 +357,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[FK_SequenceOperations_ToSimpleProduct]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="2f904cfb-894f-4b79-8d2d-84ab163c2dc1" ChangeDateTime="03/13/2019 06:48:27">
+    <Property Name="ElementName" Value="[InputData].[Orgunit].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Orgunit]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="orguinit" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="34cf54d3-9529-4382-86d2-f1ea72144a26" ChangeDateTime="03/13/2019 08:52:08">
+    <Property Name="ElementName" Value="[SupportData].[EntrySimpleProduct].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[EntrySimpleProduct]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SimpleProductId" />
+  </Operation>
 </Operations>
