@@ -118,6 +118,8 @@
     <Build Include="Schemas\LogData.sql" />
     <Build Include="Tables\Log.sql" />
     <Build Include="Functions\udf_GetKTOPTitle.sql" />
+    <Build Include="Tables\AltOperations.sql" />
+    <Build Include="Tables\AltOperationRule.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
