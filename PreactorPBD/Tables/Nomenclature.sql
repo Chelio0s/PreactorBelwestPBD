@@ -6,5 +6,5 @@
     [Size] FLOAT NOT NULL, 
     [CountPersent] FLOAT NOT NULL, 
     CONSTRAINT [FK_Nomenclature_ToArticle] FOREIGN KEY (ArticleID) REFERENCES [InputData].[Article]([IdArticle])
-
+	ON UPDATE CASCADE ON DELETE CASCADE
 )

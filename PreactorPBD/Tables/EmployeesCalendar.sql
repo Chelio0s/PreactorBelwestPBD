@@ -5,4 +5,5 @@
 	[Start] DATETIME NOT NULL,
 	[End] DATETIME NOT NULL, 
     CONSTRAINT [FK_EmployeesCalendar_ToEmployees] FOREIGN KEY (EmployeeID) REFERENCES InputData.Employees(IdEmployee)
+	ON UPDATE CASCADE ON DELETE CASCADE
 )

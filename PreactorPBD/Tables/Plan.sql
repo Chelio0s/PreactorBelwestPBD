@@ -6,4 +6,5 @@
     [DateTime] DATETIME NULL, 
     [Priority] FLOAT NOT NULL, 
     CONSTRAINT [FK_Plan_ToArticle] FOREIGN KEY (ArticleId) REFERENCES [InputData].Article(IdArticle)
+	ON UPDATE CASCADE ON DELETE CASCADE
 )

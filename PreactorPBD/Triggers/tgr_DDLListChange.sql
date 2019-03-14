@@ -36,10 +36,9 @@ VALUES
 ,GETDATE()
 ,@dataXML
 ,(
- SELECT  dmec.client_net_address 
+  SELECT  dmec.client_net_address 
   FROM sys.sysprocesses sp 
   JOIN sys.dm_exec_connections dmec ON sp.spid = dmec.session_id
   WHERE sp.spid = @@SPID)
-
-) --— во сколь изменено
+)
 END

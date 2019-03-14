@@ -9,4 +9,5 @@
     [CategoryOperation] INT NOT NULL, 
     CONSTRAINT [FK_Operations_ToProfGroup] FOREIGN KEY ([ProfessionId]) REFERENCES [InputData].[Professions](IdProfession), 
     CONSTRAINT [FK_Operations_ToSemiProduct] FOREIGN KEY ([SemiProductID]) REFERENCES [InputData].[SemiProducts](IdSemiProduct)
+	ON UPDATE CASCADE ON DELETE CASCADE
 )

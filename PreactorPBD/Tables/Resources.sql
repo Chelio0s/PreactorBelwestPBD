@@ -6,6 +6,6 @@
     [DepartmentId] INT NOT NULL, 
     [KOB] INT NOT NULL, 
     CONSTRAINT [FK_Resources_ToDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [InputData].[Departments](IdDepartment)
-	ON UPDATE CASCADE
+	ON UPDATE CASCADE ON DELETE CASCADE
 
 )

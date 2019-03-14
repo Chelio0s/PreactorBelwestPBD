@@ -4,4 +4,5 @@
     [Title] NVARCHAR(99) NOT NULL UNIQUE, 
     [NomenclatureID] INT NOT NULL, 
     CONSTRAINT [FK_SemiProducts_ToNomenclature] FOREIGN KEY ([NomenclatureID]) REFERENCES [InputData].Nomenclature(IdNomenclature)
+	ON UPDATE CASCADE ON DELETE CASCADE
 )

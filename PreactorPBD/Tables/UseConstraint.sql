@@ -6,4 +6,5 @@
     [Count] INT NOT NULL, 
     CONSTRAINT [FK_UseConstraint_ToResources] FOREIGN KEY (ResourceId) REFERENCES [InputData].[Resources](IdResource), 
     CONSTRAINT [FK_UseConstraint_ToConstraint] FOREIGN KEY (ConstraintId) REFERENCES [InputData].[SecondaryConstraints](IdSecondaryConstraint)
-	)
+	ON UPDATE CASCADE ON DELETE CASCADE
+)
