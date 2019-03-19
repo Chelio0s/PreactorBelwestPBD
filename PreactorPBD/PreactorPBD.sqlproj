@@ -120,6 +120,10 @@
     <Build Include="Functions\udf_GetKTOPTitle.sql" />
     <Build Include="Tables\AltOperations.sql" />
     <Build Include="Tables\AltOperationRule.sql" />
+    <Build Include="Procedures\sp_InsertProfsIntoPreactor.sql" />
+    <Build Include="Procedures\sp_InsertOrgUnit.sql" />
+    <Build Include="Procedures\sp_InsertActualEmployees.sql" />
+    <Build Include="Procedures\sp_InsertEmployeesInProffs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

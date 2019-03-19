@@ -1,6 +1,8 @@
 ﻿CREATE TABLE [InputData].[Employees]
 (
-	[IdEmployee] INT NOT NULL PRIMARY KEY IDENTITY, 
     [Name] NVARCHAR(99) NOT NULL, 
-    [TabNum] NVARCHAR(99) NOT NULL UNIQUE
+    [TabNum] VARCHAR(15) NOT NULL UNIQUE, 
+    [Orgunit] INT NOT NULL, 
+    CONSTRAINT [FK_Employees_ToOrgunit] FOREIGN KEY ([Orgunit]) REFERENCES [SupportData].[Orgunit]([OrgUinit]), 
+    PRIMARY KEY ([TabNum])
 )

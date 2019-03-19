@@ -371,4 +371,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="SimpleProductId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b645861d-c257-41b7-b3fa-68778cd63819" ChangeDateTime="03/15/2019 12:41:15">
+    <Property Name="ElementName" Value="[InputData].[Employees].[ORGUNIT]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Employees]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OrgunitId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="01494819-779c-4395-8298-2935696a75e4" ChangeDateTime="03/15/2019 12:42:00">
+    <Property Name="ElementName" Value="[InputData].[Employees].[OrgunitId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Employees]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Orgunit" />
+  </Operation>
 </Operations>
