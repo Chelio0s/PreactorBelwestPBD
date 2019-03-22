@@ -448,4 +448,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdWorkDay" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="c6072163-7e18-4bc1-922b-7265b725f4b3" ChangeDateTime="03/22/2019 10:45:53">
+    <Property Name="ElementName" Value="[SupportData].[SettingShift].[OrgUnitId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[SettingShift]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AreaId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a4e2a39f-e9f4-4179-b057-6e3e0f14c418" ChangeDateTime="03/22/2019 10:46:58">
+    <Property Name="ElementName" Value="[SupportData].[Cicle].[OrgUnitId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[Cicle]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AreaId" />
+  </Operation>
 </Operations>

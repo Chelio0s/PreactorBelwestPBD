@@ -91,7 +91,7 @@
     <Build Include="Tables\Plan.sql" />
     <Build Include="Tables\Operation.sql" />
     <Build Include="Tables\OperationInResource.sql" />
-    <Build Include="Tables\UseConstraint.sql" />
+    <Build Include="Tables\UseConstraintResources.sql" />
     <Build Include="Tables\Calendar.sql" />
     <Build Include="Tables\Specifications.sql" />
     <Build Include="Schemas\InputData.sql" />
@@ -130,6 +130,7 @@
     <Build Include="Tables\SettingShift.sql" />
     <Build Include="Tables\WorkDays.sql" />
     <Build Include="Procedures\sp_InsertWorkDays.sql" />
+    <Build Include="Tables\UseConstraintOperations.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -138,13 +139,13 @@
     <None Include="PreactorPBD.publish.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLR\OracleSetting.cs" />
     <Compile Include="CLR\pc_Select_Oralce_SAP.cs" />
     <Compile Include="CLR\pc_Select_Oralce_MPU.cs" />
     <Compile Include="CLR\ctvf_GetMkz_Art.cs" />
     <Compile Include="CLR\ctvf_GetSizes.cs" />
     <Compile Include="CLR\pc_InsertEquipmentIntoPreactorDB.cs" />
     <Compile Include="Entity\Equipment.cs" />
+    <Compile Include="Entity\OracleSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
