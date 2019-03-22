@@ -9,7 +9,7 @@ if object_id(N'tempdb..#tempEmp',N'U') is not null drop table #tempEmp
 create table #tempEmp(tabno varchar(15), orgunit varchar(15), fio varchar(99), 
 trfst varchar(5), trfs1 varchar(5), persg varchar(5), stell varchar(20), stext1 varchar(99))
 insert #tempEmp
-exec [PreactorSDB].[InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
+exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
     tabno,
     orgunit,
     fio,
@@ -25,12 +25,12 @@ FROM
  ALTER TABLE #tempEmp
   ALTER COLUMN  STELL VARCHAR(99) COLLATE Cyrillic_General_BIN NULL;
 
- DELETE FROM [PreactorSDB].[InputData].[Employees]
- INSERT INTO [PreactorSDB].[InputData].[Employees]
+ DELETE FROM [InputData].[Employees]
+ INSERT INTO [InputData].[Employees]
            ([Name]
            ,[TabNum]
            ,[Orgunit])
- select fio, tabno, orgunit from #tempEmp as sell
- INNER JOIN [PreactorSDB].[InputData].[Professions] as prof ON sell.stell = prof.IdProfession
+ select distinct fio, tabno, orgunit from #tempEmp as sell
+ INNER JOIN [InputData].[Professions] as prof ON sell.stell = prof.IdProfession
  order by fio
 RETURN 0

@@ -124,6 +124,12 @@
     <Build Include="Procedures\sp_InsertOrgUnit.sql" />
     <Build Include="Procedures\sp_InsertActualEmployees.sql" />
     <Build Include="Procedures\sp_InsertEmployeesInProffs.sql" />
+    <Build Include="Procedures\sp_CheckEmployees.sql" />
+    <Build Include="Tables\Shift.sql" />
+    <Build Include="Tables\Cicle.sql" />
+    <Build Include="Tables\SettingShift.sql" />
+    <Build Include="Tables\WorkDays.sql" />
+    <Build Include="Procedures\sp_InsertWorkDays.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

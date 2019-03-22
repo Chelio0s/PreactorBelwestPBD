@@ -1,6 +1,9 @@
 ﻿CREATE TABLE [SupportData].[Orgunit]
 (
-	[OrgUinit] INT NOT NULL PRIMARY KEY, 
-    [Kcex] INT NOT NULL, 
-    [Title] NVARCHAR(99) NOT NULL UNIQUE
+	[OrgUnit] INT NOT NULL PRIMARY KEY, 
+    [AreaId] INT NULL, 
+    [Title] NVARCHAR(99) NOT NULL UNIQUE, 
+    [Crew] NVARCHAR(1) NULL, 
+    CONSTRAINT [FK_Orgunit_ToArea] FOREIGN KEY (AreaId) REFERENCES [InputData].[Areas](IdArea)
+	ON UPDATE CASCADE ON DELETE CASCADE
 )

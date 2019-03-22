@@ -8,7 +8,7 @@ AS
 if object_id(N'tempdb..#t1',N'U') is not null drop table #t1
 create table #t1(STELL varchar(max), STEXT varchar(max))
 insert #t1
-exec [PreactorSDB].[InputData].[pc_Select_Oralce_MPU] @selectCommandText = 
+exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 
 																			'SELECT distinct
 																			   st.stell,st.stext
 																			FROM
@@ -27,8 +27,8 @@ exec [PreactorSDB].[InputData].[pc_Select_Oralce_MPU] @selectCommandText =
 	  profSAP.STELL
 	  ,profSAP.STEXT
 	  ,prof.[KPROF]
-  FROM rkv.[PLANT].[dbo].[s_prof2] as prof
-  INNER JOIN rkv.[RKV_SCAL].[dbo].[d_sap_vika10] as vika ON vika.KPROF = prof.KPROF
+  FROM [RKV].[PLANT].[dbo].[s_prof2] as prof
+  INNER JOIN [RKV].[RKV_SCAL].[dbo].[d_sap_vika10] as vika ON vika.KPROF = prof.KPROF
   INNER JOIN #t1 as profSAP ON profSAP.STELL = vika.[ALT_KPROF]
 
 RETURN 0
