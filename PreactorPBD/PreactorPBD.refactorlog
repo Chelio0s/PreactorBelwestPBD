@@ -462,4 +462,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="AreaId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="7686555f-54a4-4e01-876c-7c85eb70ba2d" ChangeDateTime="03/22/2019 12:16:52">
+    <Property Name="ElementName" Value="[InputData].[EmployeesCalendar].[EmployeeID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EmployeesCalendar]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OrgUnit" />
+  </Operation>
 </Operations>
