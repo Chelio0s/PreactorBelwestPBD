@@ -20,7 +20,7 @@ insert #tempEmp
 		FROM
 		belwpr.s_seller seller 
 	LEFT JOIN belwpr.s_tab_stell_add  s_tab ON s_tab.tabno = seller.tabno
-	WHERE  dated = ''31.12.9999'' and ESTPOST <> 99999999 and seller.tabno not like ''3%'' and prof_stell <>''00000000'' and prozt<>0'
+	WHERE  dated = ''31.12.9999'' and ESTPOST <> 99999999 and seller.tabno not like ''3%'' and prof_stell <>''00000000'' and prozt<>0 and trfst<>'' '''
 
 	 
 		ALTER TABLE #tempEmp

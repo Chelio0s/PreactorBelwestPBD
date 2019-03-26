@@ -131,6 +131,11 @@
     <Build Include="Tables\WorkDays.sql" />
     <Build Include="Procedures\sp_InsertWorkDays.sql" />
     <Build Include="Tables\UseConstraintOperations.sql" />
+    <Build Include="Functions\udf_GetStartTimeForShift.sql" />
+    <Build Include="Views\VI_EmployeesWorkHours.sql" />
+    <Build Include="Views\VI_OrgUnitsWithAreas.sql" />
+    <Build Include="Views\VI_WorkHoursForOrgUnit.sql" />
+    <Build Include="Functions\udf_GetShiftNumber.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -146,6 +151,12 @@
     <Compile Include="CLR\pc_InsertEquipmentIntoPreactorDB.cs" />
     <Compile Include="Entity\Equipment.cs" />
     <Compile Include="Entity\OracleSetting.cs" />
+    <Compile Include="Entity\ShiftSetting.cs" />
+    <Compile Include="Entity\CicleWork.cs" />
+    <Compile Include="CLR\ctvf_GetWorkTimeSummAccounting.cs" />
+    <Compile Include="Entity\WorkTime.cs" />
+    <Compile Include="CLR\ctvf_GetWorkTime1Shift.cs" />
+    <Compile Include="CLR\ctvf_GetWorkTime2Shifts.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -157,5 +168,12 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\AddExtendedProp.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
+      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
   </ItemGroup>
 </Project>
