@@ -136,6 +136,9 @@
     <Build Include="Views\VI_OrgUnitsWithAreas.sql" />
     <Build Include="Views\VI_WorkHoursForOrgUnit.sql" />
     <Build Include="Functions\udf_GetShiftNumber.sql" />
+    <Build Include="Users\Login_MPU.sql" />
+    <Build Include="Users\ServerRoleMembership_MPU.sql" />
+    <Build Include="Views\VI_CheckKOBGroups.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

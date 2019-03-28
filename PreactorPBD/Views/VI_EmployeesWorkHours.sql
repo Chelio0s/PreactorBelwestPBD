@@ -14,5 +14,5 @@
   CROSS JOIN [SupportData].[WorkDays]  as wd
   INNER JOIN [SupportData].[Orgunit] as org ON org.OrgUnit = emp.Orgunit
   CROSS APPLY  [InputData].[ctvf_GetWorkTimeSummAccounting](org.OrgUnit, wd.DateWorkDay) as ca
-  WHERE MONTH(wd.DateWorkDay) = 3 and wd.Crew = org.Crew 
+  WHERE wd.Crew = org.Crew 
   ORDER BY emp.tabnum, wd.DateWorkDay
