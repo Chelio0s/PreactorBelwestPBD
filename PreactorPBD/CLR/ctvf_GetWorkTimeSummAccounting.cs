@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using Microsoft.SqlServer.Server;
 using PreactorPBD;
@@ -31,11 +32,24 @@ public partial class UserDefinedFunctions
                             FROM       [SupportData].[Orgunit] as org
                             INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
                             INNER JOIN [SupportData].[WorkDays] as wdays ON wdays.Crew = org.Crew" +
-                     $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = '{DateWorkDay}'";
+                     $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = @date";
 
             SqlCommand comm = new SqlCommand(cmdText, con);
-            var reader = comm.ExecuteReader();
+            comm.Parameters.Add("@date", SqlDbType.Date);
+            comm.Parameters["@date"].Value = DateWorkDay.Date;
+
+            SqlDataReader reader;
             ShiftSetting shiftSetting = null;
+            try
+            {
+                reader = comm.ExecuteReader();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Ошибка при выполнении запроса" + Environment.NewLine +
+                                    cmdText);
+            }
+
             int counter = 0;
 
             while (reader.Read())
@@ -52,12 +66,12 @@ public partial class UserDefinedFunctions
                         shiftSetting.AreaId = Convert.ToInt32(reader[5]);
                         shiftSetting.TimeStart = TimeSpan.Parse(reader[6].ToString());
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        throw new Exception("Ошибка при преобразовании типов после выборки SettingShift"+ Environment.NewLine +
-                                            "OrgUnit:" +shiftSetting.OrgUnit+" Date:"+ shiftSetting.DateWorkDay+" ShiftId:"+ shiftSetting.ShiftId);
+                        throw new Exception("Ошибка при преобразовании типов после выборки SettingShift" + Environment.NewLine +
+                                            "OrgUnit:" + shiftSetting.OrgUnit + " Date:" + shiftSetting.DateWorkDay + " ShiftId:" + shiftSetting.ShiftId);
                     }
-                    
+
                     counter++;
                 }
                 else
@@ -66,13 +80,9 @@ public partial class UserDefinedFunctions
                              $"OrgUnit:{OrgUnit}, DateWorkDay:{DateWorkDay}");
             }
 
-            if (shiftSetting != null)
-            {
+            if (shiftSetting == null)
+                return workTimes;
 
-            }
-            else throw new Exception(
-                "Выборка настройки времени начала смены для OrgUnit + DateWorkDay не дала результата " + Environment.NewLine +
-                $"OrgUnit:{OrgUnit}, DateWorkDay:{DateWorkDay}");
 
             cmdText = @"SELECT [IdCicle]
                           ,[AreaId]
@@ -81,16 +91,24 @@ public partial class UserDefinedFunctions
                           ,[ShiftId]
                       FROM [SupportData].[Cicle]" +
               $"  WHERE AreaId = {shiftSetting.AreaId} and ShiftId = {shiftSetting.ShiftId}";
+
             comm = new SqlCommand(cmdText, con);
             reader.Close();
 
-            reader = comm.ExecuteReader();
+            try
+            {
+                reader = comm.ExecuteReader();
+            }
+            catch
+            {
+                throw new Exception("Ошибка при выполнении запроса" + Environment.NewLine +
+                                    cmdText);
+            }
             List<CicleWork> cicles = new List<CicleWork>();
 
             while (reader.Read())
             {
                 var cw = new CicleWork();
-
                 try
                 {
                     cw.IdCicle = Convert.ToInt32(reader[0]);
@@ -99,16 +117,15 @@ public partial class UserDefinedFunctions
                     cw.DurationOff = TimeSpan.Parse(reader[3].ToString());
                     cw.ShiftId = Convert.ToInt32(reader[4]);
                 }
-                catch (Exception e)
+                catch
                 {
-                    throw new Exception("Ошибка при преобразовании типов после выборки Cicle " + Environment.NewLine+
+                    throw new Exception("Ошибка при преобразовании типов после выборки Cicle " + Environment.NewLine +
                                         "AreaId:" + cw.AreaId + " ShiftId:" + cw.ShiftId);
                 }
-
                 cicles.Add(cw);
             }
 
-     
+
             var timeStart = shiftSetting.DateWorkDay + shiftSetting.TimeStart;
             foreach (var c in cicles)
             {
@@ -117,6 +134,8 @@ public partial class UserDefinedFunctions
                 wt.EndWork = wt.StartWork + c.DurationOn;
                 timeStart = wt.EndWork + c.DurationOff;
                 workTimes.Add(wt);
+
+                Console.WriteLine(wt.StartWork + "   " + wt.EndWork);
             }
         }
         return workTimes;

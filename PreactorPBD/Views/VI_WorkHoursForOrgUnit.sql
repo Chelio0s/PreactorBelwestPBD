@@ -31,7 +31,7 @@ CROSS JOIN [SupportData].[WorkDays] as wd
 OUTER APPLY [InputData].[ctvf_GetWorkTime1Shift](org.OrgUnit, wd.DateWorkDay)
 WHERE OrgUnit in (50000451, 50000473, 50000460, 50008990, 50001844, 50001846) and ShiftId = 1 
 --Отсев субботы и вс.
-and (DATEPART(WEEKDAY,DateWorkDay) <>6 and DATEPART(WEEKDAY,DateWorkDay) <>7)
+and (DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 5 and DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 6)
 
 --Выборка OrgUnit кто работает в 2 смены 5 дней
 UNION SELECT  
@@ -42,5 +42,5 @@ CROSS JOIN [SupportData].[WorkDays] as wd
 OUTER APPLY [InputData].[ctvf_GetWorkTime2Shifts](org.OrgUnit, wd.DateWorkDay)
 WHERE OrgUnit in (50033716,50033718,50033722,50033723) 
 --Отсев субботы и вс.
-and (DATEPART(WEEKDAY,DateWorkDay) <>6 and DATEPART(WEEKDAY,DateWorkDay) <>7) 
+and (DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 5 and DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 6)
 and ShiftId = [InputData].[udf_GetShiftNumber](OrgUnit, DateWorkDay)
