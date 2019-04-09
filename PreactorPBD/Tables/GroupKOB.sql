@@ -5,9 +5,9 @@
     [KOB] INT NOT NULL, 
     [KTOPN] INT NOT NULL, 
     [AreaId] INT NULL, 
-    CONSTRAINT [FK_GroupKOB_ToGroups] FOREIGN KEY ([GroupId]) REFERENCES [Inputdata].[ResourcesGroup]([IdResourceGroup])
+    CONSTRAINT [FK_GroupKOB_ToGroups] FOREIGN KEY ([GroupId]) REFERENCES [InputData].[ResourcesGroup]([IdResourceGroup])
 	ON UPDATE CASCADE, 
-    CONSTRAINT [FK_GroupKOB_ToArea] FOREIGN KEY (AreaId) REFERENCES [Inputdata].Areas([IdArea])
+    CONSTRAINT [FK_GroupKOB_ToArea] FOREIGN KEY (AreaId) REFERENCES [InputData].Areas([IdArea])
 	ON DELETE SET NULL ON UPDATE SET NULL, 
     CONSTRAINT [UK_GroupKOB_KOB_KTOPN_AreaId] UNIQUE(KOB,KTOPN, AreaId)
 )

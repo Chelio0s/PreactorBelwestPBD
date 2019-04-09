@@ -4,6 +4,6 @@
 	[OrgUnit] INT NOT NULL,
 	[Start] DATETIME NOT NULL,
 	[End] DATETIME NOT NULL, 
-    CONSTRAINT [FK_EmployeesCalendar_ToEmployees] FOREIGN KEY ([OrgUnit]) REFERENCES [SupportData].[Orgunit]([OrgUnit])
+    CONSTRAINT [FK_EmployeesCalendar_ToEmployees] FOREIGN KEY ([OrgUnit]) REFERENCES [SupportData].[OrgUnit]([OrgUnit])
 	ON UPDATE CASCADE ON DELETE CASCADE
 )

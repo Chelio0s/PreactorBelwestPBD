@@ -358,9 +358,9 @@
     <Property Name="NewName" Value="[FK_SequenceOperations_ToSimpleProduct]" />
   </Operation>
   <Operation Name="Rename Refactor" Key="2f904cfb-894f-4b79-8d2d-84ab163c2dc1" ChangeDateTime="03/13/2019 06:48:27">
-    <Property Name="ElementName" Value="[InputData].[Orgunit].[Id]" />
+    <Property Name="ElementName" Value="[InputData].[OrgUnit].[Id]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[InputData].[Orgunit]" />
+    <Property Name="ParentElementName" Value="[InputData].[OrgUnit]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="orguinit" />
   </Operation>
@@ -372,30 +372,30 @@
     <Property Name="NewName" Value="SimpleProductId" />
   </Operation>
   <Operation Name="Rename Refactor" Key="b645861d-c257-41b7-b3fa-68778cd63819" ChangeDateTime="03/15/2019 12:41:15">
-    <Property Name="ElementName" Value="[InputData].[Employees].[ORGUNIT]" />
+    <Property Name="ElementName" Value="[InputData].[Employees].[OrgUnit]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[InputData].[Employees]" />
     <Property Name="ParentElementType" Value="SqlTable" />
-    <Property Name="NewName" Value="OrgunitId" />
+    <Property Name="NewName" Value="OrgUnitId" />
   </Operation>
   <Operation Name="Rename Refactor" Key="01494819-779c-4395-8298-2935696a75e4" ChangeDateTime="03/15/2019 12:42:00">
-    <Property Name="ElementName" Value="[InputData].[Employees].[OrgunitId]" />
+    <Property Name="ElementName" Value="[InputData].[Employees].[OrgUnitId]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[InputData].[Employees]" />
     <Property Name="ParentElementType" Value="SqlTable" />
-    <Property Name="NewName" Value="Orgunit" />
+    <Property Name="NewName" Value="OrgUnit" />
   </Operation>
   <Operation Name="Rename Refactor" Key="3fa66637-3828-4e2b-ad30-ff03e912395f" ChangeDateTime="03/21/2019 06:10:02">
-    <Property Name="ElementName" Value="[SupportData].[Orgunit].[Kcex]" />
+    <Property Name="ElementName" Value="[SupportData].[OrgUnit].[Kcex]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[SupportData].[Orgunit]" />
+    <Property Name="ParentElementName" Value="[SupportData].[OrgUnit]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Code" />
   </Operation>
   <Operation Name="Rename Refactor" Key="6b496131-f0ac-40ca-8219-32f460bef04f" ChangeDateTime="03/21/2019 06:22:56">
-    <Property Name="ElementName" Value="[SupportData].[Orgunit].[Code]" />
+    <Property Name="ElementName" Value="[SupportData].[OrgUnit].[Code]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[SupportData].[Orgunit]" />
+    <Property Name="ParentElementName" Value="[SupportData].[OrgUnit]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="AreaId" />
   </Operation>
@@ -428,16 +428,16 @@
     <Property Name="NewName" Value="IdSettingShift" />
   </Operation>
   <Operation Name="Rename Refactor" Key="115c669a-d916-4e9e-99e0-c898e1c0a0ce" ChangeDateTime="03/22/2019 07:17:09">
-    <Property Name="ElementName" Value="[SupportData].[Orgunit].[OrgUinit]" />
+    <Property Name="ElementName" Value="[SupportData].[OrgUnit].[OrgUinit]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[SupportData].[Orgunit]" />
+    <Property Name="ParentElementName" Value="[SupportData].[OrgUnit]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="OrgUnit" />
   </Operation>
   <Operation Name="Rename Refactor" Key="784d512f-9e7c-43e0-832a-1b257e7e8c1e" ChangeDateTime="03/22/2019 07:26:20">
-    <Property Name="ElementName" Value="[SupportData].[Orgunit].[Shift]" />
+    <Property Name="ElementName" Value="[SupportData].[OrgUnit].[Shift]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[SupportData].[Orgunit]" />
+    <Property Name="ParentElementName" Value="[SupportData].[OrgUnit]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Crew" />
   </Operation>

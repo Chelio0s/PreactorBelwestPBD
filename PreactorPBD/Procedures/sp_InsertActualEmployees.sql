@@ -6,17 +6,17 @@ AS
 	
 
 if object_id(N'tempdb..#tempEmp',N'U') is not null drop table #tempEmp
-create table #tempEmp(tabno varchar(15), orgunit varchar(15), fio varchar(99), 
-trfst varchar(5), trfs1 varchar(5), persg varchar(5), stell varchar(20), stext1 varchar(99))
+create table #tempEmp(tabno varchar(15), OrgUnit varchar(15), fio varchar(99), 
+trfst varchar(5), trfs1 varchar(5), persg varchar(5), STELL varchar(20), stext1 varchar(99))
 insert #tempEmp
 exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
     tabno,
-    orgunit,
+    OrgUnit,
     fio,
     trfst,
     trfs1,
     persg,
-    stell,
+    STELL,
 	stext1
 FROM
     belwpr.s_seller
@@ -36,9 +36,9 @@ FROM
  INSERT INTO [InputData].[Employees]
            ([Name]
            ,[TabNum]
-           ,org.[Orgunit])
- select distinct fio, tabno, org.orgunit from #tempEmp as sell
- INNER JOIN [SupportData].[Orgunit] as org ON org.OrgUnit = sell.orgunit
+           ,org.[OrgUnit])
+ select distinct fio, tabno, org.OrgUnit from #tempEmp as sell
+ INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
  order by fio
 
 RETURN 0

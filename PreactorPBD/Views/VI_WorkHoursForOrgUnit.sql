@@ -2,8 +2,8 @@
 	AS 
 	
 	--Выборка OrgUnit кто работает 5-3-5-2
-SELECT OrgUnit,  AreaId, org.Title as OrgTitle, code, areas.Title, DateWorkDay, ShiftId, wd.Crew as wdCrew, StartWork, EndWork
-FROM [SupportData].[Orgunit] as org
+SELECT OrgUnit,  AreaId, org.Title as OrgTitle, Code, areas.Title, DateWorkDay, ShiftId, wd.Crew as wdCrew, StartWork, EndWork
+FROM [SupportData].[OrgUnit] as org
 INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
 CROSS JOIN [SupportData].[WorkDays] as wd
 OUTER APPLY [InputData].[ctvf_GetWorkTimeSummAccounting](org.OrgUnit, wd.DateWorkDay)
@@ -24,8 +24,8 @@ WHERE wd.Crew = org.Crew and OrgUnit in (50000457,
 ,50036717)
 
 --Выборка OrgUnit кто работает в 1 смену 5 дней
-UNION SELECT OrgUnit,  AreaId, org.Title as OrgTitle, code, areas.Title, DateWorkDay, ShiftId, wd.Crew as wdCrew, StartWork, EndWork
-FROM [SupportData].[Orgunit] as org
+UNION SELECT OrgUnit,  AreaId, org.Title as OrgTitle, Code, areas.Title, DateWorkDay, ShiftId, wd.Crew as wdCrew, StartWork, EndWork
+FROM [SupportData].[OrgUnit] as org
 INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
 CROSS JOIN [SupportData].[WorkDays] as wd
 OUTER APPLY [InputData].[ctvf_GetWorkTime1Shift](org.OrgUnit, wd.DateWorkDay)
@@ -35,8 +35,8 @@ and (DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 5 and DATEDIFF ( dd , '
 
 --Выборка OrgUnit кто работает в 2 смены 5 дней
 UNION SELECT  
-OrgUnit,  AreaId, org.Title as OrgTitle, code, areas.Title, DateWorkDay, ShiftId, wd.Crew as wdCrew, StartWork, EndWork
-FROM [SupportData].[Orgunit] as org
+OrgUnit,  AreaId, org.Title as OrgTitle, Code, areas.Title, DateWorkDay, ShiftId, wd.Crew as wdCrew, StartWork, EndWork
+FROM [SupportData].[OrgUnit] as org
 INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
 CROSS JOIN [SupportData].[WorkDays] as wd
 OUTER APPLY [InputData].[ctvf_GetWorkTime2Shifts](org.OrgUnit, wd.DateWorkDay)

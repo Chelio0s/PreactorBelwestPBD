@@ -37,7 +37,7 @@ VALUES
 ,@dataXML
 ,(
   SELECT  dmec.client_net_address 
-  FROM sys.sysprocesses sp 
+  FROM sysprocesses sp 
   JOIN sys.dm_exec_connections dmec ON sp.spid = dmec.session_id
   WHERE sp.spid = @@SPID)
 )

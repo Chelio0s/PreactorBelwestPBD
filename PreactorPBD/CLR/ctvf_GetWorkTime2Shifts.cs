@@ -29,7 +29,7 @@ public partial class UserDefinedFunctions
                                     ,wdays.ShiftId
                                     ,areas.IdArea
                                     ,[InputData].[udf_GetStartTimeForShift] ([OrgUnit], wdays.ShiftId) as timeStart
-                            FROM       [SupportData].[Orgunit] as org
+                            FROM       [SupportData].[OrgUnit] as org
                             INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
                             CROSS JOIN [SupportData].[WorkDays] as wdays " +
                      $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = @date and ShiftId = [InputData].[udf_GetShiftNumber](OrgUnit, wdays.DateWorkDay)";
@@ -44,7 +44,7 @@ public partial class UserDefinedFunctions
             {
                 reader = comm.ExecuteReader();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Ошибка при выполнении запроса" + Environment.NewLine +
                                     cmdText);
