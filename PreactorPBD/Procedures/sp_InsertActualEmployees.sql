@@ -20,17 +20,25 @@ exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
 	stext1
 FROM
     belwpr.s_seller
-	WHERE  dated = ''31.12.9999'' and ESTPOST <> 99999999 and tabno not like ''3%'' and prozt<>0'
+		WHERE DATEB <= (select sysdate from SYS.dual)
+    and DATED > (select sysdate from SYS.dual)
+    and ESTPOST <> 99999999
+	and tabno not like ''3%''
+	and prozt<>0 
+	and persg in (''1'',''8'')
+	and btrtl = ''0900'''
  
  ALTER TABLE #tempEmp
   ALTER COLUMN  STELL VARCHAR(99) COLLATE Cyrillic_General_BIN NULL;
 
+ 
  DELETE FROM [InputData].[Employees]
  INSERT INTO [InputData].[Employees]
            ([Name]
            ,[TabNum]
-           ,[Orgunit])
- select distinct fio, tabno, orgunit from #tempEmp as sell
- INNER JOIN [InputData].[Professions] as prof ON sell.stell = prof.IdProfession
+           ,org.[Orgunit])
+ select distinct fio, tabno, org.orgunit from #tempEmp as sell
+ INNER JOIN [SupportData].[Orgunit] as org ON org.OrgUnit = sell.orgunit
  order by fio
+
 RETURN 0

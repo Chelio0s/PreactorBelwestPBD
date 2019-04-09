@@ -12,5 +12,3 @@
 )
 
 GO
-
-CREATE INDEX [UK_EmployeesInProfession_EmpID_IsPrimary] ON [InputData].[EmployeesInProfession] (EmployeeId, IsPrimary)

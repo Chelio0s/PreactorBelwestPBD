@@ -22,6 +22,13 @@ exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText =
            ([IdProfession]
            ,[Title]
            ,[CodeRKV])
+		   VALUES('00000000',
+		   'Не подходящая осн. проф.',
+		   '00000')
+  INSERT INTO [InputData].[Professions]
+           ([IdProfession]
+           ,[Title]
+           ,[CodeRKV])
 
   SELECT 
 	  profSAP.STELL

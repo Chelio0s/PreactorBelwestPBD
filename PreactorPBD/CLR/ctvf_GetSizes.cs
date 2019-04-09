@@ -18,13 +18,14 @@ public partial class UserDefinedFunctions
         using (OracleConnection con = new OracleConnection(OracleSettings.GetConnectionString(OracleDataBase.SAP)))
         {
             con.Open();
-
+            ArrayList listFinal = new ArrayList();
             string commandStr =
                 "SELECT distinct a.ID,c.art,INDEX_MODEL,FASON_MODEL,LAST,FASON_LAST,SIZE_RANGE " +
                 "FROM gui_sap.MKZ_MAIN a " +
                 "LEFT JOIN gui_sap.MKZ_SECOND_STEP b ON a.id = b.id_model " +
                 "LEFT JOIN gui_sap.MKZ_ART c ON a.id = c.id_model " +
                 $"where a.index_model_parent is not null and ART = '{article}'";
+
 
             OracleCommand comm = new OracleCommand(commandStr, con);
             var reader = comm.ExecuteReader();
@@ -46,9 +47,13 @@ public partial class UserDefinedFunctions
                 }
                 catch (Exception e)
                 {
-
                     throw new Exception(e + "id mkz_main:" + reader[0].ToString());
                 }
+            }
+
+            if (sizes==string.Empty)
+            {
+                return listFinal;
             }
 
             if (kolodka != string.Empty)
@@ -106,7 +111,7 @@ public partial class UserDefinedFunctions
 
                 });
             }
-            ArrayList listFinal = new ArrayList();
+           
             foreach (var obj in list)
             {
                 var type = obj.GetType();
