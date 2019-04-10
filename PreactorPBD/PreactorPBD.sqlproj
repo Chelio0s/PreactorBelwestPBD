@@ -142,6 +142,10 @@
     <Build Include="Tables\Cutters.sql" />
     <Build Include="Procedures\sp_CreateNomenclature.sql" />
     <Build Include="Views\VI_PercentageNomenclature.sql" />
+    <Build Include="Functions\udf_GetModelArticle.sql" />
+    <Build Include="Procedures\sp_InsertMaterials.sql" />
+    <Build Include="Tables\ModelArticle.sql" />
+    <Build Include="Maintenance\Servers\OracleMPU.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -174,12 +178,5 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\AddExtendedProp.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
-      <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac</HintPath>
-      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
-      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
-    </ArtifactReference>
   </ItemGroup>
 </Project>
