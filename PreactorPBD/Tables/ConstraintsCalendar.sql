@@ -1,4 +1,4 @@
-﻿CREATE TABLE [InputData].[Calendar]
+﻿CREATE TABLE [InputData].[ConstraintsCalendar]
 (
 	[IdCalendar] INT NOT NULL PRIMARY KEY Identity, 
     [SecondaryConstraintId] INT NOT NULL, 

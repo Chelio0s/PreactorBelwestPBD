@@ -92,7 +92,7 @@
     <Build Include="Tables\Operation.sql" />
     <Build Include="Tables\OperationInResource.sql" />
     <Build Include="Tables\UseConstraintResources.sql" />
-    <Build Include="Tables\Calendar.sql" />
+    <Build Include="Tables\ConstraintsCalendar.sql" />
     <Build Include="Tables\Specifications.sql" />
     <Build Include="Schemas\InputData.sql" />
     <Build Include="Tables\SemiProduct.sql" />
@@ -142,10 +142,15 @@
     <Build Include="Tables\Cutters.sql" />
     <Build Include="Procedures\sp_CreateNomenclature.sql" />
     <Build Include="Views\VI_PercentageNomenclature.sql" />
-    <Build Include="Functions\udf_GetModelArticle.sql" />
     <Build Include="Procedures\sp_InsertMaterials.sql" />
     <Build Include="Tables\ModelArticle.sql" />
     <Build Include="Maintenance\Servers\OracleMPU.sql" />
+    <Build Include="Procedures\sp_CreateSemiProducts.sql" />
+    <Build Include="Procedures\sp_CreateEntrySemiProducts.sql" />
+    <Build Include="Views\VI_EntrySemiProductsForEachNomenclature.sql" />
+    <Build Include="Procedures\sp_CreateCutters.sql" />
+    <Build Include="Tables\TypeConstraint.sql" />
+    <Build Include="Procedures\sp_CreateConstraintCalendar_Cutters.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -167,6 +172,7 @@
     <Compile Include="Entity\WorkTime.cs" />
     <Compile Include="CLR\ctvf_GetWorkTime1Shift.cs" />
     <Compile Include="CLR\ctvf_GetWorkTime2Shifts.cs" />
+    <Compile Include="CLR\ctvf_GetModelArticle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
