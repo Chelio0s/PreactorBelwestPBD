@@ -6,6 +6,8 @@ D.REL
 ,D.KPO 
 ,D.KTOPN 
 ,OP.NTOP as NTOP
+,KOB
+,NORMA
 FROM  [$(RKV)].[$(PLANT)].dbo.drive as D 
 INNER JOIN [$(RKV)].[$(RKV_SCAL)].dbo.F160013  as F on D.MOD=F.MOD
 INNER JOIN [$(RKV)].[$(PLANT)].dbo.status as  S  on S.MOD=D.MOD AND S.KPO=D.KPO
