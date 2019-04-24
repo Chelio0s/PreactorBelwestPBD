@@ -6,7 +6,3 @@
 )
 Go
 
---ALTER TABLE [InputData].[Article]
---  ADD CONSTRAINT [UK_Article_Title] UNIQUE(Title)
---Go
-

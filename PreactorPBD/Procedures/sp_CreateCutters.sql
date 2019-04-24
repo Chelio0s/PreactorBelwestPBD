@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [InputData].[sp_CreateSecondaryConstraint_Cutters]
+﻿CREATE PROCEDURE [InputData].[sp_CreateCutters]
 
 AS
 DELETE FROM [InputData].[SecondaryConstraints]

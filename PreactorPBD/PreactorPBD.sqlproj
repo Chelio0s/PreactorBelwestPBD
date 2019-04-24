@@ -155,17 +155,21 @@
       <SuppressTSqlWarnings>
       </SuppressTSqlWarnings>
     </Build>
-    <Build Include="Functions\udf_GetOperationsArticle.sql" />
+    <Build Include="Functions\udf_GetOperationsArticleFromRKV.sql" />
     <Build Include="Functions\udf_GetTitleOperation.sql" />
     <Build Include="Views\VI_OperationsRKV_Preactor.sql" />
     <Build Include="Functions\udf_CheckOperations.sql" />
     <Build Include="Procedures\sp_CheckRoutes.sql" />
+    <Build Include="Procedures\sp_InsertAll.sql" />
+    <Build Include="Procedures\sp_InsertEquipmentWithDelete.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PreactorPBD.publish.xml" />
+    <None Include="Triggers\tgr_RestrictionDeleteOrgUnit.sql" />
+    <PreDeploy Include="Maintenance\ChangeOwner.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLR\pc_Select_Oralce_SAP.cs" />
