@@ -162,6 +162,10 @@
     <Build Include="Procedures\sp_CheckRoutes.sql" />
     <Build Include="Procedures\sp_InsertAll.sql" />
     <Build Include="Procedures\sp_InsertEquipmentWithDelete.sql" />
+    <Build Include="Views\VI_OperationsRKVOnSemiProducts.sql" />
+    <Build Include="Triggers\tgr_DeleteSemiProduct.sql" />
+    <Build Include="Triggers\tgr_DeleteNomenclature.sql" />
+    <Build Include="Triggers\tgr_DeleteArticle.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -193,7 +197,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Oracle.ManagedDataAccess">
+<<<<<<< HEAD
       <HintPath>..\..\Oracle.ManagedDataAccess.dll</HintPath>
+=======
+      <HintPath>Oracle.ManagedDataAccess.dll</HintPath>
+>>>>>>> e97a316049f0db6654053d61274dcb6e9a5b7d17
     </Reference>
   </ItemGroup>
   <ItemGroup>
