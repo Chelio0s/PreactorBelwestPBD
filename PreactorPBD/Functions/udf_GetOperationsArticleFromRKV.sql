@@ -31,7 +31,7 @@ RTRIM(F13.ART) as ART
 ,OP.KPROF as KPROF
 ,D.KOB
 ,OBR.MOB    --[$(RKV)].[$(RKV_SCAL)]
-FROM  [$(RKV)].[$(PLANT)].dbo.drive as D 
+FROM  [$(RKV)].[$(PLANT)].dbo.DRIVE as D 
 INNER JOIN [$(RKV)].[$(RKV_SCAL)].dbo.F160013  as F13 on D.MOD=F13.MOD
 INNER JOIN [$(RKV)].[$(PLANT)].dbo.status as  S  on S.MOD=D.MOD AND S.KPO=D.KPO
 INNER JOIN [$(RKV)].[$(PLANT)].dbo.DRIVE0 as ART on D.REL=ART.REL and F13.ART=ART.ART
@@ -40,6 +40,6 @@ LEFT JOIN  [$(RKV)].[$(PLANT)].dbo.s_obor2 OBR on D.KOB=OBR.KOB
 WHERE S.PR_UD2=0  
 and D.KTOPN <> 0 
 and RTRIM(F13.ART) = @article
-ORDER BY [$(RKV)].[$(PLANT)].[dbo].[s_obor2].[KPO]
+ORDER BY D.KPO
 	RETURN
 END

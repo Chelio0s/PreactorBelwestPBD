@@ -85,10 +85,10 @@ FROM
 									INNER JOIN [InputData].[Areas] as areas ON CTE.KPO = areas.KPO) as t)
 	UNION 
 	SELECT 'Проверка на наличие размеров обуви'
-	,CASE WHEN EXISTS(SELECT title, size, Percents from [InputData].[Article]
-						OUTER APPLY [InputData].[ctvf_GetSizes](title) 
-						WHERE size is null ) THEN CONVERT(bit, 'FALSE') ELSE CONVERT(bit, 'TRUE') END 
+	,CASE WHEN EXISTS(SELECT Title, SIZE, Percents from [InputData].[Article]
+						OUTER APPLY [InputData].[ctvf_GetSizes](Title) 
+						WHERE SIZE is null ) THEN CONVERT(bit, 'FALSE') ELSE CONVERT(bit, 'TRUE') END 
     ,(SELECT [InputData].[ctvf_ConcatWithoutDublicates](Title) FROM [InputData].[Article]
-						OUTER APPLY [InputData].[ctvf_GetSizes](title) 
-						WHERE size is null)
+						OUTER APPLY [InputData].[ctvf_GetSizes](Title) 
+						WHERE SIZE is null)
 RETURN 0

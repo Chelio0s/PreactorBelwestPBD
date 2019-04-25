@@ -31,7 +31,7 @@ BEGIN
       ,[MOB]
       ,[KPROF]
       
-  FROM [PreactorSDB].[InputData].[VI_OperationsRKVOnSemiProducts]
+  FROM [InputData].[VI_OperationsRKVOnSemiProducts]
   WHERE IdNomenclature = 918 and IdSemiProduct is not null
 	RETURN
 END
