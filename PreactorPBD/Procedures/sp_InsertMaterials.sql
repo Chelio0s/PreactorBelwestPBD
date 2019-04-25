@@ -12,5 +12,5 @@ AS
       [FKGR]
       ,LTRIM(RTRIM([FNGR]))
 	  ,NEI
-  FROM [RKV].[POTREB].[dbo].[s_group]
+  FROM [$(RKV)].[$(POTREB)].[dbo].[s_group]
 RETURN 0

@@ -197,11 +197,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Oracle.ManagedDataAccess">
-<<<<<<< HEAD
       <HintPath>..\..\Oracle.ManagedDataAccess.dll</HintPath>
-=======
-      <HintPath>Oracle.ManagedDataAccess.dll</HintPath>
->>>>>>> e97a316049f0db6654053d61274dcb6e9a5b7d17
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -212,9 +208,13 @@
       <DefaultValue>PLANT</DefaultValue>
       <Value>$(SqlCmdVar__16)</Value>
     </SqlCmdVariable>
+    <SqlCmdVariable Include="POTREB">
+      <DefaultValue>POTREB</DefaultValue>
+      <Value>$(SqlCmdVar__26)</Value>
+    </SqlCmdVariable>
     <SqlCmdVariable Include="RKV">
       <DefaultValue>RKV</DefaultValue>
-      <Value>$(SqlCmdVar__25)</Value>
+      <Value>$(SqlCmdVar__27)</Value>
     </SqlCmdVariable>
     <SqlCmdVariable Include="RKV_SCAL">
       <DefaultValue>RKV_SCAL</DefaultValue>
@@ -243,6 +243,14 @@
       <Private>True</Private>
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseSqlCmdVariable>RKV_SCAL</DatabaseSqlCmdVariable>
+      <ServerSqlCmdVariable>RKV</ServerSqlCmdVariable>
+    </ProjectReference>
+    <ProjectReference Include="..\POTREB\POTREB.sqlproj">
+      <Name>POTREB</Name>
+      <Project>{743e160a-1b03-42bf-9c6e-977706b2b7f1}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>POTREB</DatabaseSqlCmdVariable>
       <ServerSqlCmdVariable>RKV</ServerSqlCmdVariable>
     </ProjectReference>
   </ItemGroup>
