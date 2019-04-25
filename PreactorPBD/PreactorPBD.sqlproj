@@ -193,7 +193,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Oracle.ManagedDataAccess">
-      <HintPath>..\..\SQLCLR\Assemblies\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>..\..\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

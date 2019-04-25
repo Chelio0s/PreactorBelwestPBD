@@ -60,5 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="F160013_1.sql" />
+    <Build Include="d_sap_vika10.sql" />
   </ItemGroup>
 </Project>

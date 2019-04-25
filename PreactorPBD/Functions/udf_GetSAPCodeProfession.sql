@@ -6,7 +6,8 @@ RETURNS VARCHAR(50)
 BEGIN
 DECLARE @SAPCode VARCHAR(50)
 	SELECT TOP(1) @SAPCode = [ALT_KPROF]
-	FROM [RKV].[RKV_SCAL].[dbo].[d_sap_vika10]
+	FROM [$(RKV)].[$(RKV_SCAL)].[dbo].[d_sap_vika10]
 	WHERE KPROF = @codeProfRKV
 	RETURN @SAPCode
 END
+
