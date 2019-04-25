@@ -62,6 +62,9 @@
     <Build Include="status.sql" />
     <Build Include="drive0.sql" />
     <Build Include="s_top2.sql" />
+    <Build Include="s_obor2.sql" />
+    <Build Include="d_sap_vika10.sql" />
+    <Build Include="s_prof2.sql" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="RKV">

@@ -34,8 +34,8 @@ exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText =
 	  profSAP.STELL
 	  ,profSAP.STEXT
 	  ,prof.[KPROF]
-  FROM [RKV].[PLANT].[dbo].[s_prof2] as prof
-  INNER JOIN [RKV].[RKV_SCAL].[dbo].[d_sap_vika10] as vika ON vika.KPROF = prof.KPROF
+  FROM [$(RKV)].[$(PLANT)].[dbo].[s_prof2] as prof
+  INNER JOIN [$(RKV)].[$(RKV_SCAL)].[dbo].[d_sap_vika10] as vika ON vika.KPROF = prof.KPROF
   INNER JOIN #t1 as profSAP ON profSAP.STELL = vika.[ALT_KPROF]
 
 RETURN 0

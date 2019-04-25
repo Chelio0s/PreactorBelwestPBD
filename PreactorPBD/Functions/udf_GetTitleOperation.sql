@@ -13,7 +13,7 @@ CASE WHEN (SELECT  title
 			FROM SupportData.[GroupKTOP] as ktop
 			INNER JOIN SupportData.[GroupsOperations] as gr ON gr.IdGroupOperations = ktop.GroupOperationId
 			WHERE KTOP = @KTOPN) is null THEN @NTOP 
-			ELSE (SELECT  title
+			ELSE (SELECT  Title
 			FROM SupportData.[GroupKTOP] as ktop
 			INNER JOIN SupportData.[GroupsOperations] as gr ON gr.IdGroupOperations = ktop.GroupOperationId
 			WHERE KTOP = @KTOPN) END

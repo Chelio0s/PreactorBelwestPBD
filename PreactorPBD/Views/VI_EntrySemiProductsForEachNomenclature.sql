@@ -2,7 +2,7 @@
 	AS 
 
 SELECT semi.IdSemiProduct as IdSemiProductParent
-	  ,semi.title as TitleParent
+	  ,semi.Title as TitleParent
 	  ,spp.IdSemiProduct as IdSemiProductChild
 	  ,spp.Title as TitleChild
   FROM  [InputData].[SemiProducts] as semi

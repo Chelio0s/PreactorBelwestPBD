@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[d_sap_vika10]
+(
+	[Id] INT NOT NULL PRIMARY KEY, 
+    [KPROF] VARCHAR(50) NULL, 
+    [ALT_KPROF] VARCHAR(50) NULL
+)
