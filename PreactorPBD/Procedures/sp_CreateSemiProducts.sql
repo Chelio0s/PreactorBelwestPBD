@@ -5,7 +5,7 @@ DELETE FROM [InputData].[SemiProducts]
            ([Title]
            ,[NomenclatureID]
            ,[SimpleProductId])
-SELECT Title+':'+CAST(IdNomenclature as varchar(10))
+SELECT Title+':'+Number_ 
 		, IdNomenclature
 		, IdSimpleProduct
   FROM [InputData].[Nomenclature]

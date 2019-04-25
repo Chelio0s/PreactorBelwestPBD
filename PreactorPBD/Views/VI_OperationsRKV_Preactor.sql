@@ -5,8 +5,6 @@
       ,inpart.Title as Article
       ,[Number_] as [Nomenclature]
       ,[Size]
-	  ,semiprod.IdSemiProduct
-	  ,semiprod.Title
 	  ,op.KPO
 	  ,area.Code
 	  ,KTOPN
@@ -21,4 +19,4 @@
   INNER JOIN [InputData].[Article] as inpart ON nom.ArticleId = inpart.IdArticle
   OUTER APPLY [InputData].[udf_GetOperationsArticleFromRKV](inpart.Title) AS OP
   LEFT JOIN [InputData].[Areas] as area ON area.KPO COLLATE Cyrillic_General_CI_AS = op.KPO
-  LEFT JOIN [InputData].[SemiProducts] as semiprod ON semiprod.NomenclatureID  = IdNomenclature
+ 
