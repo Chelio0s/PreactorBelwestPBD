@@ -1,6 +1,7 @@
-﻿CREATE VIEW [InputData].[VI_OperationsRKVOnSemiProducts]
+﻿--Выборка данных по операциям для каждой номенклатуры
+CREATE VIEW [InputData].[VI_OperationsRKVOnSemiProducts]
 	AS 
-		SELECT  [IdNomenclature]
+SELECT  [IdNomenclature]
 	  ,op.[MOD] as Model
       ,inpart.Title as Article
       ,[Number_] as [Nomenclature]

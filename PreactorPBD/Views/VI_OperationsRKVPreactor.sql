@@ -1,4 +1,4 @@
-﻿CREATE VIEW [InputData].[VI_OperationsRKV_Preactor]
+﻿CREATE VIEW [InputData].[VI_OperationsRKVPreactor]
 	AS 
 	SELECT  [IdNomenclature]
 	  ,op.[MOD] as Model

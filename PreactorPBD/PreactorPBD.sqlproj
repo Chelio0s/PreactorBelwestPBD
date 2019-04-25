@@ -157,7 +157,7 @@
     </Build>
     <Build Include="Functions\udf_GetOperationsArticleFromRKV.sql" />
     <Build Include="Functions\udf_GetTitleOperation.sql" />
-    <Build Include="Views\VI_OperationsRKV_Preactor.sql" />
+    <Build Include="Views\VI_OperationsRKVPreactor.sql" />
     <Build Include="Functions\udf_CheckOperations.sql" />
     <Build Include="Procedures\sp_CheckRoutes.sql" />
     <Build Include="Procedures\sp_InsertAll.sql" />
@@ -166,6 +166,7 @@
     <Build Include="Triggers\tgr_DeleteSemiProduct.sql" />
     <Build Include="Triggers\tgr_DeleteNomenclature.sql" />
     <Build Include="Triggers\tgr_DeleteArticle.sql" />
+    <Build Include="Functions\udf_GetOperationForTableOperation.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
