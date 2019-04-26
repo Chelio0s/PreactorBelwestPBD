@@ -1,37 +1,27 @@
 ﻿CREATE FUNCTION [InputData].[udf_GetOperationForTableOperation]
 (
-	@IdNomenclature int
+	@SimpleProductId int
 )
 RETURNS @returntable TABLE
 (
 	Title nvarchar(99),
 	NumberOp int,
-	SemiProductId int,
-	ProfessionId int
+	SimpleProductId int,
+	--ProfessionId int,
+	IdSemiProduct int, 
+	OperOrder int
 )
 AS
 BEGIN
 	INSERT @returntable
 	SELECT  
 	[PreactorOperation]
-	,ROW_NUMBER() over(partition by IdSemiProduct order by IdSemiProduct ) as opNum
-      ,[Model]
-      ,[Article]
-      ,[Nomenclature]
-      ,[Size]
-      ,[IdSemiProduct]
-      ,[Title]
-      ,[KPO]
-      ,[Code]
-      ,[KTOPN]
-      ,[NTOP]
-      ,[PONEOB]
-      ,[NORMATIME]
-      ,[KOB]
-      ,[MOB]
-      ,[KPROF]
-      
+	,ROW_NUMBER() over(partition by IdSemiProduct order by IdSemiProduct, OperOrder)*10 as opNum
+	,SimpleProductId
+   -- ,[InputData].[udf_GetSAPCodeProfession]([KPROF])
+    ,IdSemiProduct
+	,OperOrder
   FROM [InputData].[VI_OperationsRKVOnSemiProducts]
-  WHERE IdNomenclature = 918 and IdSemiProduct is not null
+ WHERE IdSemiProduct = @SimpleProductId and IdSemiProduct is not null
 	RETURN
 END

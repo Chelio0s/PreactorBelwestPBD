@@ -1,10 +1,9 @@
 ﻿--Выборка данных по операциям для каждой номенклатуры
-CREATE VIEW [InputData].[VI_OperationsRKVOnSemiProducts]
-	AS 
-SELECT  [IdNomenclature]
-	  ,op.[MOD] as Model
-      ,inpart.Title as Article
-      ,[Number_] as [Nomenclature]
+--Выборка напрямую с RKV - медленная
+CREATE VIEW [InputData].[VI_OperationsRKVOnSemiProducts_SLOW]
+AS
+SELECT
+	   IdNomenclature
       ,[Size]
 	  ,semiprod.IdSemiProduct
 	  ,semiprod.Title
@@ -18,6 +17,8 @@ SELECT  [IdNomenclature]
 	  ,MOB
 	  ,KPROF
 	  ,[InputData].[udf_GetTitleOperation] (KTOPN, NTOP) as [PreactorOperation]
+	  ,seq.SimpleProductId
+	  ,seq.OperOrder
   FROM [InputData].[Nomenclature] as nom
   INNER JOIN [InputData].[Article] as inpart ON nom.ArticleId = inpart.IdArticle
   OUTER APPLY [InputData].[udf_GetOperationsArticleFromRKV](inpart.Title) AS OP

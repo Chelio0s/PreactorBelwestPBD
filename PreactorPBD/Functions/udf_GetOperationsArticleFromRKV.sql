@@ -13,6 +13,7 @@ RETURNS @returntable TABLE
 	,PONEOB bit
 	,NORMATIME decimal(8,2)
 	,KPROF varchar(5)
+	,RD int
 	,KOB varchar(5)
 	,MOB varchar(199)
 )
@@ -29,9 +30,10 @@ RTRIM(F13.ART) as ART
 ,PONEOB
 ,D.NORMA as NORMATIME
 ,OP.KPROF as KPROF
+,OP.RD
 ,D.KOB
-,OBR.MOB    --[$(RKV)].[$(RKV_SCAL)]
-FROM  [$(RKV)].[$(PLANT)].dbo.DRIVE as D 
+,OBR.MOB    
+FROM  [$(RKV)].[$(PLANT)].dbo.drive as D 
 INNER JOIN [$(RKV)].[$(RKV_SCAL)].dbo.F160013  as F13 on D.MOD=F13.MOD
 INNER JOIN [$(RKV)].[$(PLANT)].dbo.status as  S  on S.MOD=D.MOD AND S.KPO=D.KPO
 INNER JOIN [$(RKV)].[$(PLANT)].dbo.DRIVE0 as ART on D.REL=ART.REL and F13.ART=ART.ART

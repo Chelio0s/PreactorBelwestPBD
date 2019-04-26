@@ -167,6 +167,12 @@
     <Build Include="Triggers\tgr_DeleteNomenclature.sql" />
     <Build Include="Triggers\tgr_DeleteArticle.sql" />
     <Build Include="Functions\udf_GetOperationForTableOperation.sql" />
+    <Build Include="Tables\TempOperations.sql" />
+    <Build Include="Procedures\sp_FillTempOperationTable.sql" />
+    <Build Include="Views\VI_OperationsWithSemiProducts_FAST.sql" />
+    <Build Include="Maintenance\sp_rebuildIndexes.sql" />
+    <Build Include="Schemas\System.sql" />
+    <Build Include="Procedures\sp_InsertOperations.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -203,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\AddExtendedProp.sql" />
+    <DeploymentExtensionConfiguration Include="Maintenance\AddJobUpdateTempOperTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="PLANT">
