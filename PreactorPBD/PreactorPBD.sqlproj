@@ -173,6 +173,7 @@
     <Build Include="Maintenance\sp_rebuildIndexes.sql" />
     <Build Include="Schemas\System.sql" />
     <Build Include="Procedures\sp_InsertOperations.sql" />
+    <Build Include="Procedures\sp_InsertOrgUnitsCalendars.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
