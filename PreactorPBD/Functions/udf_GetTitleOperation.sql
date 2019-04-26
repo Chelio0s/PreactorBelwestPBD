@@ -9,7 +9,7 @@ BEGIN
 DECLARE @Return varchar(99)
 
 SELECT @Return =
-CASE WHEN (SELECT  title
+CASE WHEN (SELECT  Title
 			FROM SupportData.[GroupKTOP] as ktop
 			INNER JOIN SupportData.[GroupsOperations] as gr ON gr.IdGroupOperations = ktop.GroupOperationId
 			WHERE KTOP = @KTOPN) is null THEN @NTOP 

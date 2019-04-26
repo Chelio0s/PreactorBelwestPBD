@@ -29,7 +29,7 @@ FROM
   
     --Выборка всех ТМ для заданных артикулов
     INSERT INTO @CTE 
-	SELECT * FROM [InputData].[VI_OperationsFromRKV] WHERE ART in (SELECT Title FROM [InputData].[Article])
+	SELECT * FROM [InputData].[VI_OperationsFromRKV] WHERE ART in (SELECT title FROM [InputData].[Article])
 	INSERT INTO @TableObor
 	--Выборка оборудования которе есть в ТМ но нет в МПУ
 	SELECT KOB,  areas.Code FROM @CTE  as cte
@@ -88,7 +88,7 @@ FROM
 	,CASE WHEN EXISTS(SELECT title, size, Percents from [InputData].[Article]
 						OUTER APPLY [InputData].[ctvf_GetSizes](title) 
 						WHERE size is null ) THEN CONVERT(bit, 'FALSE') ELSE CONVERT(bit, 'TRUE') END 
-    ,(SELECT [InputData].[ctvf_ConcatWithoutDublicates](Title) FROM [InputData].[Article]
+    ,(SELECT [InputData].[ctvf_ConcatWithoutDublicates](title) FROM [InputData].[Article]
 						OUTER APPLY [InputData].[ctvf_GetSizes](title) 
 						WHERE size is null)
 RETURN 0

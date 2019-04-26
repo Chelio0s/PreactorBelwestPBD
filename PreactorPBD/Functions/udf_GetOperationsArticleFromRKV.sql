@@ -34,7 +34,7 @@ RTRIM(F13.ART) as ART
 FROM  [$(RKV)].[$(PLANT)].dbo.drive as D 
 INNER JOIN [$(RKV)].[$(RKV_SCAL)].dbo.F160013  as F13 on D.MOD=F13.MOD
 INNER JOIN [$(RKV)].[$(PLANT)].dbo.status as  S  on S.MOD=D.MOD AND S.KPO=D.KPO
-INNER JOIN [$(RKV)].[$(PLANT)].dbo.DRIVE0 as ART on D.REL=ART.REL and F13.ART=ART.ART
+INNER JOIN [$(RKV)].[$(PLANT)].dbo.drive0 as ART on D.REL=ART.REL and F13.ART=ART.ART
 INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_top2 as  OP on OP.KTOP=D.KTOPN
 LEFT JOIN  [$(RKV)].[$(PLANT)].dbo.s_obor2 OBR on D.KOB=OBR.KOB 
 WHERE S.PR_UD2=0  
