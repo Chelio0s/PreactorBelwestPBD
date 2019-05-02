@@ -21,7 +21,7 @@ BEGIN
    -- ,[InputData].[udf_GetSAPCodeProfession]([KPROF])
     ,IdSemiProduct
 	,OperOrder
-  FROM [InputData].[VI_OperationsRKVOnSemiProducts]
+  FROM [InputData].[VI_OperationsRKVOnSemiProducts_SLOW]
  WHERE IdSemiProduct = @SimpleProductId and IdSemiProduct is not null
 	RETURN
 END

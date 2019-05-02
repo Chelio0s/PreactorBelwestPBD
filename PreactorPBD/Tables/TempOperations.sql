@@ -2,7 +2,8 @@
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [IdNomenclature] INT NOT NULL, 
-    [Model] NCHAR(15) NOT NULL, 
+	[REL] NCHAR(15) NULL,
+    [Model] NVARCHAR(15) NOT NULL, 
     [Article] NCHAR(15) NOT NULL, 
     [Nomenclature] NCHAR(20) NOT NULL, 
     [Size] FLOAT NOT NULL, 
@@ -17,7 +18,8 @@
     [KPROF] NCHAR(10) NOT NULL,
 	[CategoryOperation] INT NOT NULL,
 	[TitlePreactorOper] NVARCHAR(99) NOT NULL,
-	InsertedDate NVARCHAR(99) DEFAULT GetDate()
+	InsertedDate NVARCHAR(99) DEFAULT GetDate(), 
+    
 )
 
 GO

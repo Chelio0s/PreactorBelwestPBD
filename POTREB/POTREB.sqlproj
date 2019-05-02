@@ -59,5 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="s_group.sql" />
+    <Build Include="passp.sql" />
   </ItemGroup>
 </Project>

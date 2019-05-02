@@ -12,7 +12,7 @@ SELECT
 	  ,KTOPN
 	  ,NTOP as [NTOP]
 	  ,PONEOB
-	  ,NORMATIME
+	  ,NORMATIME 
 	  ,KOB
 	  ,MOB
 	  ,KPROF

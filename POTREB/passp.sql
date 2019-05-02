@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[passp]
+(
+	[FKGR] INT NOT NULL PRIMARY KEY, 
+    [ART] NCHAR(10) NOT NULL, 
+    [NORMA] DECIMAL(8, 2) NOT NULL
+)

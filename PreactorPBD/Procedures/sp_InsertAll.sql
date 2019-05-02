@@ -16,9 +16,11 @@ BEGIN
 	EXEC [InputData].sp_CreateEntrySemiProducts
 	EXEC [InputData].sp_CreateCutters
 	EXEC [InputData].sp_CreateConstraintCalendar_Cutters
-	EXEC [InputData].sp_FillTempOperationTable
-	EXEC [InputData].[sp_InsertOperations]
-	
+	EXEC [InputData].sp_FillTempOperationTable -- заполняем вр. таблицу с опер-ми
+	EXEC [InputData].sp_InsertOperations
+	EXEC [InputData].sp_InsertOperationsInResources
+	EXEC [InputData].sp_FillTempMaterials -- заполняем вр. таблицу с мат-ми
+	EXEC [InputData].sp_InsertSpecifications -- заполняем спецификации
 
 END
 RETURN 0

@@ -65,6 +65,8 @@
     <Build Include="s_obor2.sql" />
     <Build Include="d_sap_vika10.sql" />
     <Build Include="s_prof2.sql" />
+    <Build Include="DRIVE_ART.sql" />
+    <Build Include="drive1.sql" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="RKV">
@@ -75,5 +77,8 @@
       <DefaultValue>RKV_SCAL</DefaultValue>
       <Value>$(SqlCmdVar__1)</Value>
     </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="PLANT.refactorlog" />
   </ItemGroup>
 </Project>

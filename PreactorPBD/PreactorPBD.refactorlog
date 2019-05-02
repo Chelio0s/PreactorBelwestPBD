@@ -511,4 +511,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="OperationId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="921d9641-ea60-44df-a851-e6fb6b14e2fc" ChangeDateTime="04/30/2019 12:31:47">
+    <Property Name="ElementName" Value="[InputData].[TempMaterials].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[TempMaterials]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Article" />
+  </Operation>
 </Operations>

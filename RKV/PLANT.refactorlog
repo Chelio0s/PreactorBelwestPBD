@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="77dc6f1b-5226-41ae-bacc-c753ca8ab978" ChangeDateTime="04/30/2019 12:39:51">
+    <Property Name="ElementName" Value="[dbo].[DRIVE_ART].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DRIVE_ART]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="KTOPN" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e247a729-810b-4431-b04d-a2d67ed42c61" ChangeDateTime="04/30/2019 12:40:37">
+    <Property Name="ElementName" Value="[dbo].[drive1].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[drive1]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="REL" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9bfd2788-422c-4d9a-80a1-aba56a4e4587" ChangeDateTime="04/30/2019 12:41:09">
+    <Property Name="ElementName" Value="[dbo].[passp].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[passp]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FKGR" />
+  </Operation>
+</Operations>

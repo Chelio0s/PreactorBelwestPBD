@@ -1,11 +1,12 @@
 ﻿CREATE PROCEDURE [InputData].[sp_FillTempOperationTable]
 	
 AS
-BEGIN TRANSACTION 
-	truncate table [SupportData].[TempOperations]
-	INSERT [SupportData].[TempOperations]
+BEGIN TRANSACTION  
+    TRUNCATE TABLE [SupportData].[TempOperations] 
+	INSERT [SupportData].[TempOperations] 
 	SELECT  
 	[IdNomenclature]
+	  ,REL
 	  ,op.[MOD] as Model
       ,inpart.Title as Article
       ,[Number_] as [Nomenclature]
