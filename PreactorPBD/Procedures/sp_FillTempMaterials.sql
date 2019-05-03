@@ -8,8 +8,9 @@ BEGIN TRANSACTION
 			   ([Article]
 			   ,[REL]
 			   ,[FKGR]
-			   ,[NORMA])
-	SELECT DISTINCT  ART, REL, FKGR, NORMA
+			   ,[NORMA]
+			   ,KPODTO)
+	SELECT DISTINCT  ART, REL, FKGR, NORMA, KPODTO
 	FROM    [InputData].[VI_MaterialsFromRKV_SLOW]
 
 COMMIT TRANSACTION

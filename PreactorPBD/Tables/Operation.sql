@@ -7,6 +7,7 @@
     [ProfessionId] INT NOT NULL, 
     [TypeTime] BIT NOT NULL, 
     [CategoryOperation] INT NOT NULL, 
+    [Code] varchar(4) NULL, 
     CONSTRAINT [FK_Operations_ToProfGroup] FOREIGN KEY ([ProfessionId]) REFERENCES [InputData].[Professions](IdProfession)
 	ON UPDATE CASCADE ON DELETE CASCADE, 
     CONSTRAINT [FK_Operations_ToSemiProduct] FOREIGN KEY ([SemiProductID]) REFERENCES [InputData].[SemiProducts](IdSemiProduct)
