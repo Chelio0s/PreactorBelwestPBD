@@ -57,6 +57,31 @@
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
   <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
@@ -180,6 +205,10 @@
     <Build Include="Views\VI_MaterialsFromRKV_SLOW.sql" />
     <Build Include="Procedures\sp_FillTempMaterials.sql" />
     <Build Include="Procedures\sp_InsertSpecifications.sql" />
+    <Build Include="Maintenance\sp_BackUp_Full.sql" />
+    <Build Include="Users\Login_admin.sql" />
+    <Build Include="Users\ServerRoleMembership_admin.sql" />
+    <Build Include="Views\VI_EmployeesWithProfs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -188,6 +217,8 @@
     <None Include="PreactorPBD.publish.xml" />
     <None Include="Triggers\tgr_RestrictionDeleteOrgUnit.sql" />
     <PreDeploy Include="Maintenance\ChangeOwner.sql" />
+    <None Include="Maintenance\CreateJobBackUp.sql" />
+    <None Include="Maintenance\CreateOperator.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLR\pc_Select_Oralce_SAP.cs" />
@@ -205,6 +236,7 @@
     <Compile Include="CLR\ctvf_GetWorkTime2Shifts.cs" />
     <Compile Include="CLR\ctvf_GetModelArticle.cs" />
     <Compile Include="CLR\ctvf_ConcatWithoutDublicates.cs" />
+    <Compile Include="CLR\pc_TestRelationOracle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

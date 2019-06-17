@@ -9,7 +9,7 @@ using PreactorPBD;
 public partial class StoredProcedures
 {
     [Microsoft.SqlServer.Server.SqlProcedure]
-    public static void pc_Select_Oralce_MPU (SqlString selectCommandText)
+    public static void pc_Select_Oralce_MPU(SqlString selectCommandText)
     {
         using (OracleConnection con = new OracleConnection(OracleSettings.GetConnectionString(OracleDataBase.MPU)))
         {
@@ -32,7 +32,7 @@ public partial class StoredProcedures
                     case "FLOAT": type = SqlDbType.Float; break;
                     case "NCHAR": type = SqlDbType.NChar; break;
                     case "CHAR": type = SqlDbType.Char; break;
-                    case "TIMESTAMP": type = SqlDbType.DateTime; break;
+
                     default: type = SqlDbType.NVarChar; break;
                 }
 
@@ -44,6 +44,7 @@ public partial class StoredProcedures
             }
 
             bool first = true;
+            bool start = false;
             try
             {
                 while (reader.Read())
@@ -61,15 +62,32 @@ public partial class StoredProcedures
                             case "FLOAT": record.SetSqlDecimal(i, (decimal)reader[i]); break;
                             case "NCHAR": record.SetSqlString(i, Convert.ToString(reader[i])); break;
                             case "CHAR": record.SetSqlString(i, Convert.ToString(reader[i])); break;
-                            case "TIMESTAMP": record.SetSqlDateTime(i, (DateTime)reader[i]); break;
+
                             default: record.SetSqlString(i, Convert.ToString(reader[i])); break;
                         }
                     }
                     if (first)
                     {
-                        SqlContext.Pipe.SendResultsStart(record);
-                        SqlContext.Pipe.SendResultsRow(record);
-                        first = false;
+                        try
+                        {
+                            SqlContext.Pipe.SendResultsStart(record);
+                            SqlContext.Pipe.SendResultsRow(record);
+                            first = false;
+                        }
+                        catch (Exception eq)
+                        {
+                            if (SqlContext.Pipe.IsSendingResults && start)
+                            {
+                                SqlContext.Pipe.SendResultsEnd();
+                            }
+
+                            string error = string.Empty;
+                            for (int i = 0; i < record.FieldCount; i++)
+                            {
+                                error += record.GetFieldType(i).Name +" :"+ record.GetString(i) + " ";
+                            }
+                            SqlContext.Pipe.ExecuteAndSend(new SqlCommand(string.Format("RAISERROR ( '{0}', 11, 1)", eq.Message + " "+error)));
+                        }
                     }
                     else
                     {
@@ -81,14 +99,13 @@ public partial class StoredProcedures
                 {
                     SqlContext.Pipe.SendResultsEnd();
                 }
-                
+
             }
             catch (Exception e)
             {
+                SqlContext.Pipe.SendResultsEnd();
                 SqlContext.Pipe.ExecuteAndSend(new SqlCommand(string.Format("RAISERROR ( '{0}', 11, 1)", e.Message)));
-               
             }
-
         }
     }
 }
