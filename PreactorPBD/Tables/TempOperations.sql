@@ -18,8 +18,8 @@
     [KPROF] NCHAR(10) NOT NULL,
 	[CategoryOperation] INT NOT NULL,
 	[TitlePreactorOper] NVARCHAR(99) NOT NULL,
-	InsertedDate NVARCHAR(99) DEFAULT GetDate(), 
-    
+	[NPP] INT NOT NULL, 
+	InsertedDate NVARCHAR(99) DEFAULT GetDate()
 )
 
 GO

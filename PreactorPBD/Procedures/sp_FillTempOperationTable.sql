@@ -22,6 +22,7 @@ BEGIN TRANSACTION
 	  ,KPROF
 	  ,RD
 	  ,[InputData].[udf_GetTitleOperation] (KTOPN, NTOP) as [PreactorOperation]
+	  ,NPP
 	  ,GETDATE()
   FROM [InputData].[Nomenclature] as nom
   INNER JOIN [InputData].[Article] as inpart ON nom.ArticleId = inpart.IdArticle

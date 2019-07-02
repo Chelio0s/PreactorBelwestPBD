@@ -518,4 +518,32 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Article" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="040dc68d-2b21-48e6-9016-1ae9a7a4c41f" ChangeDateTime="06/17/2019 13:22:40">
+    <Property Name="ElementName" Value="[InputData].[Rout].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Rout]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdRout" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e9b63a00-3825-460b-86c7-ea8f7ffe4fad" ChangeDateTime="06/17/2019 13:29:06">
+    <Property Name="ElementName" Value="[InputData].[Operations].[SemiProductID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RoutId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4ba31099-a6ba-4548-92c6-bdd59b8ed481" ChangeDateTime="06/27/2019 11:33:32">
+    <Property Name="ElementName" Value="[SupportData].[CombineRules].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[CombineRules]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCombineRules" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e691eb14-4a5e-4459-8ea8-2d93828a9389" ChangeDateTime="06/27/2019 11:59:15">
+    <Property Name="ElementName" Value="[SupportData].[CombineComposition].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[CombineComposition]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCombineComposition" />
+  </Operation>
 </Operations>

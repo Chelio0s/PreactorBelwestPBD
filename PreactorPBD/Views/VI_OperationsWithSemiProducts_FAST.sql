@@ -23,6 +23,7 @@ CREATE VIEW [InputData].[VI_OperationsWithSemiProducts_FAST]
 	  ,seq.SimpleProductId
 	  ,seq.OperOrder
 	  ,REL
+	  ,NPP
 	FROM [SupportData].[TempOperations] as temp
 	LEFT JOIN [SupportData].[SequenceOperations] as seq ON seq.KTOP = temp.KTOPN 
 	LEFT JOIN [InputData].[SemiProducts] as semi ON semi.NomenclatureID = temp.IdNomenclature 											

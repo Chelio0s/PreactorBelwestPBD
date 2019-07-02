@@ -16,6 +16,7 @@
       ,[TitlePreactorOper]
       ,[SimpleProductId]
       ,[OperOrder]
+	  ,NPP
   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]
   GROUP BY 
 		   [Article]
@@ -33,3 +34,4 @@
 		  ,[TitlePreactorOper]
 		  ,[SimpleProductId]
 		  ,[OperOrder]
+		  ,NPP

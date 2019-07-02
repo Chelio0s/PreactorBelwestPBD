@@ -99,6 +99,8 @@
     <Folder Include="Triggers" />
     <Folder Include="Scripts" />
     <Folder Include="Snapshots" />
+    <Folder Include="Tables\SupportData" />
+    <Folder Include="Entity\Combinator" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -144,8 +146,6 @@
     <Build Include="Schemas\LogData.sql" />
     <Build Include="Tables\Log.sql" />
     <Build Include="Functions\udf_GetKTOPTitle.sql" />
-    <Build Include="Tables\AltOperations.sql" />
-    <Build Include="Tables\AltOperationRule.sql" />
     <Build Include="Procedures\sp_InsertProfsIntoPreactor.sql" />
     <Build Include="Procedures\sp_InsertOrgUnit.sql" />
     <Build Include="Procedures\sp_InsertActualEmployees.sql" />
@@ -209,6 +209,18 @@
     <Build Include="Users\Login_admin.sql" />
     <Build Include="Users\ServerRoleMembership_admin.sql" />
     <Build Include="Views\VI_EmployeesWithProfs.sql" />
+    <Build Include="Tables\Rout.sql" />
+    <Build Include="Tables\SupportData\ComposeOperation.sql" />
+    <Build Include="Tables\SupportData\OperationComposition.sql" />
+    <Build Include="Tables\SupportData\RoutRoules.sql" />
+    <Build Include="Views\VI_KTOPWithSemiProducts.sql" />
+    <Build Include="Views\VI_OperationsRoutRules.sql" />
+    <Build Include="Procedures\sp_InsertRoutes.sql" />
+    <Build Include="Tables\SupportData\RuleGroup.sql" />
+    <Build Include="Tables\SupportData\CombineRules.sql" />
+    <Build Include="Tables\SupportData\CombineComposition.sql" />
+    <Build Include="Functions\udf_GetRuslesForSemiProduct.sql" />
+    <Build Include="Procedures\sp_InsertCombines.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -219,6 +231,8 @@
     <PreDeploy Include="Maintenance\ChangeOwner.sql" />
     <None Include="Maintenance\CreateJobBackUp.sql" />
     <None Include="Maintenance\CreateOperator.sql" />
+    <None Include="Maintenance\AddAssemblies.sql" />
+    <None Include="Maintenance\Servers\CurrentServer.sql" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLR\pc_Select_Oralce_SAP.cs" />
@@ -236,7 +250,19 @@
     <Compile Include="CLR\ctvf_GetWorkTime2Shifts.cs" />
     <Compile Include="CLR\ctvf_GetModelArticle.cs" />
     <Compile Include="CLR\ctvf_ConcatWithoutDublicates.cs" />
-    <Compile Include="CLR\pc_TestRelationOracle.cs" />
+    <Compile Include="CLR\ctvf_GetRouteRules.cs" />
+    <Compile Include="Entity\KTOPWithSemiProducts.cs" />
+    <Compile Include="Entity\RoutOperations.cs" />
+    <Compile Include="Entity\Route.cs" />
+    <Compile Include="Entity\Combinator\CombineData.cs" />
+    <Compile Include="Entity\Combinator\CombineExtension.cs" />
+    <Compile Include="CLR\ctvf_CombineRules.cs" />
+    <Compile Include="Entity\Combinator\CombineResult.cs" />
+    <Compile Include="Entity\RoutRules.cs" />
+    <Compile Include="CLR\ctvf_CombineCombines.cs" />
+    <Compile Include="Entity\Combinator\CombineRouts.cs" />
+    <Compile Include="Entity\Combinator\CombineItem.cs" />
+    <Compile Include="Entity\Combinator\CombineItemResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -245,6 +271,7 @@
     <Reference Include="Oracle.ManagedDataAccess">
       <HintPath>..\..\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\AddExtendedProp.sql" />
