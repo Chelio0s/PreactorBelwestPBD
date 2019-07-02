@@ -1,9 +1,16 @@
 ﻿
 namespace PreactorSDB
 {
-    public class CombineResult
+    public readonly struct CombineResult
     {
-        public int IdCombine { get; set; }
-        public int IdRule { get; set; }
+        public CombineResult(int idCombine, int idRule, int groupId)
+        {
+            IdCombine = idCombine;
+            IdRule = idRule;
+            GroupId = groupId;
+        }
+        public int IdCombine { get;  }
+        public int IdRule { get;  }
+        public  int GroupId { get;  }
     }
 }

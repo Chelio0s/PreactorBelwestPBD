@@ -14,7 +14,8 @@ public partial class UserDefinedFunctions
         FillRowMethodName = "FillCombineRules", SystemDataAccess = SystemDataAccessKind.Read,
         DataAccess = DataAccessKind.Read,
         TableDefinition = "IDRoutRule int " +
-                          ",IdCombine int")]
+                          ",IdCombine int " +
+                          ",GroupId int")]
     public static IEnumerable ctvf_CombineRules(int IdSemiProduct)
     {
         var resultList = new List<CombineResult>();
@@ -39,12 +40,12 @@ public partial class UserDefinedFunctions
 
             var groups = list.GroupBy(x => x.RuleGroupId);
 
-            List<List<CombineData<int>>> dataList = new List<List<CombineData<int>>>();
+            List<List<CombineData<RoutRule>>> dataList = new List<List<CombineData<RoutRule>>>();
             foreach (var gr in groups)
             {
-                var combineDatas = gr.Select(x => new CombineData<int>()
+                var combineDatas = gr.Select(x => new CombineData<RoutRule>()
                 {
-                    Data = { x.IdRoutRule }
+                    Data = { new RoutRule(x.IdRoutRule, x.RuleGroupId) }
                 }).ToList();
                 dataList.Add(combineDatas);
             }
@@ -54,11 +55,11 @@ public partial class UserDefinedFunctions
                 return null;
             }
 
-            List<CombineData<int>> finalCombine;
+            List<CombineData<RoutRule>> finalCombine;
 
             if (dataList.Count > 1)
             {
-                List<CombineData<int>> tempCombine = null;
+                List<CombineData<RoutRule>> tempCombine = null;
                 for (int i = 0; i < dataList.Count; i++)
                 {
                     if (i < dataList.Count - 1)
@@ -77,11 +78,7 @@ public partial class UserDefinedFunctions
             {
                 foreach (var data in f.Data)
                 {
-                    resultList.Add(new CombineResult()
-                    {
-                        IdCombine = counter,
-                        IdRule = data
-                    });
+                    resultList.Add(new CombineResult(counter, data.IdRoutRule, data.GroupId));
                 }
 
                 counter++;
@@ -91,10 +88,11 @@ public partial class UserDefinedFunctions
     }
 
 
-    public static void FillCombineRules(object obj, out SqlInt32 IdRule, out SqlInt32 IdCombine)
+    public static void FillCombineRules(object obj, out SqlInt32 IdRule, out SqlInt32 IdCombine, out SqlInt32 GroupId)
     {
-        var resObj = obj as CombineResult;
+        var resObj = (CombineResult)obj;
         IdRule = resObj.IdRule;
         IdCombine = resObj.IdCombine;
+        GroupId = resObj.GroupId;
     }
 }

@@ -6,6 +6,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using Microsoft.SqlServer.Server;
 using PreactorPBD;
+using PreactorSDB;
 
 public partial class UserDefinedFunctions
 {
@@ -22,55 +23,46 @@ public partial class UserDefinedFunctions
             = new SqlConnection("context connection=true"))
         {
             SqlCommand command = new SqlCommand($"SELECT * FROM [InputData].[ctvf_CombineRules] " +
-                                                $"({IdSemiProduct})", sqlConnection);
+                                                     $"({IdSemiProduct})", sqlConnection);
             sqlConnection.Open();
             var reader = command.ExecuteReader();
-            List<CombineRouts> list = new List<CombineRouts>();
+            List<CombineResult> list = new List<CombineResult>();
             while (reader.Read())
             {
-                list.Add(new CombineRouts()
-                {
-                    IdRoutRule = Convert.ToInt32(reader[0]),
-                    IdCombine = Convert.ToInt32(reader[1])
-                });
+                list.Add(new CombineResult(
+                    Convert.ToInt32(reader[1]),
+                    Convert.ToInt32(reader[0]),
+                    Convert.ToInt32(reader[2])));
             }
-
+     
             //Группируем все по группам и помещаем в спец. листы
 
-            var groups = list.GroupBy(x => x.IdCombine);
+            var groups = list.GroupBy(x => x.GroupId);
 
             List<List<CombineData<CombineItem>>> dataList = new List<List<CombineData<CombineItem>>>();
             foreach (var gr in groups)
             {
-                var combineDatas = gr.Select(x => new CombineData<CombineItem>()
-                {
-                    Data =
-                    {
-                        new CombineItem()
-                        {
-                            IdRoutRule = x.IdRoutRule,
-                            IsParent = true,
-                            IdCombine = x.IdCombine
-                        }
-                    }
-                }).ToList();
+                var combineDatas = new List<CombineData<CombineItem>>();
 
-                var data2 = gr.Select(x => new CombineData<CombineItem>()
+                foreach (var d2 in gr)
                 {
-                    Data =
+                    var cd = new CombineData<CombineItem>();
+                    cd.Data.Add(new CombineItem()
                     {
-                        new CombineItem()
-                        {
-                            IdRoutRule = x.IdRoutRule,
-                            IsParent = false,
-                            IdCombine = x.IdCombine
-                        }
-                    }
-                }).ToList();
+                        IdRoutRule = d2.IdRule,
+                        IsParent = false,
+                        IdCombine = d2.IdCombine
+                    });
+                    combineDatas.Add(cd);
+                    cd = new CombineData<CombineItem>();
+                    cd.Data.Add(new CombineItem()
+                    {
+                        IdRoutRule = d2.IdRule,
+                        IsParent = true,
+                        IdCombine = d2.IdCombine
+                    });
+                    combineDatas.Add(cd);
 
-                foreach (var d2 in data2)
-                {
-                    combineDatas.Add(d2);
                 }
 
                 dataList.Add(combineDatas);
@@ -107,6 +99,7 @@ public partial class UserDefinedFunctions
                 counter++;
                 foreach (var data in f.Data)
                 {
+
                     resultList.Add(new CombineItemResult()
                     {
                         IdCombine = counter,

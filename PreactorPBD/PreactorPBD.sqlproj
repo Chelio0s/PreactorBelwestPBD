@@ -221,6 +221,7 @@
     <Build Include="Tables\SupportData\CombineComposition.sql" />
     <Build Include="Functions\udf_GetRuslesForSemiProduct.sql" />
     <Build Include="Procedures\sp_InsertCombines.sql" />
+    <Build Include="Views\VI_RulesWithOperations.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -258,11 +259,12 @@
     <Compile Include="Entity\Combinator\CombineExtension.cs" />
     <Compile Include="CLR\ctvf_CombineRules.cs" />
     <Compile Include="Entity\Combinator\CombineResult.cs" />
-    <Compile Include="Entity\RoutRules.cs" />
     <Compile Include="CLR\ctvf_CombineCombines.cs" />
     <Compile Include="Entity\Combinator\CombineRouts.cs" />
     <Compile Include="Entity\Combinator\CombineItem.cs" />
     <Compile Include="Entity\Combinator\CombineItemResult.cs" />
+    <Compile Include="Entity\Combinator\RoutRule.cs" />
+    <Compile Include="Entity\Combinator\RoutRules.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
