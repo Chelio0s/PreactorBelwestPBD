@@ -20,7 +20,7 @@ BEGIN
 	EXEC [InputData].sp_InsertRoutes						-- создаем маршруты
 	EXEC [InputData].sp_FillTempOperationTable				-- заполняем вр. таблицу с опер-ми
 	EXEC [InputData].sp_InsertOperations					-- заполняем операции для продуктов
-	EXEC [InputData].sp_InsertOperationsInResources
+	EXEC [InputData].sp_InsertOperationsInResources         -- заливаем операции на рессурсы
 	EXEC [InputData].sp_FillTempMaterials					-- заполняем вр. таблицу с мат-ми
 	EXEC [InputData].sp_InsertSpecifications				-- заполняем спецификации
 

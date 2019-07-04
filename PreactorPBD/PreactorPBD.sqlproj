@@ -222,6 +222,10 @@
     <Build Include="Functions\udf_GetRuslesForSemiProduct.sql" />
     <Build Include="Procedures\sp_InsertCombines.sql" />
     <Build Include="Views\VI_RulesWithOperations.sql" />
+    <Build Include="Views\VI_SemiProductsWithRules.sql" />
+    <Build Include="Views\VI_SemiProductsWithArticles.sql" />
+    <Build Include="Views\VI_RoutWithOperationsRoutRules.sql" />
+    <Build Include="Functions\udf_GetOperationsRule.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -254,7 +258,6 @@
     <Compile Include="CLR\ctvf_GetRouteRules.cs" />
     <Compile Include="Entity\KTOPWithSemiProducts.cs" />
     <Compile Include="Entity\RoutOperations.cs" />
-    <Compile Include="Entity\Route.cs" />
     <Compile Include="Entity\Combinator\CombineData.cs" />
     <Compile Include="Entity\Combinator\CombineExtension.cs" />
     <Compile Include="CLR\ctvf_CombineRules.cs" />
@@ -265,6 +268,10 @@
     <Compile Include="Entity\Combinator\CombineItemResult.cs" />
     <Compile Include="Entity\Combinator\RoutRule.cs" />
     <Compile Include="Entity\Combinator\RoutRules.cs" />
+    <Compile Include="CLR\ctvf_GetOperationsForRout.cs" />
+    <Compile Include="Entity\RoutRulesOperation.cs" />
+    <Compile Include="Entity\DisableOperations.cs" />
+    <Compile Include="Entity\RoutRulesOperationSmall.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
