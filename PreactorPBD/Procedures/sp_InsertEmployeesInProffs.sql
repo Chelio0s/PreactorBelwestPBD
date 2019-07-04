@@ -114,13 +114,14 @@ SELECT
 			   ,[ProfessionId]
 			   ,[CategoryProfession]
 			   ,[IsPrimary])
- SELECT tabno, 
+ SELECT DISTINCT tabno, 
 		PROF_STELL, 
 		PROF_TRFST, 
 		isPrimary
  FROM #tempPrimaryProf as t 
  INNER JOIN [InputData].[Professions] AS p ON p.IdProfession=t.PROF_STELL
  
+ WHERE tabno <> 00022659
  ORDER BY tabno
 
 RETURN 0
