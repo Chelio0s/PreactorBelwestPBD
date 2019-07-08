@@ -4,7 +4,7 @@
       ,[TabNum]
       ,emp.[Orgunit]
 	  ,org.Title as OrgTitle
-	  ,org.crew
+	  ,org.Crew
 	  ,empInProf.ProfessionId
 	  ,empInProf.CategoryProfession
 	  ,prof.Title as TitleProf

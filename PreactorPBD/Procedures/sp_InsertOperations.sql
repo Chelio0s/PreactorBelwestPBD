@@ -13,7 +13,7 @@ AS
       ,1 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
-	  ,NPP
+	  ,1  --заменяем NPP на 1 чтобы убрать потом дубликаты
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
   WHERE code = 'OP01'
@@ -62,7 +62,7 @@ INSERT INTO [InputData].[Operations]
            ,[Code])
 	SELECT 
 		TitleOperPr
-		,ROW_NUMBER() over (partition by IdSemiProduct order by IdSemiProduct, OperOrder)
+		,ROW_NUMBER() over (partition by IdSemiProduct order by IdSemiProduct, OperOrder)*10
 		,idRout
 		,idProfesson
 		,TypeTime
@@ -80,15 +80,15 @@ INSERT INTO [InputData].[Operations]
            ,[TypeTime]
            ,[CategoryOperation]
            ,[Code])
-	SELECT 
-		TitleOperPr
-		,ROW_NUMBER() over (partition by IdSemiProduct order by IdSemiProduct, OperOrder)
+	SELECT DISTINCT
+		tt.TitleOperPr
+		,(SELECT TOP(1) NPP FROM @table as t WHERE t.TitleOperPr = tt.TitleOperPr and t.idRout = tt.idRout and t.IdSemiProduct = tt.IdSemiProduct) as NPP
 		,idRout
 		,idProfesson
 		,TypeTime
 		,CategoryOperation
 		,Code
-		FROM @table
+		FROM @table as tt
 		WHERE Code = 'OP02'
 		ORDER BY idRout, NPP
 RETURN 0

@@ -1,8 +1,13 @@
 ﻿using System;
 
-internal class WorkTime
+readonly struct WorkTime
 {
-    public DateTime StartWork { get; set; }
-    public DateTime EndWork { get; set; }
+    public WorkTime(DateTime startWork, DateTime endWork)
+    {
+        StartWork = startWork;
+        EndWork = endWork;
+    }
+    public DateTime StartWork { get;  }
+    public DateTime EndWork { get; }
 }
 

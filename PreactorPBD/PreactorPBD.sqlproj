@@ -226,6 +226,8 @@
     <Build Include="Views\VI_SemiProductsWithArticles.sql" />
     <Build Include="Views\VI_RoutWithOperationsRoutRules.sql" />
     <Build Include="Functions\udf_GetOperationsRule.sql" />
+    <Build Include="Maintenance\sp_SrinkDb.sql" />
+    <Build Include="Views\VI_OperationsFromSDB.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -272,6 +274,7 @@
     <Compile Include="Entity\RoutRulesOperation.cs" />
     <Compile Include="Entity\DisableOperations.cs" />
     <Compile Include="Entity\RoutRulesOperationSmall.cs" />
+    <Compile Include="Entity\Sizes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

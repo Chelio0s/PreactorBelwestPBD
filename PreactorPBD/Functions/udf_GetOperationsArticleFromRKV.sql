@@ -22,27 +22,21 @@ AS
 BEGIN
 	INSERT @returntable
 SELECT DISTINCT 
-RTRIM(F13.ART) as ART
-,D.[MOD]
-,D.REL 
-,D.KPO 
-,D.KTOPN 
-,OP.NTOP as NTOP
+ ART
+,[MOD]
+,REL 
+,KPO 
+,KTOPN 
+,NTOP as NTOP
 ,PONEOB
-,D.NORMA as NORMATIME
-,OP.KPROF as KPROF
-,OP.RD
-,D.KOB
-,OBR.MOB  
+,NORMA as NORMATIME
+,KPROF as KPROF
+,RD
+,KOB 
+,MOB
 ,NPP
-FROM  [$(RKV)].[$(PLANT)].dbo.drive as D 
-INNER JOIN [$(RKV)].[$(RKV_SCAL)].dbo.F160013  as F13 on D.MOD=F13.MOD
-INNER JOIN [$(RKV)].[$(PLANT)].dbo.status as  S  on S.MOD=D.MOD AND S.KPO=D.KPO
-INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_top2 as  OP on OP.KTOP=D.KTOPN
-LEFT JOIN  [$(RKV)].[$(PLANT)].dbo.s_obor2 OBR on D.KOB=OBR.KOB 
-WHERE S.PR_UD2=0  
-and D.KTOPN <> 0 
-and RTRIM(F13.ART) = @article
-ORDER BY D.KPO
+FROM  VI_OperationsFromRKV
+WHERE ART = @article
+ORDER BY KPO
 	RETURN
 END

@@ -29,11 +29,7 @@ public partial class UserDefinedFunctions
             List<RoutRules> list = new List<RoutRules>();
             while (reader.Read())
             {
-                list.Add(new RoutRules()
-                {
-                    IdRoutRule = Convert.ToInt32(reader[1]),
-                    RuleGroupId = Convert.ToInt32(reader[2])
-                });
+                list.Add(new RoutRules(Convert.ToInt32(reader[1]), Convert.ToInt32(reader[2])));
             }
 
             //Группируем все по группам и помещаем в спец. листы

@@ -1,9 +1,14 @@
 
 namespace PreactorSDB
 {
-    class RoutRules
+    readonly struct RoutRules
     {
-        public int IdRoutRule { get; set; }
-        public  int RuleGroupId { get; set; }
+        public  RoutRules(int idRoutRules, int ruleGroupId)
+        {
+            IdRoutRule = idRoutRules;
+            RuleGroupId = ruleGroupId;
+        }
+        public int IdRoutRule { get; }
+        public  int RuleGroupId { get;  }
     }
 }

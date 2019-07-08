@@ -111,11 +111,11 @@ public partial class UserDefinedFunctions
                 var cw = new CicleWork();
                 try
                 {
-                    cw.IdCicle = Convert.ToInt32(reader[0]);
-                    cw.AreaId = Convert.ToInt32(reader[1]);
-                    cw.DurationOn = TimeSpan.Parse(reader[2].ToString());
-                    cw.DurationOff = TimeSpan.Parse(reader[3].ToString());
-                    cw.ShiftId = Convert.ToInt32(reader[4]);
+                    cw = new CicleWork(Convert.ToInt32(reader[0])
+                        , Convert.ToInt32(reader[1])
+                        , TimeSpan.Parse(reader[2].ToString())
+                        , TimeSpan.Parse(reader[3].ToString())
+                        , Convert.ToInt32(reader[4]));
                 }
                 catch
                 {
@@ -129,9 +129,8 @@ public partial class UserDefinedFunctions
             var timeStart = shiftSetting.DateWorkDay + shiftSetting.TimeStart;
             foreach (var c in cicles)
             {
-                var wt = new WorkTime();
-                wt.StartWork = timeStart;
-                wt.EndWork = wt.StartWork + c.DurationOn;
+                var wt = new WorkTime(timeStart, timeStart + c.DurationOn);
+           
                 timeStart = wt.EndWork + c.DurationOff;
                 workTimes.Add(wt);
 
