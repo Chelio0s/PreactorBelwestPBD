@@ -23,8 +23,8 @@ public partial class UserDefinedFunctions
 
             string commandStr = @"SELECT distinct INDEX_MODEL
                 FROM gui_sap.MKZ_MAIN a 
-                INNER JOIN gui_sap.MKZ_ART c ON a.id = c.id_model 
-             where  art = '" + article.Value+"'";
+                INNER JOIN gui_sap.MKZ_ART c ON a.id = c.id_model "+
+                $"where  art = '{article}'";
             OracleDataReader reader;
             OracleCommand comm = new OracleCommand(commandStr, con);
             try

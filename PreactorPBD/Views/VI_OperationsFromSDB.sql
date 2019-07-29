@@ -1,5 +1,6 @@
 ﻿--  Все операции в ПБД для каждого маршрута
-
+--  DON'T CHANGE PLEASE
+--  От этой вью зависит инсерт OperationsInResources
 CREATE VIEW [InputData].[VI_OperationsFromSDB]
 	AS 
 	SELECT [IdOperation]
@@ -13,6 +14,8 @@ CREATE VIEW [InputData].[VI_OperationsFromSDB]
       ,[TypeTime]
       ,[CategoryOperation]
       ,[Code]
+	  ,sp.IdSemiProduct
+	  ,sp.SimpleProductId 
   FROM [InputData].[Operations]			as oper
   INNER JOIN [InputData].[Rout]			as rout	ON rout.IdRout = oper.RoutId
   INNER JOIN [InputData].[SemiProducts] as sp	ON sp.IdSemiProduct = rout.SemiProductId

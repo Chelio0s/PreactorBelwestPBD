@@ -101,6 +101,9 @@
     <Folder Include="Snapshots" />
     <Folder Include="Tables\SupportData" />
     <Folder Include="Entity\Combinator" />
+    <Folder Include="Tables\SupportData\MappingRoutes" />
+    <Folder Include="Tables\SupportData\AltRoutes" />
+    <Folder Include="Entity\MappingRules" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -210,15 +213,9 @@
     <Build Include="Users\ServerRoleMembership_admin.sql" />
     <Build Include="Views\VI_EmployeesWithProfs.sql" />
     <Build Include="Tables\Rout.sql" />
-    <Build Include="Tables\SupportData\ComposeOperation.sql" />
-    <Build Include="Tables\SupportData\OperationComposition.sql" />
-    <Build Include="Tables\SupportData\RoutRoules.sql" />
     <Build Include="Views\VI_KTOPWithSemiProducts.sql" />
     <Build Include="Views\VI_OperationsRoutRules.sql" />
     <Build Include="Procedures\sp_InsertRoutes.sql" />
-    <Build Include="Tables\SupportData\RuleGroup.sql" />
-    <Build Include="Tables\SupportData\CombineRules.sql" />
-    <Build Include="Tables\SupportData\CombineComposition.sql" />
     <Build Include="Functions\udf_GetRuslesForSemiProduct.sql" />
     <Build Include="Procedures\sp_InsertCombines.sql" />
     <Build Include="Views\VI_RulesWithOperations.sql" />
@@ -228,6 +225,37 @@
     <Build Include="Functions\udf_GetOperationsRule.sql" />
     <Build Include="Maintenance\sp_SrinkDb.sql" />
     <Build Include="Views\VI_OperationsFromSDB.sql" />
+    <Build Include="Views\VI_MissingOperations.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithTimes.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\CombineComposition.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\CombineRules.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\ComposeOperation.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\OperationComposition.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\RoutRoules.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\RuleGroup.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingComposeResource.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingResourceComposition.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingComposeOperation.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingOperationComposition.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingRules.sql" />
+    <Build Include="Views\VI_MappingRules.sql" />
+    <Build Include="Functions\udf_GetOperationsForSemiProduct.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\NotMappingOperations.sql" />
+    <Build Include="Functions\udf_GetOperationsForArticle.sql" />
+    <Build Include="Functions\udf_CompareRouts.sql" />
+    <Build Include="Functions\udf_GetAviableequipmentForMappingOperation.sql" />
+    <Build Include="Functions\udf_GetCountEquipmentInArea.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingNeed.sql" />
+    <Build Include="Functions\udf_GetMaxCountEquipmentInAreaForOperation.sql" />
+    <Build Include="Views\VI_CheckList_CheckModelExistense.sql" />
+    <Build Include="Views\VI_CheckList_Persentage.sql" />
+    <Build Include="Views\VI_SelectSemiProductWithArticle.sql" />
+    <Build Include="Views\VI_GetAviablesMappingRouts.sql" />
+    <Build Include="Procedures\sp_GetAlterRoutsOtherPlaces.sql" />
+    <Build Include="Views\VI_RoutesWithArticle.sql" />
+    <Build Include="Views\VI_ResourcesOnDepartments.sql" />
+    <Build Include="Views\VI_OperationsSDBWithResGroups.sql" />
+    <Build Include="Views\VI_OperationsSDBWithConcreetResources.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -275,6 +303,13 @@
     <Compile Include="Entity\DisableOperations.cs" />
     <Compile Include="Entity\RoutRulesOperationSmall.cs" />
     <Compile Include="Entity\Sizes.cs" />
+    <Compile Include="CLR\ctvf_GetMappingRulesForSemiProduct.cs" />
+    <Compile Include="Entity\MappingRules\OperationData.cs" />
+    <Compile Include="Entity\MappingRules\Operation.cs" />
+    <Compile Include="CLR\ctvf_GetFinalRoutForOtherPlaceSemiProduct.cs" />
+    <Compile Include="Entity\MappingRules\MappingRule.cs" />
+    <Compile Include="CLR\ctvf_GetMappingrulesForArticle.cs" />
+    <Compile Include="CLR\ctvf_GetFinalRoutForOterPlaceArticle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

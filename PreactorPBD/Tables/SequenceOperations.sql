@@ -2,7 +2,7 @@
 (
 	[IdSeqOperation] INT NOT NULL PRIMARY KEY IDENTITY, 
     [OperOrder] INT NOT NULL, 
-    [KTOP] INT NOT NULL, 
+    [KTOP] INT NOT NULL UNIQUE, 
     [Title] NVARCHAR(99) NOT NULL, 
     [SimpleProductId] INT NOT NULL, 
     [Changed] DATETIME NULL DEFAULT GETDATE(), 

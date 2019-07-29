@@ -546,4 +546,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdCombineComposition" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="5553c628-e093-4246-8a14-e3b1942203c5" ChangeDateTime="07/17/2019 07:55:17">
+    <Property Name="ElementName" Value="[SupportData].[NotMappingOperations].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[NotMappingOperations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdNMOperation" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="debe5806-2d36-4278-ab4b-1dea91526260" ChangeDateTime="07/19/2019 08:49:11">
+    <Property Name="ElementName" Value="[SupportData].[MappingNeed].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[MappingNeed]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdMapNeed" />
+  </Operation>
 </Operations>
