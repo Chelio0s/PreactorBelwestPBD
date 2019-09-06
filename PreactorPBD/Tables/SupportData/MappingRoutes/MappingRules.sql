@@ -6,8 +6,6 @@
 	OperationMappingChildId			INT                  NOT NULL,
 	MappingComposeResourceParentId	INT                  NOT NULL,
 	MappingComposeResourceChildId	INT                  NOT NULL,
-	AreaIdKOBParent					INT					 NOT NULL, 
-	AreaIdKOBChild					INT					 NOT NULL, 
 	TimeCoefficient					DECIMAL(3,2)         NOT NULL DEFAULT(1), 
     [AddDate]						DATETIME			 NOT NULL DEFAULT(Getdate()), 
 
@@ -22,9 +20,5 @@
 	CONSTRAINT FK_MAPPINGR_REFERENCE_RESCHILD		FOREIGN KEY (MappingComposeResourceChildId)
 		 REFERENCES [SupportData].MappingComposeResource (IdMappingComposeResource),
 	CONSTRAINT FK_MAPPINGR_REFERENCE_DEPART			FOREIGN KEY (AreaId)
-		REFERENCES [InputData].[Areas] (IdArea),
-	CONSTRAINT FK_MAPPINGR_REFERENCE_AreaKobParent	FOREIGN KEY (AreaIdKOBParent)
-		REFERENCES [InputData].[Areas] (IdArea),
-	CONSTRAINT FK_MAPPINGR_REFERENCE_AreaKobChild	FOREIGN KEY (AreaIdKOBChild)
 		REFERENCES [InputData].[Areas] (IdArea)
 )

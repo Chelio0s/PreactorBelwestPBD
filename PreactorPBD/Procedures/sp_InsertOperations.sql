@@ -1,8 +1,20 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperations]
 AS
 
+	DELETE FROM [InputData].[OperationWithKTOP]
 	DELETE FROM  [InputData].[Operations]
-		DECLARE @table as table(idRout int, TitleOperPr nvarchar(99), IdSemiProduct int, idProfesson int, TypeTime int, CategoryOperation int, OperOrder int, Code varchar(4), NPP int)
+		DECLARE @table as table(idRout int, 
+		TitleOperPr nvarchar(99), 
+		IdSemiProduct int, 
+		idProfesson int, 
+		TypeTime int, 
+		CategoryOperation int, 
+		OperOrder int, 
+		Code varchar(4), 
+		NPP int, 
+		KTOPN int,
+		TimeMultiply float,
+		IdMappingRule int NULL)
 	--Все для 1 цеха (там операции строго сортированы по правилам)
 	INSERT INTO @table
 	SELECT DISTINCT
@@ -10,13 +22,16 @@ AS
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-      ,1 as [TypeTime]
+      ,4 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
 	  ,1  --заменяем NPP на 1 чтобы убрать потом дубликаты
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE code = 'OP01' and r.AreaId = 3
+  WHERE code = 'OP01' and r.AreaId = 3 
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все для 2 цеха с правилами, сортировка по NPP
@@ -26,10 +41,13 @@ AS
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-      ,1 as [TypeTime]
+      ,4 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
 	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
   WHERE CombineId is not null and (IdSemiProduct = r.SemiProductId and KTOPN not in (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
@@ -42,10 +60,13 @@ AS
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-      ,1 as [TypeTime]
+      ,4 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
 	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
   WHERE CombineId is null AND code = 'OP02' and r.AreaId = 4
@@ -58,10 +79,13 @@ AS
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-      ,1 as [TypeTime]
+      ,4 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
 	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
   WHERE Code = 'OP61' and r.AreaId = 9
@@ -74,10 +98,13 @@ AS
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-      ,1 as [TypeTime]
+      ,4 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
 	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
   WHERE Code = 'OP71' and r.AreaId = 13
@@ -90,10 +117,13 @@ AS
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-      ,1 as [TypeTime]
+      ,4 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
 	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
   WHERE Code = 'OP81' and r.AreaId = 14
@@ -106,13 +136,54 @@ AS
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-      ,1 as [TypeTime]
+      ,4 as [TypeTime]
 	  ,CategoryOperation, vi.[OperOrder]
 	  ,Code
 	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
   WHERE Code = 'OP09' and r.AreaId = 20
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+
+  --Все для 3 цеха 
+	INSERT INTO @table
+	SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+  WHERE Code = 'OP03' and r.AreaId = 5
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+
+    --Все для 4 цеха 
+	INSERT INTO @table
+	SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+  WHERE Code = 'OP04' and r.AreaId = 6
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   
@@ -122,27 +193,35 @@ INSERT INTO [InputData].[Operations]
            ,[NumberOp]
            ,[RoutId]
            ,[ProfessionId]
-           ,[TypeTime]
+           ,[TypeTimeId]
            ,[CategoryOperation]
            ,[Code])
-	SELECT 
+	SELECT DISTINCT
 		TitleOperPr
-		,ROW_NUMBER() over (partition by IdSemiProduct order by IdSemiProduct, OperOrder)*10
+		,OperOrder*10
 		,idRout
 		,idProfesson
 		,TypeTime
 		,CategoryOperation
 		,Code
-		FROM @table
-		WHERE Code = 'OP01'
-		ORDER BY idRout, OperOrder
+	FROM @table
+	WHERE Code = 'OP01' and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
+	ORDER BY 
+		idRout
+		,OperOrder*10	
+		,TitleOperPr
+		,idProfesson
+		,TypeTime
+		,CategoryOperation
+		,Code
+
 --Залив финала 2 цех и 6/1, 7/1, 8/1, 9/2 цех
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
            ,[RoutId]
            ,[ProfessionId]
-           ,[TypeTime]
+           ,[TypeTimeId]
            ,[CategoryOperation]
            ,[Code])
 	SELECT DISTINCT
@@ -154,12 +233,29 @@ INSERT INTO [InputData].[Operations]
 		,CategoryOperation
 		,Code
 		FROM @table as tt
-		WHERE Code  in ('OP02','OP61', 'OP71', 'OP81', 'OP09')
+		WHERE Code  in ('OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04') and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
 		ORDER BY idRout, NPP
+
+		--Заливаем в КТОПы		TitleOperPr
+		INSERT INTO OperationWithKTOP
+ 		SELECT 
+		oper.IdOperation
+		,t.KTOPN
+		,t.TimeMultiply
+		FROM @table							as t
+		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
+													AND oper.RoutId = t.idRout
+													AND oper.CategoryOperation = t.CategoryOperation
+		WHERE oper.Code in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04')
+		ORDER BY idRout, OperOrder
+
+
 		--Очищаем таблицу 
 	DELETE FROM @table
 	--Заливаем в нее данные для переходящих маршрутов
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
+
+
   INSERT INTO @table
   SELECT  DISTINCT
        r.IdRout
@@ -171,11 +267,19 @@ INSERT INTO [InputData].[Operations]
 	   ,vi.OperOrder
 	   ,area.Code
 	   ,NPP
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_SemiProductsWithArticles] as sp ON r.SemiProductId = sp.IdSemiProduct
-  OUTER APPLY [InputData].[ctvf_GetFinalRoutForOtherPlaceSemiProduct](sp.IdSemiProduct, [AreaId]) as fn
-  LEFT JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = sp.IdSemiProduct and vi.KTOPN = KTOPParent
-  INNER JOIN [InputData].[Areas] as area ON area.IdArea = r.AreaId
+	   ,fn.KTOPChild
+	   ,mr.TimeCoefficient
+	   ,mr.IdRule
+  FROM [InputData].[Rout]																				AS r
+  INNER JOIN	[InputData].[VI_SemiProductsWithArticles]												AS sp ON r.SemiProductId = sp.IdSemiProduct
+  OUTER APPLY	[InputData].[ctvf_GetFinalRoutForOtherPlaceSemiProduct](sp.IdSemiProduct, r.[AreaId])	AS fn
+  LEFT JOIN		[InputData].[VI_OperationsWithSemiProducts_FAST]										AS vi ON vi.IdSemiProduct = sp.IdSemiProduct and vi.KTOPN = KTOPParent
+  INNER JOIN	[InputData].[VI_MappingRules]															AS mr ON mr.KTOPParent = fn.KTOPParent 
+																										AND mr.KOBParent = fn.KOBParent
+																										AND mr.KTOPChild = fn.KTOPChild
+																										AND mr.KOBChild = fn.KOBChild
+																										AND mr.AreaId = r.AreaId
+   INNER JOIN	[InputData].[Areas]																		AS area ON area.IdArea = mr.AreaId
  
   WHERE IdRout not in 
   (
@@ -190,9 +294,10 @@ INSERT INTO [InputData].[Operations]
            ,[NumberOp]
            ,[RoutId]
            ,[ProfessionId]
-           ,[TypeTime]
+           ,[TypeTimeId]
            ,[CategoryOperation]
-           ,[Code])
+           ,[Code]
+		   ,MappingRuleId)
 	SELECT DISTINCT
 		tt.TitleOperPr
 		,(SELECT TOP(1) NPP FROM @table as t WHERE t.TitleOperPr = tt.TitleOperPr and t.idRout = tt.idRout and t.IdSemiProduct = tt.IdSemiProduct) as NPP
@@ -201,7 +306,20 @@ INSERT INTO [InputData].[Operations]
 		,TypeTime
 		,CategoryOperation
 		,Code
+		,IdMappingRule
 		FROM @table as tt
 		ORDER BY idRout, NPP
+
+		--Залив Опер - ктоп
+		INSERT INTO OperationWithKTOP
+ 		SELECT DISTINCT
+		oper.IdOperation
+		,t.KTOPN
+		,t.TimeMultiply
+		FROM @table							as t
+		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
+													AND oper.RoutId = t.idRout
+													AND oper.CategoryOperation = t.CategoryOperation
+		WHERE oper.Code in ('OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04')
 
 RETURN 0

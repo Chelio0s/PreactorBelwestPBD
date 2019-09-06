@@ -67,6 +67,7 @@
     <Build Include="s_prof2.sql" />
     <Build Include="DRIVE_ART.sql" />
     <Build Include="drive1.sql" />
+    <Build Include="plant3.sql" />
   </ItemGroup>
   <ItemGroup>
     <SqlCmdVariable Include="RKV">

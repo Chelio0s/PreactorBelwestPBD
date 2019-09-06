@@ -27,7 +27,7 @@ SELECT   sp.[IdSemiProduct]
   FROM [InputData].[SemiProducts] as sp
   INNER JOIN @FilteredTable as filtered ON filtered.IdSemiProduct = sp.IdSemiProduct
   OUTER APPLY [InputData].ctvf_GetRouteRules(sp.[IdSemiProduct]) as r
-  INNER JOIN  [SupportData].[RoutRoules] as rr ON rr.IdRule = r.IDRoutRule
+  INNER JOIN  [SupportData].[RoutRoules] as rr ON rr.IdRule = r.IdRoutRule
   WHERE sp.[IdSemiProduct] = @IdSemiProduct
 	RETURN 
 END

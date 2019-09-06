@@ -5,14 +5,15 @@ CREATE VIEW [InputData].[VI_MappingRules]
 	SELECT [IdRule]
       ,AreaId
       ,[TimeCoefficient]
-	  ,MCRParent.Title	as resParentTitle
-	  ,MCRChild.Title	as resChildTitle
-	  ,MRCParent.KOB	as KOBParent
-	  ,MRCChild.KOB		as KOBChild
-	  ,MRCOParent.Title as OpParentTitle
-	  ,MRCOChild.Title	as OpChildTitle
-	  ,MOCParent.KTOP	as KTOPParent
-	  ,MOCChild.KTOP	as KTOPChild
+	  ,MCRParent.Title		as ResParentTitle
+	  ,MCRChild.Title		as ResChildTitle
+	  ,MRCParent.KOB		as KOBParent
+	  ,MRCChild.KOB			as KOBChild
+	  ,MRCOParent.Title		as OpParentTitle
+	  ,MRCOChild.Title		as OpChildTitle
+	  ,MOCParent.KTOP		as KTOPParent
+	  ,MOCChild.KTOP		as KTOPChild
+	  
 FROM [SupportData].[MappingRules] as MR
   INNER JOIN [SupportData].[MappingComposeResource]			as MCRParent	ON MCRParent.IdMappingComposeResource = MR.MappingComposeResourceParentId
   INNER JOIN [SupportData].[MappingComposeResource]			as MCRChild		ON MCRChild.IdMappingComposeResource = MR.MappingComposeResourceChildId

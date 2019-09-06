@@ -9,7 +9,5 @@ INSERT INTO [InputData].[OperationInResource]
       IdOperation
 	  ,IdResource
       ,[NORMATIME]
-  FROM [InputData].[VI_OperationsSDBWithConcreetResources]
-  
-									 
+  FROM [InputData].[VI_OperationsFromSDBWithConcreetResources]								 
 RETURN 0

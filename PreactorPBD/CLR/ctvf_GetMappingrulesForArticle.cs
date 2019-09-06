@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
@@ -44,7 +43,7 @@ public partial class UserDefinedFunctions
             var parentOperations = new List<OperationData>();
             while (reader.Read())
             {
-                parentOperations.Add(new OperationData(Convert.ToInt32(reader[0]),
+                parentOperations.Add(new OperationData(Convert.ToInt32(reader[0].GetHashCode()),
                     Convert.ToInt32(reader[1]),
                     Convert.ToInt32(reader[3]),
                     Convert.ToDecimal(reader[4]),

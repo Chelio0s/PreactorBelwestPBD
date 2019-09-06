@@ -30,19 +30,20 @@ BEGIN
 	print 'Созание ограничений, резаки'
 	EXEC [InputData].sp_CreateConstraintCalendar_Cutters
 	print 'Создание компбинаций операций'
-	EXEC [InputData].sp_InsertCombines						-- инсертим комбинации всех правил для создания ТМов
+	EXEC [InputData].sp_InsertCombines							-- инсертим комбинации всех правил для создания ТМов
 	print 'Заполнение временной таблицы операций'
-	EXEC [InputData].sp_FillTempOperationTable				-- заполняем вр. таблицу с опер-ми
+	EXEC [InputData].sp_FillTempOperationTable					-- заполняем вр. таблицу с опер-ми
+	print 'Удаляем лишние (не соотв. ПФ)'
+	EXEC [InputData].sp_DeleteInappropriateSemiProducts			-- Удаляем пустые ПФ
 	print 'Создание маршрутов'
-	EXEC [InputData].sp_InsertRoutes						-- создаем маршруты
+	EXEC [InputData].sp_InsertRoutes							-- создаем маршруты
 	print 'Загрузка операций'
-	EXEC [InputData].sp_InsertOperations					-- заполняем операции для продуктов
+	EXEC [InputData].sp_InsertOperations						-- заполняем операции для продуктов
 	print 'Ставим операции на рессурсы'
-	EXEC [InputData].sp_InsertOperationsInResources         -- заливаем операции на рессурсы
+	EXEC [InputData].sp_InsertOperationsInResources			   -- заливаем операции на рессурсы
 	print 'Создание временной таблицы материаллов'
-	EXEC [InputData].sp_FillTempMaterials					-- заполняем вр. таблицу с мат-ми
+	EXEC [InputData].sp_FillTempMaterials						-- заполняем вр. таблицу с мат-ми
 	print 'Загрузка спецификаций'
-	EXEC [InputData].sp_InsertSpecifications				-- заполняем спецификации
-
+	EXEC [InputData].sp_InsertSpecifications					-- заполняем спецификации
 END
 RETURN 0

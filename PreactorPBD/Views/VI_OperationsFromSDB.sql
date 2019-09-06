@@ -10,11 +10,13 @@ CREATE VIEW [InputData].[VI_OperationsFromSDB]
       ,oper.[Title] as OperTitle
       ,[NumberOp]
       ,[RoutId]
+	  ,rout.Title as RoutTitle
       ,[ProfessionId]
-      ,[TypeTime]
+      ,[TypeTimeId]
       ,[CategoryOperation]
       ,[Code]
 	  ,sp.IdSemiProduct
+	  ,sp.Title as SPtitle
 	  ,sp.SimpleProductId 
   FROM [InputData].[Operations]			as oper
   INNER JOIN [InputData].[Rout]			as rout	ON rout.IdRout = oper.RoutId

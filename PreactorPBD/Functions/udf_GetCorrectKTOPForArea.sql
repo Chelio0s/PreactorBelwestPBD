@@ -1,0 +1,20 @@
+﻿CREATE FUNCTION [InputData].[udf_GetCorrectKTOPForArea]
+(
+	@KTOP int,
+	@AreaId int
+)
+RETURNS INT
+AS
+BEGIN
+DECLARE @CorrectResult int
+	SELECT @CorrectResult = CASE WHEN @AreaId = 9 AND @KTOP <1000 THEN @KTOP + 1000
+							WHEN @AreaId = 9 AND @KTOP > 1000 AND @KTOP <2000 THEN @KTOP
+							WHEN @AreaId = 13 AND @KTOP < 3000 THEN @KTOP+3000
+							WHEN @AreaId = 13 AND @KTOP > 3000 AND @KTOP < 4000 THEN @KTOP
+							WHEN @AreaId = 14 AND @KTOP < 4000 THEN @KTOP+4000
+							WHEN @AreaId = 14 AND @KTOP > 4000 AND @KTOP < 5000 THEN @KTOP
+							WHEN @AreaId = 20 AND @KTOP < 5000 THEN @KTOP+5000
+							WHEN @AreaId = 20 AND @KTOP > 5000 AND @KTOP < 6000 THEN @KTOP 
+							ELSE @KTOP END
+	RETURN @CorrectResult
+END

@@ -1,0 +1,6 @@
+﻿CREATE TABLE [InputData].[TypeTimes]
+(
+	[IdTypeTime] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [TitleRus] NVARCHAR(99) NOT NULL UNIQUE, 
+    [TitleEng] NVARCHAR(99) NOT NULL UNIQUE
+)

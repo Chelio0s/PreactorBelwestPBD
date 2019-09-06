@@ -15,6 +15,6 @@ BEGIN
 	  FROM [SupportData].[MappingRules] as mr
 	  INNER JOIN [SupportData].[MappingOperationComposition] as oc ON oc.MappingComposeOperationId = [OperationMappingChildId]
 	  INNER JOIN [SupportData].[MappingResourceComposition] as rc ON rc.MappingComposeResourceId = [MappingComposeResourceChildId] 
-	  WHERE oc.KTOP = @KTOP and areaId = @AreaId
+	  WHERE oc.KTOP = @KTOP and AreaId = @AreaId
 	RETURN
 END

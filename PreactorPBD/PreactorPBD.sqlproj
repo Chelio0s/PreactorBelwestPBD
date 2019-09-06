@@ -171,7 +171,6 @@
     <Build Include="Procedures\sp_CreateNomenclature.sql" />
     <Build Include="Views\VI_PercentageNomenclature.sql" />
     <Build Include="Procedures\sp_InsertMaterials.sql" />
-    <Build Include="Tables\ModelArticle.sql" />
     <Build Include="Maintenance\Servers\MPU.sql" />
     <Build Include="Procedures\sp_CreateSemiProducts.sql" />
     <Build Include="Procedures\sp_CreateEntrySemiProducts.sql" />
@@ -254,8 +253,17 @@
     <Build Include="Procedures\sp_GetAlterRoutsOtherPlaces.sql" />
     <Build Include="Views\VI_RoutesWithArticle.sql" />
     <Build Include="Views\VI_ResourcesOnDepartments.sql" />
-    <Build Include="Views\VI_OperationsSDBWithResGroups.sql" />
-    <Build Include="Views\VI_OperationsSDBWithConcreetResources.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithResGroups.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithConcreetResources.sql" />
+    <Build Include="Tables\OperationWithKTOP.sql" />
+    <Build Include="Functions\udf_GetCorrectKTOPForArea.sql" />
+    <Build Include="Views\VI_OperationsFullInfo.sql" />
+    <Build Include="Functions\udf_GetKobTitle.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithResources.sql" />
+    <Build Include="Procedures\sp_DeleteInappropriateSemiProducts.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithREL.sql" />
+    <Build Include="Tables\TypeTimes.sql" />
+    <Build Include="Tables\MergeRoutes.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

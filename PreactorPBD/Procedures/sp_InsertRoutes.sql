@@ -35,6 +35,9 @@ SELECT DISTINCT
   ,4
   FROM [InputData].[SemiProducts]
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (18, 19)
+
+
+
    --Инсерт ТМ всех остальных для других цехов
    --Инсерт ТМ с правилами
 INSERT INTO [InputData].[Rout]
@@ -50,6 +53,35 @@ INSERT INTO [InputData].[Rout]
   ,3
   FROM [InputData].[SemiProducts]
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,17)
+
+
+  INSERT INTO [InputData].[Rout]
+           ([Title]
+           ,[SemiProductId]
+           ,[Priority]
+           ,[CombineId]
+		   ,AreaId)
+  SELECT 'Стандартный ТМ для ПФ '+ CONVERT(NVARCHAR(10), IdSemiProduct)+ ' цех 3'
+  , IdSemiProduct
+  ,10
+  ,NULL
+  ,5
+  FROM [InputData].[SemiProducts]
+  WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (20)
+
+    INSERT INTO [InputData].[Rout]
+           ([Title]
+           ,[SemiProductId]
+           ,[Priority]
+           ,[CombineId]
+		   ,AreaId)
+  SELECT 'Стандартный ТМ для ПФ '+ CONVERT(NVARCHAR(10), IdSemiProduct)+ ' цех 4'
+  , IdSemiProduct
+  ,10
+  ,NULL
+  ,6
+  FROM [InputData].[SemiProducts]
+  WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (20)
 
    print 'Создание переходящих маршрутов'
   ----Маппинг маршрутов для других цехов
