@@ -148,43 +148,43 @@ AS
   WHERE Code = 'OP09' and r.AreaId = 20
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
-  --Все для 3 цеха 
-	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,1 --timemultiply
-	  ,NULL -- idMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE Code = 'OP03' and r.AreaId = 5
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+ -- --Все для 3 цеха 
+	--INSERT INTO @table
+	--SELECT DISTINCT
+	--  r.IdRout
+	--  ,[TitlePreactorOper]
+ --     ,vi.[IdSemiProduct]
+ --     ,vi.[IdProfession]
+ --     ,4 as [TypeTime]
+	--  ,CategoryOperation, vi.[OperOrder]
+	--  ,Code
+	--  ,NPP
+	--  ,KTOPN
+	--  ,1 --timemultiply
+	--  ,NULL -- idMappingRule
+ -- FROM [InputData].[Rout] as r
+ -- INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+ -- WHERE Code = 'OP03' and r.AreaId = 5
+ -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
-    --Все для 4 цеха 
-	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,1 --timemultiply
-	  ,NULL -- idMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE Code = 'OP04' and r.AreaId = 6
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+ --   --Все для 4 цеха 
+	--INSERT INTO @table
+	--SELECT DISTINCT
+	--  r.IdRout
+	--  ,[TitlePreactorOper]
+ --     ,vi.[IdSemiProduct]
+ --     ,vi.[IdProfession]
+ --     ,4 as [TypeTime]
+	--  ,CategoryOperation, vi.[OperOrder]
+	--  ,Code
+	--  ,NPP
+	--  ,KTOPN
+	--  ,1 --timemultiply
+	--  ,NULL -- idMappingRule
+ -- FROM [InputData].[Rout] as r
+ -- INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+ -- WHERE Code = 'OP04' and r.AreaId = 6
+ -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   
 --Залив финала 1 цех
@@ -237,7 +237,7 @@ INSERT INTO [InputData].[Operations]
 		ORDER BY idRout, NPP
 
 		--Заливаем в КТОПы		TitleOperPr
-		INSERT INTO OperationWithKTOP
+		INSERT INTO [InputData].[OperationWithKTOP]
  		SELECT 
 		oper.IdOperation
 		,t.KTOPN
@@ -272,7 +272,7 @@ INSERT INTO [InputData].[Operations]
 	   ,mr.IdRule
   FROM [InputData].[Rout]																				AS r
   INNER JOIN	[InputData].[VI_SemiProductsWithArticles]												AS sp ON r.SemiProductId = sp.IdSemiProduct
-  OUTER APPLY	[InputData].[ctvf_GetFinalRoutForOtherPlaceSemiProduct](sp.IdSemiProduct, r.[AreaId])	AS fn
+  CROSS APPLY	[InputData].[ctvf_GetFinalRoutForOtherPlaceSemiProduct](sp.IdSemiProduct, r.[AreaId])	AS fn
   LEFT JOIN		[InputData].[VI_OperationsWithSemiProducts_FAST]										AS vi ON vi.IdSemiProduct = sp.IdSemiProduct and vi.KTOPN = KTOPParent
   INNER JOIN	[InputData].[VI_MappingRules]															AS mr ON mr.KTOPParent = fn.KTOPParent 
 																										AND mr.KOBParent = fn.KOBParent

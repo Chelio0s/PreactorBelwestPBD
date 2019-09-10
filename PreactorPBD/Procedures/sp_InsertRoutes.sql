@@ -67,7 +67,7 @@ INSERT INTO [InputData].[Rout]
   ,NULL
   ,5
   FROM [InputData].[SemiProducts]
-  WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (20)
+  WHERE  SimpleProductId in (20)
 
     INSERT INTO [InputData].[Rout]
            ([Title]
@@ -81,7 +81,7 @@ INSERT INTO [InputData].[Rout]
   ,NULL
   ,6
   FROM [InputData].[SemiProducts]
-  WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (20)
+  WHERE SimpleProductId in (20)
 
    print 'Создание переходящих маршрутов'
   ----Маппинг маршрутов для других цехов

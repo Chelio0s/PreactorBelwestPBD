@@ -33,8 +33,7 @@ public partial class UserDefinedFunctions
                     command = new SqlCommand($"SELECT * FROM [InputData].[udf_GetOperationsForArticle] ('{Article}', 18) ",
                     sqlConnection); break;
                 default:
-                    command = new SqlCommand($"SELECT * FROM [InputData].[udf_GetOperationsForArticle] ('{Article}', DEFAULT) ",
-                        sqlConnection); break;
+                    return null;
 
             }
 
@@ -145,7 +144,6 @@ public partial class UserDefinedFunctions
         }
         catch (Exception e)
         {
-            
             throw new Exception("Ошибка в методе заполнения строки");
         }
 
