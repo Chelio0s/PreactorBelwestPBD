@@ -148,47 +148,74 @@ AS
   WHERE Code = 'OP09' and r.AreaId = 20
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
- -- --Все для 3 цеха 
-	--INSERT INTO @table
-	--SELECT DISTINCT
-	--  r.IdRout
-	--  ,[TitlePreactorOper]
- --     ,vi.[IdSemiProduct]
- --     ,vi.[IdProfession]
- --     ,4 as [TypeTime]
-	--  ,CategoryOperation, vi.[OperOrder]
-	--  ,Code
-	--  ,NPP
-	--  ,KTOPN
-	--  ,1 --timemultiply
-	--  ,NULL -- idMappingRule
- -- FROM [InputData].[Rout] as r
- -- INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
- -- WHERE Code = 'OP03' and r.AreaId = 5
- -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
- --   --Все для 4 цеха 
-	--INSERT INTO @table
-	--SELECT DISTINCT
-	--  r.IdRout
-	--  ,[TitlePreactorOper]
- --     ,vi.[IdSemiProduct]
- --     ,vi.[IdProfession]
- --     ,4 as [TypeTime]
-	--  ,CategoryOperation, vi.[OperOrder]
-	--  ,Code
-	--  ,NPP
-	--  ,KTOPN
-	--  ,1 --timemultiply
-	--  ,NULL -- idMappingRule
- -- FROM [InputData].[Rout] as r
- -- INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
- -- WHERE Code = 'OP04' and r.AreaId = 6
- -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
+  --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
+  DECLARE @JumpSemiProducts as table (Article nvarchar(99), IdMergeRoutes int, IdSemiProduct int, BaseAreaId int, ChildAreaId int,KtopChildRoute int, KtopParentRoute int)
+  INSERT INTO @JumpSemiProducts
+  SELECT
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
+  INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
+  CROSS JOIN [SupportData].[MergeRoutes]					as mr
+  WHERE (mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) or (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
+  --тут ограничено только 3 и 4 цехом
+  AND IdArea in (5,6)
+  GROUP BY   
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  HAVING COUNT(mr.IdMergeRoutes) = 2
   
---Залив финала 1 цех
-INSERT INTO [InputData].[Operations]
+  --Залив прыгающих ТМ
+  INSERT INTO @table
+  SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout]											as r
+  INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
+																	AND jump.BaseAreaId = r.AreaId
+  CROSS APPLY ctvf_GetMergedRouteForSemiProduct(r.SemiProductId)	as vi
+
+  --Все для 3 и 4 цеха кроме маршрутов с Jump
+	INSERT INTO @table
+	SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+  WHERE (Code = 'OP03' and r.AreaId = 5) or (Code = 'OP04' and r.AreaId = 6)
+  and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+
+	--Залив финала 1 цех
+	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
            ,[RoutId]
@@ -238,7 +265,7 @@ INSERT INTO [InputData].[Operations]
 
 		--Заливаем в КТОПы		TitleOperPr
 		INSERT INTO [InputData].[OperationWithKTOP]
- 		SELECT 
+ 		SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
 		,t.TimeMultiply
@@ -247,7 +274,7 @@ INSERT INTO [InputData].[Operations]
 													AND oper.RoutId = t.idRout
 													AND oper.CategoryOperation = t.CategoryOperation
 		WHERE oper.Code in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04')
-		ORDER BY idRout, OperOrder
+		-- ORDER BY idRout, OperOrder
 
 
 		--Очищаем таблицу 
@@ -310,7 +337,7 @@ INSERT INTO [InputData].[Operations]
 		FROM @table as tt
 		ORDER BY idRout, NPP
 
-		--Залив Опер - ктоп
+		----Залив Опер - ктоп
 		INSERT INTO OperationWithKTOP
  		SELECT DISTINCT
 		oper.IdOperation
