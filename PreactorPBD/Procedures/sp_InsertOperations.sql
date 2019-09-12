@@ -192,7 +192,7 @@ AS
   FROM [InputData].[Rout]											as r
   INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
 																	AND jump.BaseAreaId = r.AreaId
-  CROSS APPLY ctvf_GetMergedRouteForSemiProduct(r.SemiProductId)	as vi
+  CROSS APPLY [InputData].ctvf_GetMergedRouteForSemiProduct(r.SemiProductId)	as vi
 
   --Все для 3 и 4 цеха кроме маршрутов с Jump
 	INSERT INTO @table
@@ -210,7 +210,7 @@ AS
 	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE (Code = 'OP03' and r.AreaId = 5) or (Code = 'OP04' and r.AreaId = 6)
+  WHERE ((Code = 'OP03' and r.AreaId = 5) or (Code = 'OP04' and r.AreaId = 6))
   and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 

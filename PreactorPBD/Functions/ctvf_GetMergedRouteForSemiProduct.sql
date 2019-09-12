@@ -59,7 +59,7 @@ BEGIN
   WHERE (mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) or (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
   --тут ограничено пока (надеюсь навсегда) только 3 и 4 цехом
   AND IdArea in (5,6)
-  AND IdSemiProduct = 535856
+  AND IdSemiProduct = @IdSemiProduct
 
   GROUP BY   
        Article
@@ -69,7 +69,6 @@ BEGIN
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-
   HAVING COUNT(mr.IdMergeRoutes) = 2
   INSERT @returntable
   SELECT * FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
@@ -82,42 +81,42 @@ BEGIN
 		AND area.IdArea = jump.BaseAreaId
   UNION 
   SELECT IdNomenclature
-  ,vifast.Article
-  ,Model
-  ,Nomenclature
-  ,Size
-  ,vifast.IdSemiProduct
-  ,vifast.Title
-  ,vifast.KPO
-  ,vifast.Code
-  ,ktopn
-  ,NTOP
-  ,poneob
-  ,normatime
-  ,KOB
-  ,MOB
-  ,KPROF
-  ,IdProfession
-  ,CategoryOperation
-  ,TitlePreactorOper
-  ,vifast.SimpleProductId
-  ,OperOrder
-  ,REL
-  ,(SELECT NPP FROM [InputData].[VI_OperationsWithSemiProducts_FAST] WHERE IdSemiProduct = vifast.IdSemiProduct AND KTOPN = jump.KtopParentRoute) 
-  + ROW_NUMBER() OVER(PARTITION BY vifast.IdSemiProduct, size, vifast.Code  ORDER BY vifast.IdSemiProduct, size, vifast.Code, NPP) AS NPP
-  ,area.IdArea
-  ,area.Code
-  ,area.Title
-  ,area.KPO
-  ,area.KPODTO
-  ,jump.Article
-  ,jump.IdMergeRoutes
-  ,jump.IdSemiProduct
-  ,jump.BaseAreaId
-  ,jump.ChildAreaId
-  ,jump.KtopChildRoute
-  ,jump.KtopParentRoute
-   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
+	  ,vifast.Article
+	  ,Model
+	  ,Nomenclature
+	  ,Size
+	  ,vifast.IdSemiProduct
+	  ,vifast.Title
+	  ,vifast.KPO
+	  ,vifast.Code
+	  ,ktopn
+	  ,NTOP
+	  ,poneob
+	  ,normatime
+	  ,KOB
+	  ,MOB
+	  ,KPROF
+	  ,IdProfession
+	  ,CategoryOperation
+	  ,TitlePreactorOper
+	  ,vifast.SimpleProductId
+	  ,OperOrder
+	  ,REL
+	  ,(SELECT NPP FROM [InputData].[VI_OperationsWithSemiProducts_FAST] WHERE IdSemiProduct = vifast.IdSemiProduct AND KTOPN = jump.KtopParentRoute) 
+	  + ROW_NUMBER() OVER(PARTITION BY vifast.IdSemiProduct, size, vifast.Code  ORDER BY vifast.IdSemiProduct, size, vifast.Code, NPP) AS NPP
+	  ,area.IdArea
+	  ,area.Code
+	  ,area.Title
+	  ,area.KPO
+	  ,area.KPODTO
+	  ,jump.Article
+	  ,jump.IdMergeRoutes
+	  ,jump.IdSemiProduct
+	  ,jump.BaseAreaId
+	  ,jump.ChildAreaId
+	  ,jump.KtopChildRoute
+	  ,jump.KtopParentRoute
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]				AS vifast
   INNER JOIN [InputData].[Areas]									AS area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
   INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = vifast.IdSemiProduct
 																	AND (jump.BaseAreaId = area.IdArea 
@@ -130,7 +129,8 @@ BEGIN
 																	AND (jump.BaseAreaId = area.IdArea 
 																	OR   jump.ChildAreaId = area.IdArea)
   WHERE NPP > (SELECT NPP FROM [InputData].[VI_OperationsWithSemiProducts_FAST] 
-               WHERE IdSemiProduct = vifast.IdSemiProduct AND KTOPN = jump.KtopParentRoute)
+               WHERE IdSemiProduct = vifast.IdSemiProduct 
+			   AND KTOPN = jump.KtopParentRoute)
 			   AND area.IdArea = jump.BaseAreaId
   ORDER BY   vifast.IdSemiProduct, NPP
   RETURN
