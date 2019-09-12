@@ -20,7 +20,8 @@ FROM
 	and tabno not like ''3%''
 	and prozt<>0 
 	and persg in (''1'',''8'')
-	and btrtl = ''0900'''
+	and btrtl = ''0900''
+	and tabno <> 00021825'
 
 	
 DECLARE @tempPrimaryProf as table (tabno varchar(15), MAIN_STELL varchar(15), MAIN_TRFST VARCHAR(5), PROF_STELL varchar(15), PROF_TRFST varchar(5), isPrimary bit)

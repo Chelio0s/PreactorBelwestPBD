@@ -96,7 +96,7 @@ public partial class UserDefinedFunctions
             var parentOperationsRaw = parentOperations.Select(x => x.Operation).ToList();
 
              //Пересечения операций из правил и из ТМа
-            int i = 0;
+          
             foreach (var group in grouppingMappingRules)
             {
                 var intersect = group

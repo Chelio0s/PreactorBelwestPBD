@@ -1,6 +1,6 @@
 namespace PreactorPBD
 {
-    readonly struct Operation
+    internal readonly struct Operation
     {
         public Operation(int ktop, int kob)
         {
@@ -24,6 +24,19 @@ namespace PreactorPBD
         {
             return !(operFirst == operSecond);
         }
-    }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is Operation operation)
+            {
+                return this.KTOP == operation.KTOP && this.KOB == operation.KOB;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return int.Parse(KTOP.ToString() + KOB.ToString());
+        }
+    }
 }
