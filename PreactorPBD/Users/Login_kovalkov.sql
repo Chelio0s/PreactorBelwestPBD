@@ -1,1 +1,0 @@
-﻿CREATE LOGIN [kovalkov] WITH PASSWORD = '12345a'

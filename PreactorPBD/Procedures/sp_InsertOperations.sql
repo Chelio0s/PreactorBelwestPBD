@@ -214,6 +214,26 @@ AS
   and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
+   --Все для 5 цеха 
+	INSERT INTO @table
+	SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+  WHERE (Code = 'OP05' and r.AreaId = 7) 
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+
+
 	--Залив финала 1 цех
 	INSERT INTO [InputData].[Operations]
            ([Title]

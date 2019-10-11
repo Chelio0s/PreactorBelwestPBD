@@ -19,6 +19,7 @@ public partial class UserDefinedFunctions
         using (SqlConnection sqlConnection
             = new SqlConnection("context connection=true"))
         {
+            //Получем опреации для конкретного ПФ
             SqlCommand command = new SqlCommand(@"SELECT [IdSemiProduct]
                     ,[artTitle]
                     ,[spTitle]

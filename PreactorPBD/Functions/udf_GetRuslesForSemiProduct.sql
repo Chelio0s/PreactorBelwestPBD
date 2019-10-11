@@ -17,9 +17,8 @@ SELECT [IdSemiProduct]
 FROM [InputData].[SemiProducts] as sp
 --Просееваем заведомо не нужные ПФ (для которых нет RULES)
 WHERE sp.SimpleProductId IN (SELECT DISTINCT
-								   [SimpleProductId]
-							  FROM [SupportData].[SequenceOperations] as sq
-							  INNER JOIN [SupportData].[OperationСomposition] as oc ON sq.KTOP = oc.KTOP)
+								   [ForSemiProduct]
+							  FROM  [SupportData].[RuleGroup])
 INSERT INTO @routedProducts
 SELECT   sp.[IdSemiProduct]
 		,r.IdRoutRule
