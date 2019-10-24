@@ -39,7 +39,7 @@ SELECT DISTINCT
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (18, 19)
 
 
-  --Инсерт ТМ с правилами для заготовки цех 2
+  --Инсерт ТМ с правилами для кроя цех 1
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -58,7 +58,7 @@ SELECT DISTINCT
   INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
   WHERE sp.SimpleProductId in (1)
 
-  --Инсерт ТМ всех остальных для 1 цеха
+  --Инсерт ТМ для кроя для 1 цеха для остальных артикулов, у которых нет ТМ с правилами
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]

@@ -15,6 +15,26 @@ AS
 		KTOPN int,
 		TimeMultiply float,
 		IdMappingRule int NULL)
+
+  --Все для 1 цеха с правилами, сортировка по правилам
+  INSERT INTO @table
+  SELECT DISTINCT 	
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,1
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
+  WHERE CombineId is not null and (IdSemiProduct = r.SemiProductId and KTOPN not in (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
+  AND code = 'OP01' and r.AreaId = 3
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 	--Все для 1 цеха (там операции строго сортированы по правилам)
 	INSERT INTO @table
 	SELECT DISTINCT
@@ -31,7 +51,7 @@ AS
 	  ,NULL -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE code = 'OP01' and r.AreaId = 3 
+  WHERE code = 'OP01' and r.AreaId = 3 and CombineId is null
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все для 2 цеха с правилами, сортировка по NPP

@@ -264,7 +264,7 @@
     <Build Include="Views\VI_OperationsFromSDBWithREL.sql" />
     <Build Include="Tables\TypeTimes.sql" />
     <Build Include="Tables\MergeRoutes.sql" />
-    <Build Include="Functions\ctvf_GetMergedRouteForSemiProduct.sql" />
+    <Build Include="CLR\ctvf_GetMergedRouteForSemiProduct.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -324,10 +324,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Oracle.ManagedDataAccess">
-      <HintPath>..\..\Oracle.ManagedDataAccess.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\AddExtendedProp.sql" />
