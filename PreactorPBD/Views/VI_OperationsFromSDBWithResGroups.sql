@@ -34,7 +34,7 @@ CREATE VIEW [InputData].[VI_OperationsFromSDBWithResGroups]
   INNER JOIN [InputData].[ResourcesInGroups]					AS resingr	ON resingr.GroupResourcesId = resgr.IdResourceGroup
   INNER JOIN [InputData].[Resources]							AS res		ON res.IdResource = resingr.ResourceId AND groupkob.KOB = res.KOB
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast	ON vifast.IdSemiProduct = rout.SemiProductId
-																			AND vifast.KTOPN = operktop.ktop
+																			AND vifast.KTOPN = operktop.KTOP
   INNER JOIN [InputData].TypeTimes								AS typetime ON typetime.IdTypeTime = TypeTimeId
  
   

@@ -19,6 +19,7 @@ SELECT  DISTINCT
 		,OBR.MOB
 FROM  [$(RKV)].[$(RKV_SCAL)].dbo. F160013		as F13 
 	INNER JOIN [$(RKV)].[$(PLANT)].dbo.drive	as D		on F13.MOD=D.MOD
+	-- DRIVE0 должен быть большими буквами, не трогать
 	INNER JOIN [$(RKV)].[$(PLANT)].dbo.DRIVE0	as ART		on D.REL=ART.REL and F13.ART=ART.ART
 	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_top2	as OP		on OP.KTOP=D.KTOPN
 	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_prof2	as P		on P.KPROF=OP.KPROF

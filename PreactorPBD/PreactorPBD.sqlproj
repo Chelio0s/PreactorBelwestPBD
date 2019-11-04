@@ -264,7 +264,10 @@
     <Build Include="Views\VI_OperationsFromSDBWithREL.sql" />
     <Build Include="Tables\TypeTimes.sql" />
     <Build Include="Tables\MergeRoutes.sql" />
-    <Build Include="CLR\ctvf_GetMergedRouteForSemiProduct.sql" />
+    <Build Include="Views\VI_OperationsMappingRules.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\IgnoreMappingOperations.sql" />
+    <Build Include="Functions\udf_GetMergedRouteForSemiProduct.sql" />
+    <Build Include="Views\VI_GetOperationsForMappingFirstFloor.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

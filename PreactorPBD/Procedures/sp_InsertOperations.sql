@@ -195,7 +195,7 @@ AS
 	  ,mr.KtopPrentRoute
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
-  --Залив прыгающих ТМ
+  --Залив прыгающих ТМ   3 и 4
   INSERT INTO @table
   SELECT DISTINCT
 	  r.IdRout
@@ -212,7 +212,7 @@ AS
   FROM [InputData].[Rout]											as r
   INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
 																	AND jump.BaseAreaId = r.AreaId
-  CROSS APPLY [InputData].ctvf_GetMergedRouteForSemiProduct(r.SemiProductId)	as vi
+  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	as vi
 
   --Все для 3 и 4 цеха кроме маршрутов с Jump
 	INSERT INTO @table
@@ -231,6 +231,73 @@ AS
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
   WHERE ((Code = 'OP03' and r.AreaId = 5) or (Code = 'OP04' and r.AreaId = 6))
+  and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+
+    --Чистим таблицу от прошлых прыгающих ТМок
+  DELETE FROM @JumpSemiProducts
+   --Выборка таких маршрутов 9/1 цеха, которые могут "прыгать из цеха в цех"
+  INSERT INTO @JumpSemiProducts
+  SELECT
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
+  INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
+  CROSS JOIN [SupportData].[MergeRoutes]					as mr
+  WHERE (mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) or (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
+  AND IdArea in (8)
+  GROUP BY   
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  HAVING COUNT(mr.IdMergeRoutes) = 2
+  
+  --Залив прыгающих ТМ 
+  INSERT INTO @table
+  SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout]											as r
+  INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
+																	AND jump.BaseAreaId = r.AreaId
+  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	as vi
+
+
+  --Все для 9/1 цеха кроме маршрутов с Jump
+	INSERT INTO @table
+	SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,1 --timemultiply
+	  ,NULL -- idMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+  WHERE (Code = 'OP09' and r.AreaId = 8)
   and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
@@ -265,16 +332,18 @@ AS
            ,[Code])
 	SELECT DISTINCT
 		TitleOperPr
-		,OperOrder*10
-		,idRout
+		,OperOrder*10 as NPP
+		,t.idRout
 		,idProfesson
 		,TypeTime
 		,CategoryOperation
 		,Code
-	FROM @table
-	WHERE Code = 'OP01' and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
+	FROM @table						as t
+	INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
+	WHERE Code = 'OP01' and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 
+	and r.AreaId = 3   -- поставил тут еще фильтр по цеху потому что ОП01 встречается и в ТМ 9го цеха при прыжках
 	ORDER BY 
-		idRout
+		t.idRout
 		,OperOrder*10	
 		,TitleOperPr
 		,idProfesson
@@ -282,7 +351,7 @@ AS
 		,CategoryOperation
 		,Code
 
---Залив финала 2 цех и 6/1, 7/1, 8/1, 9/2 цех
+--Залив финала 1 c jump, 2 цех и 6/1, 7/1, 8/1, 9/2 цех
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -300,7 +369,11 @@ AS
 		,CategoryOperation
 		,Code
 		FROM @table as tt
-		WHERE Code  in ('OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04') and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
+		WHERE Code  in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04') and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
+		and idrout not in (SELECT DISTINCT t.idRout
+							FROM @table						as t
+							INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
+							WHERE Code = 'OP01' and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 and r.AreaId = 3  )
 		ORDER BY idRout, NPP
 
 		--Заливаем в КТОПы		TitleOperPr

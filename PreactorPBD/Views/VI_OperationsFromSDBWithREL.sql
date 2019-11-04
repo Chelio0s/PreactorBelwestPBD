@@ -13,4 +13,4 @@
   LEFT JOIN  [InputData].[OperationWithKTOP]					AS operktop ON oper.IdOperation = operktop.[OperationId]
   INNER JOIN [InputData].[Rout]									AS rout		ON rout.IdRout = oper.RoutId
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast	ON vifast.IdSemiProduct = rout.SemiProductId
-																			AND vifast.KTOPN = operktop.ktop
+																			AND vifast.KTOPN = operktop.KTOP

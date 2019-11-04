@@ -13,7 +13,7 @@ TRUNCATE TABLE [InputData].[Specifications]
 		  ,[IdOperation]
 	  FROM [InputData].[Operations] as oper
 	  INNER JOIN [InputData].[Rout] as r ON r.SemiProductId = oper.RoutId
-	  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductID
+	  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
 	  INNER JOIN [SupportData].[TempOperations] as toper ON toper.IdNomenclature = sp.NomenclatureID 
 															and toper.TitlePreactorOper = oper.Title
 	  INNER JOIN [InputData].[Nomenclature] as nom ON nom.IdNomenclature = sp.NomenclatureID

@@ -2,7 +2,7 @@
 	AS
 	SELECT [Name]
       ,[TabNum]
-      ,emp.[Orgunit]
+      ,emp.[OrgUnit]
 	  ,org.Title as OrgTitle
 	  ,org.Crew
 	  ,empInProf.ProfessionId

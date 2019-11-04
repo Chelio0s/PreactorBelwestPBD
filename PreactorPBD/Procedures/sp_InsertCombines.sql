@@ -19,7 +19,7 @@ DECLARE @combinesProducts as table (IdSemiProduct  int, Title nvarchar(99), IdRo
 INSERT INTO @combinesProducts
 SELECT   sp.[IdSemiProduct]
 		,sp.Title
-		,cc.IdRoutRule
+		,cc.IDRoutRule
 		,cc.IdCombine
 		,cc.IsParent
 

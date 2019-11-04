@@ -14,7 +14,7 @@
       ,[Code]
       ,[IdSemiProduct]
       ,[SimpleProductId]
-	  ,res.kob
+	  ,res.KOB
 	  ,operdep.resTitle
 	  ,operdep.IdResource
 	  ,operdep.IdDepartment

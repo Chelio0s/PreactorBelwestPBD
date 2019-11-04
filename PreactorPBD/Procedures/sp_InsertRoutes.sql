@@ -91,6 +91,19 @@ INSERT INTO [InputData].[Rout]
   FROM [InputData].[SemiProducts]
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (2,3,4,5,6,7,8,9,10,11,12,13,14,15,17)
 
+  INSERT INTO [InputData].[Rout]
+           ([Title]
+           ,[SemiProductId]
+           ,[Priority]
+           ,[CombineId]
+		   ,AreaId)
+  SELECT 'Стандартный ТМ для ПФ '+ CONVERT(NVARCHAR(10), IdSemiProduct)+ ' цех 9/1'
+  , IdSemiProduct
+  ,10
+  ,NULL
+  ,8
+  FROM [InputData].[SemiProducts]
+  WHERE  SimpleProductId in (1,2,3,4,5,6,7,8,9,10,11,12,13,15,17)
 
   INSERT INTO [InputData].[Rout]
            ([Title]
@@ -134,9 +147,11 @@ INSERT INTO [InputData].[Rout]
   FROM [InputData].[SemiProducts]
   WHERE SimpleProductId in (19)
 
+
+
    print 'Создание переходящих маршрутов'
   ----Маппинг маршрутов для других цехов
-DECLARE @aggregateOperations table ( article nvarchar(99), KTOPN int)
+DECLARE @aggregateOperations table ( Article nvarchar(99), KTOPN int)
 INSERT INTO @aggregateOperations
 SELECT DISTINCT
 	vi.Article

@@ -21,12 +21,12 @@ WHERE sp.SimpleProductId IN (SELECT DISTINCT
 							  FROM  [SupportData].[RuleGroup])
 INSERT INTO @routedProducts
 SELECT   sp.[IdSemiProduct]
-		,r.IdRoutRule
+		,r.IDRoutRule
 		,rr.RuleGroupId
   FROM [InputData].[SemiProducts] as sp
   INNER JOIN @FilteredTable as filtered ON filtered.IdSemiProduct = sp.IdSemiProduct
   OUTER APPLY [InputData].ctvf_GetRouteRules(sp.[IdSemiProduct]) as r
-  INNER JOIN  [SupportData].[RoutRoules] as rr ON rr.IdRule = r.IdRoutRule
+  INNER JOIN  [SupportData].[RoutRoules] as rr ON rr.IdRule = r.IDRoutRule
   WHERE sp.[IdSemiProduct] = @IdSemiProduct
 	RETURN 
 END

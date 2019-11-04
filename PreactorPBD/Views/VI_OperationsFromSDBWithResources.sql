@@ -37,4 +37,4 @@
 	  ,res.KOB
 	  ,res.DepartmentId
 	  ,dep.Title
-  ORDER BY ArtTitle,  Size, code
+  ORDER BY ArtTitle,  Size, Code

@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [InputData].[sp_GetAlterRoutsOtherPlaces]
 AS
 	  ----Маппинг маршрутов для других цехов
-DECLARE @aggregateOperations table ( article nvarchar(99), KTOPN int)
+DECLARE @aggregateOperations table ( Article nvarchar(99), KTOPN int)
 INSERT INTO @aggregateOperations
 SELECT DISTINCT
 	vi.Article

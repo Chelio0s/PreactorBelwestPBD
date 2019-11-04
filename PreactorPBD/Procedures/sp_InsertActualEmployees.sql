@@ -4,18 +4,13 @@ CREATE PROCEDURE [InputData].[sp_InsertActualEmployees]
 
 AS
 	
-DECLARE @tempEmp as table (tabno varchar(15), OrgUnit varchar(15), fio varchar(99), 
-trfst varchar(5), trfs1 varchar(5), persg varchar(5), STELL varchar(20), stext1 varchar(99))
+DECLARE @tempEmp as table (tabno varchar(15), OrgUnit varchar(15), fio varchar(99), dated date)
 insert @tempEmp
 EXEC [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
     tabno,
     OrgUnit,
     fio,
-    trfst,
-    trfs1,
-    persg,
-    STELL,
-	stext1
+	dateb
 FROM
     belwpr.s_seller
 		WHERE DATEB <= (select sysdate from SYS.dual)
@@ -27,13 +22,21 @@ FROM
 	and btrtl = ''0900'''
  
 
+
+ DECLARE @table table (  fio varchar(99), tabno varchar(15), OrgUnit varchar(15), dated date, maxdate date)
+ INSERT INTO @table
+ SELECT DISTINCT fio, tabno, org.OrgUnit, dated, max(dated) over(partition by tabno) from @tempEmp as sell
+ INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
+ ORDER BY fio
+
+
  DELETE FROM [InputData].[Employees]
  INSERT INTO [InputData].[Employees]
            ([Name]
            ,[TabNum]
            ,org.[OrgUnit])
- select distinct fio, tabno, org.OrgUnit from @tempEmp as sell
- INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
- order by fio
+ SELECT fio, tabno, orgunit
+ FROM @table 
+ WHERE dated = maxdate
 
 RETURN 0

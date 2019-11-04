@@ -6,9 +6,10 @@
 	OperationMappingChildId			INT                  NOT NULL,
 	MappingComposeResourceParentId	INT                  NOT NULL,
 	MappingComposeResourceChildId	INT                  NOT NULL,
-	TimeCoefficient					DECIMAL(3,2)         NOT NULL DEFAULT(1), 
-    [AddDate]						DATETIME			 NOT NULL DEFAULT(Getdate()), 
-
+	TimeCoefficient					DECIMAL(3,2)         NOT NULL	DEFAULT(1), 
+    [AddDate]						DATETIME			 NOT NULL	DEFAULT(Getdate()), 
+    [TimeAddiction]					DECIMAL(3, 2)			NOT NULL	DEFAULT (0), 
+    [NeedCountDetails] BIT NOT NULL DEFAULT (0), 
     CONSTRAINT [CK_MappingRules_MappingKTOP] 
 		UNIQUE (OperationMappingParentId, OperationMappingChildId, MappingComposeResourceParentId, MappingComposeResourceChildId, AreaId),
 	CONSTRAINT FK_MAPPINGR_REFERENCE_COMPOSEPARENT	FOREIGN KEY (OperationMappingParentId)
