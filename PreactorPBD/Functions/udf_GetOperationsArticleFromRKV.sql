@@ -17,6 +17,8 @@ RETURNS @returntable TABLE
 	,KOB varchar(5)
 	,MOB varchar(199)
 	,NPP int
+	,KOLD int
+	,KOLN int
 )
 AS
 BEGIN
@@ -35,6 +37,8 @@ SELECT DISTINCT
 ,KOB 
 ,MOB
 ,NPP
+,KOLD
+,KOLN
 FROM  VI_OperationsFromRKV
 WHERE ART = @article
 ORDER BY KPO

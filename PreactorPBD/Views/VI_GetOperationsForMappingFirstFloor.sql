@@ -4,16 +4,22 @@
 	-- Т.е. все кроме автомата и т.д.
 	  SELECT DISTINCT 	
 	  r.IdRout
+	  ,Article
 	  ,[TitlePreactorOper]
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
-	  ,CategoryOperation, vi.[OperOrder]
+	  ,CategoryOperation
+	  ,vi.[OperOrder]
 	  ,Code
 	  ,KTOPN
+	  ,KOB
+	  ,NORMATIME AS NormaTime
+	  ,vi.SimpleProductId
+	  ,vi.KOLD
+	  ,vi.KOLN
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE  code = 'OP01' 
-		AND r.AreaId = 3
+  WHERE  Code = 'OP01' 
 		AND (vi.[IdSemiProduct] = r.SemiProductId and KTOPN not in (SELECT fn.KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout) AS fn))
 		AND IdRout NOT IN (SELECT DISTINCT xr.IdRout
 							FROM [InputData].[Rout] as xr
@@ -21,4 +27,5 @@
 							WHERE CombineId IS NOT NULL 
 							AND (IdSemiProduct = xr.SemiProductId 
 							AND KTOPN not in (SELECT fn.KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](xr.IdRout) AS fn))
+							--Отсев ТМ в каторых есть операции, которые сразу отваливаются и не переходят автоматом в ц 9/1
 							AND KTOPN IN (125,209,226,219,126,127,256,217, 203,293,118,264,269,155,236,263,280,278,295,196,255,281,283,161,211,178,165,167,243))

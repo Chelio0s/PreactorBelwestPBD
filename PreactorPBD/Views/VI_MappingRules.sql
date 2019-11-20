@@ -5,6 +5,8 @@ CREATE VIEW [InputData].[VI_MappingRules]
 	SELECT [IdRule]
       ,AreaId
       ,[TimeCoefficient]
+	  ,TimeAddiction
+	  ,NeedCountDetails
 	  ,MCRParent.Title		as ResParentTitle
 	  ,MCRChild.Title		as ResChildTitle
 	  ,MRCParent.KOB		as KOBParent

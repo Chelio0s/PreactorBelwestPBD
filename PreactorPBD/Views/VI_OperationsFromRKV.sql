@@ -17,6 +17,8 @@ SELECT  DISTINCT
 		,D.PONEOB
 		,D.KOB
 		,OBR.MOB
+		,KOLD
+		,KOLN
 FROM  [$(RKV)].[$(RKV_SCAL)].dbo. F160013		as F13 
 	INNER JOIN [$(RKV)].[$(PLANT)].dbo.drive	as D		on F13.MOD=D.MOD
 	-- DRIVE0 должен быть большими буквами, не трогать

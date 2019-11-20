@@ -82,7 +82,42 @@ BEGIN
 			  ,mr.KtopPrentRoute
 		  HAVING COUNT(mr.IdMergeRoutes) = 2
 		  INSERT @returntable
-		  SELECT * FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
+		  SELECT IdNomenclature
+			  ,vifast.Article
+			  ,Model
+			  ,Nomenclature
+			  ,Size
+			  ,vifast.IdSemiProduct
+			  ,vifast.Title
+			  ,vifast.KPO
+			  ,vifast.Code
+			  ,ktopn
+			  ,NTOP
+			  ,poneob
+			  ,normatime
+			  ,KOB
+			  ,MOB
+			  ,KPROF
+			  ,IdProfession
+			  ,CategoryOperation
+			  ,TitlePreactorOper
+			  ,vifast.SimpleProductId
+			  ,OperOrder
+			  ,REL
+			  ,NPP
+			  ,area.IdArea
+			  ,area.Code
+			  ,area.Title
+			  ,area.KPO
+			  ,area.KPODTO
+			  ,jump.Article
+			  ,jump.IdMergeRoutes
+			  ,jump.IdSemiProduct
+			  ,jump.BaseAreaId
+			  ,jump.ChildAreaId
+			  ,jump.KtopChildRoute
+			  ,jump.KtopParentRoute 
+			  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
 		  INNER JOIN [InputData].[Areas]									AS area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
 		  INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = vifast.IdSemiProduct
 																			AND (jump.BaseAreaId = area.IdArea 
@@ -134,7 +169,42 @@ BEGIN
 																			OR   jump.ChildAreaId = area.IdArea)
 		  WHERE jump.ChildAreaId = area.IdArea
 		  UNION 
-		  SELECT * FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
+		  SELECT IdNomenclature
+			  ,vifast.Article
+			  ,Model
+			  ,Nomenclature
+			  ,Size
+			  ,vifast.IdSemiProduct
+			  ,vifast.Title
+			  ,vifast.KPO
+			  ,vifast.Code
+			  ,ktopn
+			  ,NTOP
+			  ,poneob
+			  ,normatime
+			  ,KOB
+			  ,MOB
+			  ,KPROF
+			  ,IdProfession
+			  ,CategoryOperation
+			  ,TitlePreactorOper
+			  ,vifast.SimpleProductId
+			  ,OperOrder
+			  ,REL
+			  ,NPP
+			  ,area.IdArea
+			  ,area.Code
+			  ,area.Title
+			  ,area.KPO
+			  ,area.KPODTO
+			  ,jump.Article
+			  ,jump.IdMergeRoutes
+			  ,jump.IdSemiProduct
+			  ,jump.BaseAreaId
+			  ,jump.ChildAreaId
+			  ,jump.KtopChildRoute
+			  ,jump.KtopParentRoute
+		  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
 		  INNER JOIN [InputData].[Areas]									AS area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
 		  INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = vifast.IdSemiProduct
 																			AND (jump.BaseAreaId = area.IdArea 
@@ -179,7 +249,41 @@ BEGIN
 
 		  INSERT INTO @returntable
 		  --Выбираем все операции до отправки в другой цех
-		  SELECT * FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
+		  SELECT IdNomenclature
+			  ,vifast.Article
+			  ,Model
+			  ,Nomenclature
+			  ,Size
+			  ,vifast.IdSemiProduct
+			  ,vifast.Title
+			  ,vifast.KPO
+			  ,vifast.Code
+			  ,ktopn
+			  ,NTOP
+			  ,poneob
+			  ,normatime
+			  ,KOB
+			  ,MOB
+			  ,KPROF
+			  ,IdProfession
+			  ,CategoryOperation
+			  ,TitlePreactorOper
+			  ,vifast.SimpleProductId
+			  ,OperOrder
+			  ,REL
+			  ,NPP
+			  ,area.IdArea
+			  ,area.Code
+			  ,area.Title
+			  ,area.KPO
+			  ,area.KPODTO
+			  ,jump.Article
+			  ,jump.IdMergeRoutes
+			  ,jump.IdSemiProduct
+			  ,jump.BaseAreaId
+			  ,jump.ChildAreaId
+			  ,jump.KtopChildRoute
+			  ,jump.KtopParentRoute FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
 		  INNER JOIN [InputData].[Areas]									AS area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
 		  INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = vifast.IdSemiProduct
 																			AND (jump.BaseAreaId = area.IdArea 
@@ -233,7 +337,41 @@ BEGIN
 		 WHERE KTOPN IN (104,204,139,203,293,118,264,120,269,257,246,235,245,159,155,233,236,234,263,237,270,191,267,272,252,248,218, 280,278,295,196,255,281,283,161,211,178,165,167,243)
 		 UNION 
 		 -- Все операции после приемки с 1 цеха 
-		 SELECT * FROM [InputData].[VI_OperationsWithSemiProducts_FAST]		AS vifast
+		 SELECT IdNomenclature
+			  ,vifast.Article
+			  ,Model
+			  ,Nomenclature
+			  ,Size
+			  ,vifast.IdSemiProduct
+			  ,vifast.Title
+			  ,vifast.KPO
+			  ,vifast.Code
+			  ,ktopn
+			  ,NTOP
+			  ,poneob
+			  ,normatime
+			  ,KOB
+			  ,MOB
+			  ,KPROF
+			  ,IdProfession
+			  ,CategoryOperation
+			  ,TitlePreactorOper
+			  ,vifast.SimpleProductId
+			  ,OperOrder
+			  ,REL
+			  ,NPP
+			  ,area.IdArea
+			  ,area.Code
+			  ,area.Title
+			  ,area.KPO
+			  ,area.KPODTO
+			  ,jump.Article
+			  ,jump.IdMergeRoutes
+			  ,jump.IdSemiProduct
+			  ,jump.BaseAreaId
+			  ,jump.ChildAreaId
+			  ,jump.KtopChildRoute
+			  ,jump.KtopParentRoute FROM [InputData].[VI_OperationsWithSemiProducts_FAST]		AS vifast
 		  INNER JOIN [InputData].[Areas]									AS area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
 		  INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = vifast.IdSemiProduct
 																			AND (jump.BaseAreaId = area.IdArea 
@@ -244,5 +382,5 @@ BEGIN
 					   AND area.IdArea = jump.BaseAreaId
 		  ORDER BY   vifast.IdSemiProduct, NPP
 	END
- RETURN	  
-END
+ RETURN
+ END

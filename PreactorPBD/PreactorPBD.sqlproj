@@ -268,6 +268,10 @@
     <Build Include="Tables\SupportData\MappingRoutes\IgnoreMappingOperations.sql" />
     <Build Include="Functions\udf_GetMergedRouteForSemiProduct.sql" />
     <Build Include="Views\VI_GetOperationsForMappingFirstFloor.sql" />
+    <Build Include="Views\VI_MappingRuleForFirstFloor.sql" />
+    <Build Include="Functions\udf_CanIMapFirstFloor.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\TempOperationForMapping.sql" />
+    <Build Include="Functions\udf_GetCompareRoutesFIsrtsFlorrAnd9-1.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -322,6 +326,9 @@
     <Compile Include="Entity\MappingRules\MappingRule.cs" />
     <Compile Include="CLR\ctvf_GetMappingrulesForArticle.cs" />
     <Compile Include="CLR\ctvf_GetFinalRoutForOterPlaceArticle.cs" />
+    <Compile Include="CLR\ctvf_GetAltRouteForFirstFloor.cs" />
+    <Compile Include="Entity\MappingRules\MappingRuleFull.cs" />
+    <Compile Include="Entity\MappingRules\OperationWithTimeAndProffs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

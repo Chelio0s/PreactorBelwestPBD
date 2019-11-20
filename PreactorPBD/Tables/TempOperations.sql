@@ -19,7 +19,9 @@
 	[CategoryOperation] INT NOT NULL,
 	[TitlePreactorOper] NVARCHAR(99) NOT NULL,
 	[NPP] INT NOT NULL, 
-	InsertedDate NVARCHAR(99) DEFAULT GetDate()
+	InsertedDate NVARCHAR(99) DEFAULT GetDate() NOT NULL, 
+    [KOLD] INT NOT NULL, 
+    [KOLN] NCHAR(10) NOT NULL
 )
 
 GO

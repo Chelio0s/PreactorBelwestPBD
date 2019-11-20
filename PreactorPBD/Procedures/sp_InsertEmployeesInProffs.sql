@@ -117,8 +117,10 @@ SELECT
  SELECT DISTINCT tabno, 
 		PROF_STELL, 
 		PROF_TRFST, 
-		isPrimary
+		CONVERT(bit, min(CONVERT(int, isPrimary)))
  FROM @tempPrimaryProf as t 
  INNER JOIN [InputData].[Professions] AS p ON p.IdProfession=t.PROF_STELL
-
+ GROUP BY tabno, 
+		PROF_STELL, 
+		PROF_TRFST
 RETURN 0

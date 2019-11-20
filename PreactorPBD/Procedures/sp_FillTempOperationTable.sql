@@ -1,7 +1,6 @@
 ﻿CREATE PROCEDURE [InputData].[sp_FillTempOperationTable]
 	
-AS
-BEGIN TRANSACTION  
+AS 
     TRUNCATE TABLE [SupportData].[TempOperations] 
 	INSERT [SupportData].[TempOperations] 
 	SELECT  
@@ -24,10 +23,11 @@ BEGIN TRANSACTION
 	  ,[InputData].[udf_GetTitleOperation] (KTOPN, NTOP) as [PreactorOperation]
 	  ,NPP
 	  ,GETDATE()
+	  ,KOLD  -- count details
+	  ,KOLN  -- count nastills
   FROM [InputData].[Nomenclature] as nom
   INNER JOIN [InputData].[Article] as inpart ON nom.ArticleId = inpart.IdArticle
   OUTER APPLY [InputData].[udf_GetOperationsArticleFromRKV](inpart.Title) AS OP
   LEFT JOIN [InputData].[Areas] as area ON area.KPO COLLATE Cyrillic_General_CI_AS = op.KPO
-IF @@ERROR = 0
-COMMIT TRANSACTION
+  WHERE code is not null
 RETURN 0

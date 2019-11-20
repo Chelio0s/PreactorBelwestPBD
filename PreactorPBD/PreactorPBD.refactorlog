@@ -651,4 +651,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdIgnoreOperations" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="2388c7cf-9283-43e0-93a6-4658f0d95c0c" ChangeDateTime="11/16/2019 07:12:10">
+    <Property Name="ElementName" Value="[InputData].[Operations].[MappingRuleId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Operations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsMappingRule" />
+  </Operation>
 </Operations>
