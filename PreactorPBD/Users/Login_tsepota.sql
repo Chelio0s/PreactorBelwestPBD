@@ -1,1 +1,0 @@
-﻿CREATE LOGIN [tsepota] WITH PASSWORD = '12345a'

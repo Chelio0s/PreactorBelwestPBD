@@ -129,8 +129,8 @@
     <Build Include="Tables\SemiProduct.sql" />
     <Build Include="Tables\EntrySemiProduct.sql" />
     <Build Include="Tables\Areas.sql" />
-    <Build Include="Users\Login_tsepota.sql" />
-    <Build Include="Users\ServerRoleMembership_tsepota.sql" />
+    <Build Include="Users\Login_plm.sql" />
+    <Build Include="Users\ServerRoleMembership_plm.sql" />
     <Build Include="Tables\EmployeesCalendar.sql" />
     <Build Include="Schemas\SupportData.sql" />
     <Build Include="Tables\DepartComposition.sql" />
@@ -272,6 +272,9 @@
     <Build Include="Functions\udf_CanIMapFirstFloor.sql" />
     <Build Include="Tables\SupportData\MappingRoutes\TempOperationForMapping.sql" />
     <Build Include="Functions\udf_GetCompareRoutesFIsrtsFlorrAnd9-1.sql" />
+    <Build Include="Views\VI_GetOperationsForMappingSecondFloor.sql" />
+    <Build Include="Functions\udf_GetMappingTime.sql" />
+    <Build Include="Views\VI_MappingRuleForSecondFloor.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

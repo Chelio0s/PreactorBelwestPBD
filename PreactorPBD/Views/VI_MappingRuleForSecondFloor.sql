@@ -1,6 +1,5 @@
-﻿CREATE VIEW [InputData].[VI_MappingRuleForFirstFloor]
-	AS 
-SELECT DISTINCT
+﻿CREATE VIEW [InputData].[VI_MappingRuleForSecondFloor]
+	AS SELECT DISTINCT
 	   [IdRule]
       ,[AreaId]
       ,[TimeCoefficient]
@@ -25,8 +24,7 @@ SELECT DISTINCT
 	  ,vioper.KOLN
 	  ,vioper.CategoryOperation
 	  ,vioper.IdProfession
-  FROM [InputData].[VI_MappingRules]								as  vimr
-  INNER JOIN [InputData].[VI_GetOperationsForMappingFirstFloor]		as  vioper ON  vioper.KTOPN = vimr.KTOPParent
+  FROM [InputData].[VI_MappingRules]									AS  vimr
+  INNER JOIN [InputData].[VI_GetOperationsForMappingSecondFloor]		AS  vioper ON  vioper.KTOPN = vimr.KTOPParent
 																			   AND vioper.KOB = vimr.KOBParent	 
-
 
