@@ -6,7 +6,7 @@
 	@NeedCountDetails	bit,
 	@KOLD				int
 )
-RETURNS INT
+RETURNS DECIMAL(6,2)
 AS
 BEGIN
 	RETURN CASE WHEN @NeedCountDetails = 1 THEN @norma + (@addictionTime * @KOLD)*@koef 

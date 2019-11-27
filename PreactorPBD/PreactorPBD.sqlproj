@@ -332,6 +332,7 @@
     <Compile Include="CLR\ctvf_GetAltRouteForFirstFloor.cs" />
     <Compile Include="Entity\MappingRules\MappingRuleFull.cs" />
     <Compile Include="Entity\MappingRules\OperationWithTimeAndProffs.cs" />
+    <Compile Include="CLR\ctvf_GetAltRouteForSecondFloor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
