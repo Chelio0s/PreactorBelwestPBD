@@ -250,7 +250,6 @@
     <Build Include="Views\VI_CheckList_Persentage.sql" />
     <Build Include="Views\VI_SelectSemiProductWithArticle.sql" />
     <Build Include="Views\VI_GetAviablesMappingRouts.sql" />
-    <Build Include="Procedures\sp_GetAlterRoutsOtherPlaces.sql" />
     <Build Include="Views\VI_RoutesWithArticle.sql" />
     <Build Include="Views\VI_ResourcesOnDepartments.sql" />
     <Build Include="Views\VI_OperationsFromSDBWithResGroups.sql" />
@@ -275,6 +274,8 @@
     <Build Include="Views\VI_GetOperationsForMappingSecondFloor.sql" />
     <Build Include="Functions\udf_GetMappingTime.sql" />
     <Build Include="Views\VI_MappingRuleForSecondFloor.sql" />
+    <Build Include="Views\VI_BannedRoutesForMapping.sql" />
+    <Build Include="Functions\udf_CanIMapSecondFloor.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

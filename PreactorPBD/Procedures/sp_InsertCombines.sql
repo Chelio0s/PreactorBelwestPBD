@@ -1,8 +1,6 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertCombines]
 AS
 	
-	BEGIN TRANSACTION 
-
 	DELETE FROM [SupportData].[CombineRules]
 
 	DECLARE @FilteredTable as table (IdSemiProduct int NOT NULL)
@@ -45,12 +43,5 @@ SELECT   sp.[IdSemiProduct]
   FROM [SupportData].[CombineRules] as cr
   INNER JOIN @combinesProducts as cp ON cp.IdSemiProduct = cr.[SemiProductId] 
 										and cp.IdCombine = cr.[Number_]
-
-
-  
-  IF @@ERROR <>0
-	ROLLBACK TRANSACTION
-  ELSE
-	COMMIT TRANSACTION
 
 RETURN 0
