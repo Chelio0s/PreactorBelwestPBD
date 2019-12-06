@@ -2,7 +2,6 @@
 AS
 
 BEGIN
-	
 	print 'Загрузка профессий'
 	EXEC [InputData].sp_InsertProfsIntoPreactor
 	print 'Загрузка рабочих'
@@ -33,12 +32,14 @@ BEGIN
 	EXEC [InputData].sp_InsertCombines							-- инсертим комбинации всех правил для создания ТМов
 	print 'Заполнение временной таблицы операций'
 	EXEC [InputData].sp_FillTempOperationTable					-- заполняем вр. таблицу с опер-ми
-	print 'Удаляем лишние (не соотв. ПФ)'
+	print 'Удаляем пустые ПФ  '
 	EXEC [InputData].sp_DeleteInappropriateSemiProducts			-- Удаляем пустые ПФ
 	print 'Создание маршрутов'
 	EXEC [InputData].sp_InsertRoutes							-- создаем маршруты
 	print 'Загрузка операций'
 	EXEC [InputData].sp_InsertOperations						-- заполняем операции для продуктов
+	print 'Удаляем пустые ТМ'
+	EXEC [InputData].sp_DeleteInappropriateRoutes				-- Удаляем пустые ТМ
 	print 'Ставим операции на рессурсы'
 	EXEC [InputData].sp_InsertOperationsInResources			   -- заливаем операции на рессурсы
 	print 'Создание временной таблицы материаллов'

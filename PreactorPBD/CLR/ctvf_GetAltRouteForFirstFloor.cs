@@ -28,7 +28,8 @@ public partial class UserDefinedFunctions
                             ,IdRout             int
                             ,SimpleProductId    int
                             ,CategoryOperation  int
-                            ,KPROF              int")]
+                            ,KPROF              int
+                            ,REL                int")]
     public static IEnumerable ctvf_GetAltRouteForFirstFloor(int idRoute)
     {
         string Article = null;
@@ -58,6 +59,7 @@ public partial class UserDefinedFunctions
                     ,[SimpleProductId]
                     ,[CategoryOperation]
                     ,[IdProfession]
+                    ,[REL]
                 FROM [InputData].[VI_MappingRuleForFirstFloor] " +
                 $"WHERE IdRout =  {idRoute}", sqlConnection);
             sqlConnection.Open();
@@ -83,7 +85,8 @@ public partial class UserDefinedFunctions
                     Convert.ToDecimal(reader[2]),
                     Convert.ToInt32(reader[19]),
                     Convert.ToInt32(reader[20]),
-                    Convert.ToInt32(reader[21])));
+                    Convert.ToInt32(reader[21]),
+                    Convert.ToInt32(reader[22])));
             }
 
             if (rules.Count == 0)
@@ -151,6 +154,7 @@ public partial class UserDefinedFunctions
                                                              ,[NORMATIME]
                                                              ,[CategoryOperation]
                                                              ,[KPROF]
+                                                             ,[REL]
                                                         FROM [InputData].[VI_OperationArticle_FAST] " +
                                                  $"WHERE Article = '{Article}' and KPO = 'П9121'", sqlConnection);
                         // Fill KTOPs second floor
@@ -162,7 +166,8 @@ public partial class UserDefinedFunctions
                                                                                                         Convert.ToInt32(reader[1]),
                                                                                                         Convert.ToDecimal(reader[2]),
                                                                                                         Convert.ToInt32(reader[3]),
-                                                                                                        Convert.ToInt32(reader[4])));
+                                                                                                        Convert.ToInt32(reader[4]),
+                                                                                                        Convert.ToInt32(reader[5])));
                         }
 
                         reader.Close();
@@ -181,13 +186,15 @@ public partial class UserDefinedFunctions
                                 5216, 0, false, ktopsecondValue.Value.Time,
                                 ktopsecondValue.Value.Time, 0, 1, temprule.SimpleProductId, 
                                 temprule.CategoryOperation, 
-                                temprule.CodeProff));
+                                temprule.CodeProff, 
+                                ktopsecondValue.Value.REL));
                             rules.Add(new MappingRuleFull(temprule.AreaId, temprule.IdRout, 0,
                                 temprule.IdSemiProduct, 179, 0,
                                 5216, 0, false, ktopsecondValue.Value.Time,
                                 ktopsecondValue.Value.Time, 0, 1, temprule.SimpleProductId,
                                 temprule.CategoryOperation,
-                                temprule.CodeProff));
+                                temprule.CodeProff,
+                                ktopsecondValue.Value.REL));
                         }
                     }
                 }
@@ -207,6 +214,7 @@ public partial class UserDefinedFunctions
                                                              ,[NORMATIME]
                                                              ,[CategoryOperation]
                                                              ,[KPROF]
+                                                             ,[REL]
                                                         FROM [InputData].[VI_OperationArticle_FAST] " +
                                              $"WHERE Article = '{Article}' and (KPO = 'П9121' or KPO = 'П9130') ", sqlConnection);
                     // Fill KTOPs second floor
@@ -218,7 +226,8 @@ public partial class UserDefinedFunctions
                             Convert.ToInt32(reader[1]),
                             Convert.ToDecimal(reader[2]),
                             Convert.ToInt32(reader[3]),
-                            Convert.ToInt32(reader[4])));
+                            Convert.ToInt32(reader[4]),
+                            Convert.ToInt32(reader[5])));
                     }
 
                     reader.Close();
@@ -243,7 +252,8 @@ public partial class UserDefinedFunctions
                             5251, 0, false, ktopsecondValue.Value.Time,
                             ktopsecondValue.Value.Time, 0, 1, temprule.SimpleProductId,
                             temprule.CategoryOperation,
-                            temprule.CodeProff));
+                            temprule.CodeProff,
+                            ktopsecondValue.Value.REL));
                     }
 
                 }
@@ -377,7 +387,8 @@ public partial class UserDefinedFunctions
         , out SqlInt32 IdRout
         , out SqlInt32 SimpleProductId
         , out SqlInt32 CategoryProff
-        , out SqlInt32 KPROF)
+        , out SqlInt32 KPROF
+        , out SqlInt32 REL)
     {
         if (obj is MappingRuleFull item)
         {
@@ -397,6 +408,7 @@ public partial class UserDefinedFunctions
             SimpleProductId = item.SimpleProductId;
             KPROF = item.CodeProff;
             CategoryProff = item.CategoryOperation;
+            REL = item.REL;
         }
         else
         {

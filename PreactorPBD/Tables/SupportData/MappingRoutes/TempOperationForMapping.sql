@@ -9,6 +9,7 @@
     [Code]				VARCHAR(4) NOT NULL, 
     [KTOPN]				INT NOT NULL, 
 	[KOB]				INT NOT NULL, 
-    [NORMATIME]			DECIMAL(6, 2) NOT NULL
+    [NORMATIME]			DECIMAL(6, 2) NOT NULL, 
+    [REL] INT NULL
   			
 )

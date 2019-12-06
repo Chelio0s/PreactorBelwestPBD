@@ -17,6 +17,7 @@
       ,[SimpleProductId]
       ,[OperOrder]
 	  ,NPP
+	  ,REL
   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]
   GROUP BY 
 		   [Article]
@@ -35,3 +36,4 @@
 		  ,[SimpleProductId]
 		  ,[OperOrder]
 		  ,NPP
+		  ,REL

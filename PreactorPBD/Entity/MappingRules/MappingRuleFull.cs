@@ -4,7 +4,7 @@ namespace PreactorPBD
     {
         public MappingRuleFull(int areaId, int idRout, int idRule, int idSemiProduct, int kobChild, int kobParent, int ktopChild,
             int ktopParent, bool needCountDetails, decimal normaTimeNew, decimal normaTimeOld, decimal timeAddiction, decimal timeCoefficient, int simpleProductId
-            ,int categoryOperation, int codeProff)
+            , int categoryOperation, int codeProff, int rel)
         {
             AreaId = areaId;
             IdRout = idRout;
@@ -22,6 +22,7 @@ namespace PreactorPBD
             SimpleProductId = simpleProductId;
             CategoryOperation = categoryOperation;
             CodeProff = codeProff;
+            REL = rel;
         }
 
         public int IdRule { get; }
@@ -40,5 +41,6 @@ namespace PreactorPBD
         public int SimpleProductId { get; }
         public int CategoryOperation { get; }
         public int CodeProff { get; }
+        public int REL { get; }
     }
 }

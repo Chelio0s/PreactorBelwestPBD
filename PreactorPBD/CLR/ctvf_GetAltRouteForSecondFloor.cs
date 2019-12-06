@@ -28,7 +28,8 @@ public partial class UserDefinedFunctions
                             ,IdRout             int
                             ,SimpleProductId    int
                             ,CategoryOperation  int
-                            ,KPROF              int")]
+                            ,KPROF              int
+                            ,REL                int")]
     public static IEnumerable ctvf_GetAltRouteForSecondFloor(int idRoute, int idArea)
     {
         using (SqlConnection sqlConnection = new SqlConnection("context connection = true"))
@@ -56,6 +57,7 @@ public partial class UserDefinedFunctions
                     ,[SimpleProductId]
                     ,[CategoryOperation]
                     ,[IdProfession]
+                    ,[REL]
                 FROM [InputData].[VI_MappingRuleForSecondFloor] " +
                 $"WHERE IdRout =  {idRoute} AND AreaId = {idArea}", sqlConnection);
             sqlConnection.Open();  
@@ -81,7 +83,8 @@ public partial class UserDefinedFunctions
                     Convert.ToDecimal(reader[2]),
                     Convert.ToInt32(reader[19]),
                     Convert.ToInt32(reader[20]),
-                    Convert.ToInt32(reader[21])));
+                    Convert.ToInt32(reader[21]),
+                    Convert.ToInt32(reader[22])));
             }
 
             if (rules.Count == 0)
@@ -127,7 +130,8 @@ public partial class UserDefinedFunctions
         , out SqlInt32 IdRout
         , out SqlInt32 SimpleProductId
         , out SqlInt32 CategoryProff
-        , out SqlInt32 KPROF)
+        , out SqlInt32 KPROF
+        , out SqlInt32 REL)
     {
         if (obj is MappingRuleFull item)
         {
@@ -147,6 +151,7 @@ public partial class UserDefinedFunctions
             SimpleProductId = item.SimpleProductId;
             KPROF = item.CodeProff;
             CategoryProff = item.CategoryOperation;
+            REL = item.REL;
         }
         else
         {

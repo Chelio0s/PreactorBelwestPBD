@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperations]
 AS
-    print 'Создаем операции'
 	DELETE FROM [InputData].[OperationWithKTOP]
 	DELETE FROM  [InputData].[Operations]
 		DECLARE @table as table(idRout int, 
@@ -13,7 +12,7 @@ AS
 		Code varchar(4), 
 		NPP int, 
 		KTOPN int,
-		TimeMultiply float,
+		REL int,
 		IsMappingRule bit)
 
   --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
@@ -28,7 +27,7 @@ AS
 	  ,Code
 	  ,1
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
@@ -47,7 +46,7 @@ AS
 	  ,Code
 	  ,1  --заменяем NPP на 1 чтобы убрать потом дубликаты
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0  -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
@@ -66,7 +65,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
@@ -85,7 +84,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
@@ -104,11 +103,11 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE Code = 'OP61' and r.AreaId = 9
+  WHERE Code = 'OP61' and r.AreaId = 9 
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все для 7/1 цеха  - стандарт, подготовлено технологами  
@@ -123,7 +122,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
@@ -142,7 +141,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
@@ -161,7 +160,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- idMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
@@ -169,7 +168,14 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
-  DECLARE @JumpSemiProducts as table (Article nvarchar(99), IdMergeRoutes int, IdSemiProduct int, BaseAreaId int, ChildAreaId int,KtopChildRoute int, KtopParentRoute int)
+  DECLARE @JumpSemiProducts as table (Article nvarchar(99)
+									  , IdMergeRoutes int
+									  , IdSemiProduct int
+									  , BaseAreaId int
+									  , ChildAreaId int
+									  , KtopChildRoute int
+									  , KtopParentRoute int
+									  , REL int)
   INSERT INTO @JumpSemiProducts
   SELECT
        Article
@@ -179,6 +185,7 @@ AS
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
+	  ,vifast.REL
   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
   INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
   CROSS JOIN [SupportData].[MergeRoutes]					as mr
@@ -193,6 +200,7 @@ AS
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
+	  ,vifast.REL
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ   3 и 4
@@ -207,7 +215,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,jump.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout]											as r
   INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
@@ -226,7 +234,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
@@ -246,6 +254,7 @@ AS
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
+	  ,vifast.REL
   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
   INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
   CROSS JOIN [SupportData].[MergeRoutes]					as mr
@@ -259,6 +268,7 @@ AS
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
+	  ,vifast.REL
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ 
@@ -273,7 +283,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,jump.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout]											as r
   INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
@@ -293,7 +303,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,1 --timemultiply
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
@@ -302,31 +312,18 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все маршруты для 9/1 для которых нет операций ТМ в базе (пробуем создать операции автоматом)
-  DECLARE @routes as table (IdRoute int, Article nvarchar(99))
+  DECLARE @routes AS TABLE (IdRoute int, Article nvarchar(99))
   INSERT INTO @routes
   SELECT DISTINCT
 	  r.IdRout
-	 ,art.Title as Article
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
-  INNER JOIN [InputData].[Nomenclature] as nom ON nom.IdNomenclature = sp.NomenclatureID
-  INNER JOIN [InputData].[Article]		as art ON art.IdArticle = nom.ArticleId
-  WHERE IdRout NOT IN (SELECT DISTINCT
-						  rout.IdRout
-					  FROM @table as rout) and r.AreaId = 8  
-    -- SimpleProductId = 1 - крой верха всегда есть в обуви по этому проверяем только его
-	-- т.к. других пф может не быть, например стельки, а это вносит недопонимание
-	and sp.SimpleProductId = 1
+	 ,art.Title AS Article
+  FROM [InputData].[Rout]				AS r
+  INNER JOIN [InputData].[SemiProducts] AS sp	ON sp.IdSemiProduct = r.SemiProductId
+  INNER JOIN [InputData].[Nomenclature] AS nom	ON nom.IdNomenclature = sp.NomenclatureID
+  INNER JOIN [InputData].[Article]		AS art	ON art.IdArticle = nom.ArticleId
+  WHERE  r.AreaId = 8  AND  r.IsAutoGenerated = 1
 
-
-  -- Выборка тех, которые возможно замаппить
-  DECLARE @MappingRoutes table (IdRoute int)
-  INSERT INTO @MappingRoutes
-  SELECT DISTINCT rr.idRoute 
-  FROM  @routes as r
-  INNER JOIN @routes as rr ON r.Article = rr.Article
-  WHERE [InputData].[udf_CanIMapFirstFloor](r.Article) = 1
-
+ 
   -- Маппим 1 в 9/1
   INSERT INTO @table
   SELECT  DISTINCT
@@ -340,9 +337,9 @@ AS
 	  ,'OP09'										                              as Code
 	  ,ROW_NUMBER() over(partition by [IdSemiProduct] order by so.OperOrder) * 10 as NPP
 	  ,KTOPChild
-	  ,1 --timemultiply
+	  ,ctvf.REL
 	  ,1 -- 1 - значит это автоматически замапленные ТМ
-  FROM @MappingRoutes
+  FROM @routes
   CROSS APPLY [InputData].[ctvf_GetAltRouteForFirstFloor](IdRoute) as ctvf
   INNER JOIN [SupportData].[SequenceOperations] as SO ON so.KTOP = KTOPChild
   GROUP BY IdRout
@@ -353,6 +350,7 @@ AS
 	  ,so.OperOrder
 	  ,KTOPChild
 	  ,ctvf.IdRule
+	  ,ctvf.REL
    ORDER BY IdRout, so.OperOrder
 
  --  --Все для 5 цеха  -- 5 цех пока выкидываем из балансировки
@@ -360,9 +358,9 @@ AS
 	--SELECT DISTINCT
 	--  r.IdRout
 	--  ,[TitlePreactorOper]
- --     ,vi.[IdSemiProduct]
- --     ,vi.[IdProfession]
- --     ,4 as [TypeTime]
+	--     ,vi.[IdSemiProduct]
+	--     ,vi.[IdProfession]
+	--     ,4 as [TypeTime]
 	--  ,CategoryOperation, vi.[OperOrder]
 	--  ,Code
 	--  ,NPP
@@ -438,7 +436,7 @@ AS
  		SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
-		,t.TimeMultiply
+		,t.REL
 		FROM @table							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
@@ -453,8 +451,6 @@ AS
 	TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
 	--Заливаем в нее данные для переходящих маршрутов
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
-
-
 INSERT INTO @table
 SELECT DISTINCT
       R.IdRout
@@ -467,7 +463,7 @@ SELECT DISTINCT
 	  ,AR.Code
 	  ,MIN(NPP) OVER(PARTITION BY  R.IdRout, [InputData].[udf_GetTitleOperation](FN.KTOPChild, SO.Title)) AS NPP
 	  ,FN.KTOPChild
-	  ,1
+	  ,fn.REL
 	  ,0
   FROM [InputData].[Rout]															AS R
   CROSS APPLY [InputData].[ctvf_GetAltRouteForSecondFloor](ParentRouteId, Areaid)	AS FN
@@ -492,6 +488,7 @@ SELECT DISTINCT
 	  ,FN.KTOPChild
 	  ,FN.KOBChild
 	  ,FN.NormaTimeNew
+	  ,FN.REL
   FROM [InputData].[Rout]															AS R
   CROSS APPLY [InputData].[ctvf_GetAltRouteForSecondFloor](ParentRouteId, Areaid)	AS FN
   INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = FN.KTOPChild
@@ -529,7 +526,7 @@ SELECT DISTINCT
  		SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
-		,t.TimeMultiply
+		,t.REL
 		FROM @table							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout

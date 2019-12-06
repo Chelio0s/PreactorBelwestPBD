@@ -25,6 +25,7 @@ SELECT DISTINCT
 	  ,vioper.KOLN
 	  ,vioper.CategoryOperation
 	  ,vioper.IdProfession
+	  ,vioper.REL
   FROM [InputData].[VI_MappingRules]								as  vimr
   INNER JOIN [InputData].[VI_GetOperationsForMappingFirstFloor]		as  vioper ON  vioper.KTOPN = vimr.KTOPParent
 																			   AND vioper.KOB = vimr.KOBParent	 

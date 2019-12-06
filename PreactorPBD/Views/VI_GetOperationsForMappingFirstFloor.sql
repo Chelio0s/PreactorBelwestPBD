@@ -17,6 +17,7 @@
 	  ,vi.SimpleProductId
 	  ,vi.KOLD
 	  ,vi.KOLN
+	  ,vi.REL
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
   WHERE  Code = 'OP01' 

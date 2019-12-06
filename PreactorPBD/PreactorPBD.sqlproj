@@ -276,6 +276,8 @@
     <Build Include="Views\VI_MappingRuleForSecondFloor.sql" />
     <Build Include="Views\VI_BannedRoutesForMapping.sql" />
     <Build Include="Functions\udf_CanIMapSecondFloor.sql" />
+    <Build Include="Functions\udf_CanIMapFirstFloorRoute.sql" />
+    <Build Include="Procedures\sp_DeleteInappropriateRoutes.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
@@ -318,7 +320,7 @@
     <Compile Include="Entity\Combinator\CombineItemResult.cs" />
     <Compile Include="Entity\Combinator\RoutRule.cs" />
     <Compile Include="Entity\Combinator\RoutRules.cs" />
-    <Compile Include="CLR\ctvf_GetOperationsForRout.cs" />
+    <Compile Include="CLR\ctvf_GetDisableOperationsForRout.cs" />
     <Compile Include="Entity\RoutRulesOperation.cs" />
     <Compile Include="Entity\DisableOperations.cs" />
     <Compile Include="Entity\RoutRulesOperationSmall.cs" />
