@@ -60,5 +60,8 @@
   <ItemGroup>
     <Build Include="s_group.sql" />
     <Build Include="passp.sql" />
+    <Build Include="passp1.sql" />
+    <Build Include="fabr1.sql" />
+    <Build Include="fabr2.sql" />
   </ItemGroup>
 </Project>

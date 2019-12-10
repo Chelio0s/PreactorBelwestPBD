@@ -278,6 +278,8 @@
     <Build Include="Functions\udf_CanIMapSecondFloor.sql" />
     <Build Include="Functions\udf_CanIMapFirstFloorRoute.sql" />
     <Build Include="Procedures\sp_DeleteInappropriateRoutes.sql" />
+    <Build Include="Functions\tvf_GetMaterialForArticleRKVSlow.sql" />
+    <Build Include="Views\VI_MaterialsForArticleWithNomenclatureFAST.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[passp1]
+(
+	[Id] INT NOT NULL PRIMARY KEY, 
+    [PARAM] NCHAR(10) NULL, 
+    [RROT] NCHAR(10) NULL, 
+    [RRTO] NCHAR(10) NULL, 
+    [REL] NCHAR(10) NULL
+)

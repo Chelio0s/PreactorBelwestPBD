@@ -91,7 +91,7 @@ AS
   WHERE CombineId is null AND code = 'OP02' and r.AreaId = 4
   ORDER BY r.IdRout, NPP
 
---Все для 6/1 цеха - стандарт, подготовлено технологами 
+--Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
 	INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -107,64 +107,10 @@ AS
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE Code = 'OP61' and r.AreaId = 9 
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
-  --Все для 7/1 цеха  - стандарт, подготовлено технологами  
-	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE Code = 'OP71' and r.AreaId = 13
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
-    --Все для 8/1 цеха  - стандарт, подготовлено технологами 
-	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE Code = 'OP81' and r.AreaId = 14
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
---Все для 9/2 цеха - стандарт, подготовлено технологами 
-	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- idMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE Code = 'OP09' and r.AreaId = 20
+  WHERE (Code = 'OP61' and r.AreaId = 9) 
+		OR (Code = 'OP71' and r.AreaId = 13) 
+		OR (Code = 'OP81' and r.AreaId = 14)
+		OR (Code = 'OP09' and r.AreaId = 20)
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"

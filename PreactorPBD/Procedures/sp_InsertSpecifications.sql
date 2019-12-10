@@ -10,16 +10,7 @@ TRUNCATE TABLE [InputData].[Specifications]
 		   FKGR
 		   ,NORMA
 		  ,[IdOperation]
-	  FROM [InputData].[Operations] as oper
-	  INNER JOIN [InputData].[Rout] as r ON r.IdRout = oper.RoutId
-	  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
-	  INNER JOIN [SupportData].[TempOperations] as toper ON toper.IdNomenclature = sp.NomenclatureID 
-															and toper.TitlePreactorOper = oper.Title
-	  INNER JOIN [InputData].[Nomenclature] as nom ON nom.IdNomenclature = sp.NomenclatureID
-      INNER JOIN [InputData].[Article] as art ON art.IdArticle = nom.ArticleId														
-	  INNER JOIN [InputData].[Areas] as area ON area.Code = toper.Code COLLATE Cyrillic_General_BIN
-	  INNER JOIN [SupportData].[TempMaterials] as tmat ON tmat.REL = toper.REL 
-														and tmat.Article  = art.Title COLLATE Cyrillic_General_BIN
-														and tmat.KPODTO = area.KPODTO
-
+	  FROM  [InputData].[VI_OperationsFromSDBWithREL] as virel										
+	  INNER JOIN [SupportData].[TempMaterials] as tmat ON tmat.REL = virel.REL 
+													      
 RETURN 0
