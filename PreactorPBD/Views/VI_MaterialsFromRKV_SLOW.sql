@@ -14,6 +14,7 @@ SELECT
 	  ,FKGR
 	  ,FNGR
 	  ,NORMA
+	  ,FN.KEI
 	  ,DOP
 	  ,DOPN
 	  ,TOL

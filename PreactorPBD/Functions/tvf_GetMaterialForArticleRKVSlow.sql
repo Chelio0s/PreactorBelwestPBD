@@ -4,7 +4,7 @@
 )
 RETURNS @returntable TABLE
 (
-    REL			INT
+     REL		INT
 	,ART		NVARCHAR(99)
 	,KPODTO		INT		 
 	,KTOPN		INT	
@@ -13,6 +13,7 @@ RETURNS @returntable TABLE
 	,FKGR		NVARCHAR(99)
 	,FNGR		NVARCHAR(99)
 	,NORMA		DECIMAL(8,3)
+	,KEI		INT
 	,DOP		NVARCHAR(99)
 	,DOPN		NVARCHAR(99)
 	,TOL		NVARCHAR(99)
@@ -25,7 +26,29 @@ RETURNS @returntable TABLE
 AS
 BEGIN
 
-INSERT INTO @returntable	
+DECLARE @temp TABLE
+(
+     REL		INT
+	,ART		NVARCHAR(99)
+	,KPODTO		INT		 
+	,KTOPN		INT	
+	,KPO		NVARCHAR(10)
+	,NPP		INT
+	,FKGR		NVARCHAR(99)
+	,FNGR		NVARCHAR(99)
+	,NORMA		DECIMAL(8,3)
+	,KEI		INT
+	,DOP		NVARCHAR(99)
+	,DOPN		NVARCHAR(99)
+	,TOL		NVARCHAR(99)
+	,KC			NVARCHAR(10)
+	,NC			NVARCHAR(99)
+	,[PARAM]	NVARCHAR(10)
+	,RROT		DECIMAL(6,2)
+	,RRTO		DECIMAL(6,2)
+)
+
+INSERT INTO @temp	
 SELECT 
 	TEMP.REL
 	,P.ART
@@ -36,6 +59,7 @@ SELECT
 	,P.FKGR
 	,P.FNGR
 	,P.NORMA
+	,P.KEI
 	,P.DOP
 	,P.DOPN
 	,P.TOL
@@ -69,14 +93,16 @@ SELECT
 	WHERE S.PR_UD2=0  --признак закрытия ТМ, т.е. пронормирован и утвержден
 	AND D.NORMA<>0  
 	 
- )  AS TEMP												ON TEMP.ART = P.ART AND TEMP.FKGR = P.FKGR
+ )  AS TEMP												ON TEMP.ART = P.ART 
+														AND TEMP.FKGR = P.FKGR
+														AND RTRIM(TEMP.KPO) LIKE '%'+RTRIM(P.KPODTO)
  WHERE P.ART = @Article
  AND P.NORMA > 0
  AND P.PR_MAT = 1
  AND FABR2.FNGR2 IS NULL
-  
+ 
  UNION 
- SELECT
+SELECT 
 	TEMP.REL
 	,P.ART
 	,P.KPODTO			AS PASSPKPODTO
@@ -85,17 +111,18 @@ SELECT
 	,TEMP.NPP
 	,FABR2.FKGR2
 	,FABR2.FNGR2
-	,FABR2.NORMA/FABR2.KOL 
+	,FABR2.NORMA/FABR2.KOL
+	,FABR2.KEI
 	,P.DOP
 	,P.DOPN
 	,P.TOL
-	,P.KC
-	,P.NC
+	,FABR2.KC
+	,FABR2.NC
 	,P1.PARAM
 	,P1.RROT
 	,P1.RRTO
-
-FROM		[$(RKV)].[$(POTREB)].[dbo].[passp]	AS P
+ 
+ FROM		[$(RKV)].[$(POTREB)].[dbo].[passp]	AS P
  LEFT JOIN	[$(RKV)].[$(POTREB)].[dbo].[passp1]	AS P1		ON	P.REL = P1.REL
  LEFT JOIN  [$(RKV)].[$(POTREB)].[dbo].[fabr1]	AS FABR1	ON  FABR1.FKGR1 = P.FKGR AND FABR1.KC = P.KC
  LEFT JOIN  [$(RKV)].[$(POTREB)].[dbo].[fabr2]	AS FABR2	ON  FABR2.REL = FABR1.REL
@@ -119,12 +146,36 @@ FROM		[$(RKV)].[$(POTREB)].[dbo].[passp]	AS P
 	WHERE S.PR_UD2=0  --признак закрытия ТМ, т.е. пронормирован и утвержден
 	AND D.NORMA<>0  
 	 
- )  AS TEMP		ON TEMP.ART = P.ART AND TEMP.FKGR = P.FKGR
+ )  AS TEMP												ON TEMP.ART = P.ART 
+														AND TEMP.FKGR = P.FKGR
+														AND RTRIM(TEMP.KPO) LIKE '%'+RTRIM(FABR2.KPODTO)
  WHERE P.ART = @Article
  AND P.NORMA > 0
  AND PR_MAT = 1
  AND FABR2.FNGR2 IS NOT NULL
  
  ORDER BY KPO, NPP
+ INSERT INTO @returntable
+ SELECT 
+ CASE WHEN T.REL IS NULL THEN (SELECT TOP(1) REL FROM @temp as FN WHERE FN.KPODTO = T.KPODTO  AND FN.REL IS NOT NULL ORDER BY FN.NPP)
+	  ELSE T.REL END
+			,ART		 
+			,KPODTO		 
+			,KTOPN		 
+			,KPO		 
+			,NPP		 
+			,FKGR		 
+			,FNGR		 
+			,NORMA		 
+			,KEI		 
+			,DOP		 
+			,DOPN		 
+			,TOL		 
+			,KC			 
+			,NC			 
+			,[PARAM]	 
+			,RROT		 
+			,RRTO	
+ FROM @temp  AS T
  RETURN
 END

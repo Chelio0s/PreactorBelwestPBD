@@ -6,6 +6,7 @@ AS
 	, REL
 	, FKGR
 	, NORMA
+	, KEI
 	, KPODTO
 	, FNGR
 	, DOP

@@ -11,5 +11,6 @@
     [KC] NCHAR(10) NULL, 
     [NC] NCHAR(10) NULL, 
     [FNGR] INT NULL, 
-    [PR_MAT] NCHAR(10) NULL
+    [PR_MAT] NCHAR(10) NULL, 
+    [KEI] NCHAR(10) NULL
 )

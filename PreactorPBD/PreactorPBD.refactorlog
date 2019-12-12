@@ -658,4 +658,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IsMappingRule" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="164d9463-012d-4b9e-aedd-055cbcdf5491" ChangeDateTime="12/10/2019 11:22:15">
+    <Property Name="ElementName" Value="[InputData].[Material].[Attribute]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Material]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AddictionAttribute" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="101a1542-4ae1-40de-8474-eca6759d5ee0" ChangeDateTime="12/11/2019 12:32:54">
+    <Property Name="ElementName" Value="[SupportData].[KEI].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[KEI]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="KEI" />
+  </Operation>
 </Operations>
