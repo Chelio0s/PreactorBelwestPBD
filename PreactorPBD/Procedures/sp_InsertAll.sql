@@ -14,6 +14,8 @@ BEGIN
 	EXEC [InputData].sp_InsertWorkDays
 	print 'Загрузка оборуд.'
 	EXEC [InputData].sp_InsertEquipmentWithDelete
+	print 'Загрузка ремонтов'
+	EXEC [InputData].sp_PutResourcesOnRepair
 	print 'Включение оборуд. в группы'
 	EXEC [InputData].sp_IncludeEquipmentIntoGroups
 	print 'Создание номенклатур (арт + размер)'

@@ -159,7 +159,6 @@
     <Build Include="Tables\SettingShift.sql" />
     <Build Include="Tables\WorkDays.sql" />
     <Build Include="Procedures\sp_InsertWorkDays.sql" />
-    <Build Include="Tables\UseConstraintOperations.sql" />
     <Build Include="Functions\udf_GetStartTimeForShift.sql" />
     <Build Include="Views\VI_OrgUnitsWithAreas.sql" />
     <Build Include="Views\VI_WorkHoursForOrgUnit.sql" />
@@ -281,6 +280,10 @@
     <Build Include="Functions\tvf_GetMaterialForArticleRKVSlow.sql" />
     <Build Include="Views\VI_MaterialsForArticleWithNomenclatureFAST.sql" />
     <Build Include="Tables\KEI.sql" />
+    <Build Include="Tables\ResourcesRepairs.sql" />
+    <Build Include="Tables\Repairs.sql" />
+    <Build Include="Views\VI_ResourcesOnRepair.sql" />
+    <Build Include="Procedures\sp_PutResourcesOnRepair.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
