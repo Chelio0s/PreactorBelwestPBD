@@ -248,7 +248,6 @@
     <Build Include="Functions\udf_GetMaxCountEquipmentInAreaForOperation.sql" />
     <Build Include="Views\VI_CheckList_CheckModelExistense.sql" />
     <Build Include="Views\VI_CheckList_Persentage.sql" />
-    <Build Include="Views\VI_SelectSemiProductWithArticle.sql" />
     <Build Include="Views\VI_GetAviablesMappingRouts.sql" />
     <Build Include="Views\VI_RoutesWithArticle.sql" />
     <Build Include="Views\VI_ResourcesOnDepartments.sql" />
@@ -290,6 +289,10 @@
     <Build Include="Procedures\InsertSingleArticle\sp_CreateNomenclatureForSingleArticle.sql" />
     <Build Include="Procedures\InsertSingleArticle\sp_InsertSingleArticleFull.sql" />
     <Build Include="Procedures\InsertSingleArticle\sp_EntriSemiProductForArticle.sql" />
+    <Build Include="Procedures\sp_KillConnections.sql" />
+    <Build Include="Functions\udf_GetModelForArticle.sql" />
+    <Build Include="Tables\SupportData\ArticleModels.sql" />
+    <Build Include="Procedures\sp_InsertArticleModels.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

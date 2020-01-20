@@ -2,6 +2,8 @@
 AS
 
 BEGIN
+	print 'Артикул - модель таблицы'
+	EXEC [SupportData].[sp_InsertArticleModels]
 	print 'Загрузка профессий'
 	EXEC [InputData].sp_InsertProfsIntoPreactor
 	print 'Загрузка рабочих'

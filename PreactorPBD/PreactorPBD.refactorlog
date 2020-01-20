@@ -679,4 +679,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdRepair" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="3dc1ccb2-6276-4727-8b3d-03d008ce3cc8" ChangeDateTime="01/20/2020 10:43:00">
+    <Property Name="ElementName" Value="[SupportData].[ArticleModels].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[ArticleModels]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Article" />
+  </Operation>
 </Operations>
