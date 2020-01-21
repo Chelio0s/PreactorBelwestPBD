@@ -686,4 +686,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Article" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="70b7ec6f-e8b5-4df4-b26e-df414847999d" ChangeDateTime="01/21/2020 08:34:49">
+    <Property Name="ElementName" Value="[InputData].[CuttersForKTOPs].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[CuttersForKTOPs]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCutterForKTOP" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="93c95d2b-8496-4fe3-99c8-7f19139dbefe" ChangeDateTime="01/21/2020 08:36:49">
+    <Property Name="ElementName" Value="[SupportData].[CutterType].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[CutterType]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCutterType" />
+  </Operation>
 </Operations>

@@ -293,6 +293,8 @@
     <Build Include="Functions\udf_GetModelForArticle.sql" />
     <Build Include="Tables\SupportData\ArticleModels.sql" />
     <Build Include="Procedures\sp_InsertArticleModels.sql" />
+    <Build Include="Tables\SupportData\CuttersForKTOPs.sql" />
+    <Build Include="Tables\SupportData\CutterType.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
