@@ -295,6 +295,10 @@
     <Build Include="Procedures\sp_InsertArticleModels.sql" />
     <Build Include="Tables\SupportData\CuttersForKTOPs.sql" />
     <Build Include="Tables\SupportData\CutterType.sql" />
+    <Build Include="Tables\SupportData\CuttersRaw.sql" />
+    <Build Include="Procedures\sp_CreateSecondaryConstraint_Cutters.sql" />
+    <Build Include="Procedures\sp_InsertContraintsOnOperations.sql" />
+    <Build Include="Tables\UseConstraintOperations.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

@@ -2,5 +2,5 @@
 CREATE TABLE [SupportData].[CutterType]
 (
 	[IdCutterType]	INT				NOT NULL PRIMARY KEY IDENTITY, 
-    [Tytle]			NVARCHAR(99)	NOT NULL
+    [Title]			NVARCHAR(99)	NOT NULL UNIQUE
 )

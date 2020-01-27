@@ -28,8 +28,10 @@ BEGIN
 	EXEC [InputData].sp_CreateEntrySemiProducts
 	print 'Создание резаков'
 	EXEC [InputData].sp_CreateCutters
-	print 'Созание ограничений, резаки'
+	EXEC [InputData].[sp_CreateSecondaryConstraint_Cutters]
+	print 'Созание календаря ограничений, резаки'
 	EXEC [InputData].sp_CreateConstraintCalendar_Cutters
+
 	print 'Создание компбинаций операций'
 	EXEC [InputData].sp_InsertCombines							-- инсертим комбинации всех правил для создания ТМов
 	print 'Заполнение временной таблицы операций'
@@ -42,6 +44,8 @@ BEGIN
 	EXEC [InputData].sp_InsertOperations						-- заполняем операции для продуктов
 	print 'Удаляем пустые ТМ'
 	EXEC [InputData].sp_DeleteInappropriateRoutes				-- Удаляем пустые ТМ
+	print 'Ставим ограничения на операции'
+	EXEC [InputData].[sp_InsertContraintsOnOperations]			-- Ставим ограничения на операции
 	print 'Ставим операции на рессурсы'
 	EXEC [InputData].sp_InsertOperationsInResources			   -- заливаем операции на рессурсы
 	print 'Создание временной таблицы материаллов'
