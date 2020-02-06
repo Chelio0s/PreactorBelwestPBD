@@ -770,4 +770,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="OperationId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="7760b478-f902-4c8d-a5a2-b953469c1926" ChangeDateTime="01/28/2020 09:10:31">
+    <Property Name="ElementName" Value="[InputData].[Article].[IsComlex]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[Article]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IsComplex" />
+  </Operation>
 </Operations>

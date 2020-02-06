@@ -27,11 +27,10 @@ BEGIN
 	print 'Включение ПФ в ПФ'
 	EXEC [InputData].sp_CreateEntrySemiProducts
 	print 'Создание резаков'
-	EXEC [InputData].sp_CreateCutters
+	EXEC [InputData].[sp_CreateCutters]
 	EXEC [InputData].[sp_CreateSecondaryConstraint_Cutters]
 	print 'Созание календаря ограничений, резаки'
 	EXEC [InputData].sp_CreateConstraintCalendar_Cutters
-
 	print 'Создание компбинаций операций'
 	EXEC [InputData].sp_InsertCombines							-- инсертим комбинации всех правил для создания ТМов
 	print 'Заполнение временной таблицы операций'

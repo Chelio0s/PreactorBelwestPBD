@@ -47,7 +47,7 @@ public partial class StoredProcedures
                             ",[KOB])" +
                     "VALUES" +
                     $"({equipment.ID}" +
-                    $",'{equipment.MOB}: ID {equipment.ID}'" +
+                    $",'{equipment.MOB}: Уч-ок {equipment.KPLOT} : Раб. место: {equipment.WP}'" +
                     $",'{equipment.WP}'" +
                     $",{equipment.KPLOT}" +
                     $",{equipment.KOB}) ");

@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertEmployeesInProffs]
 AS
+
 DECLARE @tempEmp as table (tabno varchar(15), OrgUnit varchar(15), fio varchar(99), 
 trfst varchar(5), trfs1 varchar(5), persg varchar(5), STELL varchar(20), stext1 varchar(99))
 insert @tempEmp
@@ -20,49 +21,34 @@ FROM
 	and tabno not like ''3%''
 	and prozt<>0 
 	and persg in (''1'',''8'')
-	and btrtl = ''0900''
-	and tabno <> 00021825'
+	and btrtl = ''0900'''
 
-	
-DECLARE @tempPrimaryProf as table (tabno varchar(15), MAIN_STELL varchar(15), MAIN_TRFST VARCHAR(5), PROF_STELL varchar(15), PROF_TRFST varchar(5), isPrimary bit)
+DECLARE @mainProffs as table (tabno varchar(15), MAIN_STELL varchar(15), MAIN_TRFST VARCHAR(5), isPrimary bit, OrgUnit varchar(15) )
 	--Выбираем главные профессии
-INSERT INTO  @tempPrimaryProf
+INSERT INTO  @mainProffs
            (tabno
 		   ,MAIN_STELL
 		   ,MAIN_TRFST
-           ,PROF_STELL
-           ,PROF_TRFST
-           ,[isPrimary])
+           ,[isPrimary]
+		   ,[OrgUnit])
 SELECT DISTINCT  tabno,
 			CASE WHEN prof.IdProfession  is null THEN 0 ELSE prof.IdProfession END as STELL,
 			trfst, 
-			CASE WHEN prof.IdProfession  is null THEN 0 ELSE prof.IdProfession END as STELL, 
-			trfst, 
 			1
+			,sell.OrgUnit
 FROM @tempEmp as sell
 LEFT JOIN [InputData].[Professions] as prof ON sell.STELL = prof.IdProfession
 --Только нужные участки
 INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
 
---Подготовка данных под доп. профы
-
-
-DECLARE @tempEmp1 table(tabno varchar(15), OrgUnit varchar(15), fio varchar(99), 
-trfst varchar(5), trfs1 varchar(5), persg varchar(5), STELL VARCHAR(20), PROF_STELL varchar(99), PROF_TRFST varchar(99), PROF_TRFGR varchar(99), ENDDA varchar(99), prozt varchar(5))
-insert @tempEmp1
+DECLARE @semiproffs table(tabno varchar(15), OrgUnit varchar(15), 
+PROF_STELL varchar(99), PROF_TRFST varchar(99))
+insert @semiproffs
 	EXEC[InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
 		seller.tabno,
 		OrgUnit,
-		fio,
-		trfst,
-		trfs1,
-		persg,
-		STELL,
 		PROF_STELL,
-		PROF_TRFST,
-		PROF_TRFGR,
-		ENDDA,
-		prozt
+		PROF_TRFST
 		FROM
 		belwpr.s_seller seller 
 	LEFT JOIN belwpr.s_tab_stell_add  s_tab ON s_tab.tabno = seller.tabno
@@ -78,49 +64,33 @@ insert @tempEmp1
 	and PROF_STELL <>''00000000'' 
 	and prozt<> 0 and trfst<>'' ''
     and PERSK in (''V3'', ''V4'')'
-
-
-  
---Выбираем доп профы с макс. разрядом
-INSERT INTO  @tempPrimaryProf
-           (tabno
-		   ,MAIN_STELL
-		   ,MAIN_TRFST
-           ,PROF_STELL
-           ,PROF_TRFST
+	
+	INSERT INTO [InputData].[EmployeesInProfession]
+           ([EmployeeId]
+           ,[ProfessionId]
+           ,[CategoryProfession]
            ,[IsPrimary])
-SELECT 
-   tabno, 
-   STELL,
-   trfst,
-   PROF_STELL,
-   MAX(PROF_TRFST) as PROF_TRFST,
-   0 
-   FROM @tempEmp1 as sell
-   INNER JOIN [InputData].[Professions] as prof ON sell.STELL = prof.IdProfession
-   --Только нужные участки
-   INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
- group by  tabno, PROF_STELL,STELL , trfst
- order by PROF_STELL
-
- --Дропаем дубли главная = доп. профа  если главный разряд больше доп. профы или они равны
- DELETE FROM @tempPrimaryProf 
- WHERE  MAIN_STELL = PROF_STELL and isPrimary = 0 AND (MAIN_TRFST>PROF_TRFST or MAIN_TRFST=PROF_TRFST)
- 
- --Очищаем таблицу 
- DELETE FROM [InputData].[EmployeesInProfession]
- INSERT INTO [InputData].[EmployeesInProfession]
-			   ([EmployeeId]
-			   ,[ProfessionId]
-			   ,[CategoryProfession]
-			   ,[IsPrimary])
- SELECT DISTINCT tabno, 
-		PROF_STELL, 
-		PROF_TRFST, 
-		CONVERT(bit, min(CONVERT(int, isPrimary)))
- FROM @tempPrimaryProf as t 
- INNER JOIN [InputData].[Professions] AS p ON p.IdProfession=t.PROF_STELL
- GROUP BY tabno, 
-		PROF_STELL, 
-		PROF_TRFST
+	SELECT agreageteQuery.tabno
+	, agreageteQuery.MAIN_STELL
+	, trfst
+	, CASE WHEN agreageteQuery.MAIN_STELL = main.MAIN_STELL THEN 1 ELSE 0 END as IsPrimary
+	FROM (
+		SELECT DISTINCT tabno
+		,MAIN_STELL
+		,MAX(MAIN_TRFST) OVER(PARTITION BY tabno ,MAIN_STELL) as trfst
+		FROM (
+			SELECT tabno
+			,MAIN_STELL
+			,MAIN_TRFST
+			FROM @mainProffs
+			UNION
+			SELECT tabno 
+			,CASE WHEN prof.IdProfession  is null THEN 0 ELSE prof.IdProfession END as STELL
+			,semi.PROF_TRFST  
+			FROM @semiproffs as semi
+			--Только нужные участки
+			INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = semi.OrgUnit
+			LEFT JOIN [InputData].[Professions] as prof ON semi.PROF_STELL = prof.IdProfession) as unionQuery ) as agreageteQuery
+	LEFT JOIN @mainProffs as main ON main.MAIN_STELL = agreageteQuery.MAIN_STELL
+									AND main.tabno = agreageteQuery.tabno
 RETURN 0

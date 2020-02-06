@@ -299,6 +299,13 @@
     <Build Include="Procedures\sp_CreateSecondaryConstraint_Cutters.sql" />
     <Build Include="Procedures\sp_InsertContraintsOnOperations.sql" />
     <Build Include="Tables\UseConstraintOperations.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_CreateConstraintCalendar_CuttersSingle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertRoutesSingleArticle.sql" />
+    <Build Include="Functions\udf_DistanceLevenstain.sql" />
+    <Build Include="Views\VI_ResourcesInGroups.sql" />
+    <Build Include="Procedures\sp_PutResourcesIntoGroups.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertOperationsSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_FillTempOperationTableSingleArticle.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

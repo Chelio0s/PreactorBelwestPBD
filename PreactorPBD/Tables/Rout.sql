@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [InputData].[Rout]
 (
 	[IdRout]			INT				NOT NULL PRIMARY KEY IDENTITY, 
-    [Title]				NVARCHAR(99)	NOT NULL UNIQUE,
+    [Title]				NVARCHAR(199)	NOT NULL UNIQUE,
 	[SemiProductId]		INT				NOT NULL, 
     [Priority]			INT				NOT NULL DEFAULT (0), 
     [CombineId]			INT				NULL, 

@@ -29,7 +29,13 @@ FROM [SupportData].[OrgUnit] as org
 INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
 CROSS JOIN [SupportData].[WorkDays] as wd
 OUTER APPLY [InputData].[ctvf_GetWorkTime1Shift](org.OrgUnit, wd.DateWorkDay)
-WHERE OrgUnit in (50000451, 50000473, 50000460, 50008990, 50001844, 50001846, 50000149) and ShiftId = 1 
+WHERE OrgUnit in (50000451
+, 50000473
+, 50000460
+, 50008990
+, 50001844
+, 50001846
+, 50000149) and ShiftId = 1 
 --Отсев субботы и вс.
 and (DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 5 and DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 6)
 
@@ -40,7 +46,12 @@ FROM [SupportData].[OrgUnit] as org
 INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
 CROSS JOIN [SupportData].[WorkDays] as wd
 OUTER APPLY [InputData].[ctvf_GetWorkTime2Shifts](org.OrgUnit, wd.DateWorkDay)
-WHERE OrgUnit in (50033716,50033718,50033722,50033723) 
+WHERE OrgUnit in (50033716
+,50033718
+,50033722
+,50033723
+,50000478
+,50000479) 
 --Отсев субботы и вс.
 and (DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 5 and DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 6)
 and ShiftId = [InputData].[udf_GetShiftNumber](OrgUnit, DateWorkDay)
