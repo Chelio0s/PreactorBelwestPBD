@@ -3,10 +3,11 @@
 	SELECT DISTINCT
 	 rr.IdRule
 	 ,rr.RuleGroupId
-	  ,co2.Title	as parentOperations
-	  ,oc2.KTOP		as parentKTOP
-	  ,co1.Title	as childOperations
-	  ,oc1.KTOP		as childKTOP
+	  ,co2.Title		as parentOperations
+	  ,oc2.KTOP			as parentKTOP
+	  ,co1.Title		as childOperations
+	  ,oc1.KTOP			as childKTOP
+	  ,rr.RulePriority	as rulePriority 
   FROM [SupportData].[RoutRoules] rr
   INNER JOIN [SupportData].[ComposeOperation] as co1 ON co1.idComposeOper = rr.OperationChildId
   INNER JOIN [SupportData].[ComposeOperation] as co2 ON co2.idComposeOper = rr.OperationParentId

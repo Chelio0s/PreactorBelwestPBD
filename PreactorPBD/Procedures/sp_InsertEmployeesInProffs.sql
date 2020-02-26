@@ -1,8 +1,16 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertEmployeesInProffs]
 AS
 
-DECLARE @tempEmp as table (tabno varchar(15), OrgUnit varchar(15), fio varchar(99), 
-trfst varchar(5), trfs1 varchar(5), persg varchar(5), STELL varchar(20), stext1 varchar(99))
+DECLARE @tempEmp as table (
+			tabno varchar(15)
+			, OrgUnit varchar(15)
+			, fio varchar(99)
+			, trfst varchar(5)
+			, trfs1 varchar(5)
+			, persg varchar(5)
+			, STELL varchar(20)
+			, stext1 varchar(99))
+
 insert @tempEmp
 EXEC [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
     tabno,
@@ -70,6 +78,11 @@ insert @semiproffs
            ,[ProfessionId]
            ,[CategoryProfession]
            ,[IsPrimary])
+	SELECT DISTINCT tabno
+	, MAIN_STELL
+	, trfst
+	, IsPrimary
+	FROM (
 	SELECT agreageteQuery.tabno
 	, agreageteQuery.MAIN_STELL
 	, trfst
@@ -79,18 +92,18 @@ insert @semiproffs
 		,MAIN_STELL
 		,MAX(MAIN_TRFST) OVER(PARTITION BY tabno ,MAIN_STELL) as trfst
 		FROM (
-			SELECT tabno
+			SELECT DISTINCT tabno
 			,MAIN_STELL
 			,MAIN_TRFST
 			FROM @mainProffs
 			UNION
-			SELECT tabno 
+			SELECT DISTINCT tabno 
 			,CASE WHEN prof.IdProfession  is null THEN 0 ELSE prof.IdProfession END as STELL
 			,semi.PROF_TRFST  
 			FROM @semiproffs as semi
 			--Только нужные участки
 			INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = semi.OrgUnit
 			LEFT JOIN [InputData].[Professions] as prof ON semi.PROF_STELL = prof.IdProfession) as unionQuery ) as agreageteQuery
-	LEFT JOIN @mainProffs as main ON main.MAIN_STELL = agreageteQuery.MAIN_STELL
-									AND main.tabno = agreageteQuery.tabno
+			LEFT JOIN @mainProffs as main ON main.MAIN_STELL = agreageteQuery.MAIN_STELL
+											AND main.tabno = agreageteQuery.tabno) as q
 RETURN 0

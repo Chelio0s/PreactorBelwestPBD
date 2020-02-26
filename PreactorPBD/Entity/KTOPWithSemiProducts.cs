@@ -10,5 +10,6 @@ namespace PreactorPBD
         public string Article { get; set; }
         public int SimpleProductId { get; set; }
         public int KTOP { get; set; }
+        public bool PONEOB { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
@@ -9,7 +8,7 @@ using PreactorPBD;
 
 public partial class UserDefinedFunctions
 {
-    [Microsoft.SqlServer.Server.SqlFunction(
+    [SqlFunction(
     FillRowMethodName = "FillRowGetRouteRules", SystemDataAccess = SystemDataAccessKind.Read,
     DataAccess = DataAccessKind.Read,
     TableDefinition = "IDRoutRule int")]
@@ -25,7 +24,8 @@ public partial class UserDefinedFunctions
                     ,[spTitle]
                     ,[SimpleProductId]
                     ,[KTOP]
-            FROM[InputData].[VI_KTOPWithSemiProducts] " +
+                    ,[PONEOB]
+            FROM [InputData].[VI_KTOPWithSemiProducts] " +
             $"WHERE IdSemiProduct = {idSemiProduct} ", sqlConnection);
             sqlConnection.Open();
             //Заполняем лист исходными данными - какие операции есть на данный момент
@@ -35,10 +35,11 @@ public partial class UserDefinedFunctions
             {
                 firstResults.Add(new KTOPWithSemiProducts()
                 {
-                    IdSemiProduct = Convert.ToInt32(reader[0]),
+                    IdSemiProduct = int.Parse(reader[0].ToString()),
                     Article = reader[1].ToString(),
-                    SimpleProductId = Convert.ToInt32(reader[3]),
-                    KTOP = Convert.ToInt32(reader[4])
+                    SimpleProductId = int.Parse(reader[3].ToString()),
+                    KTOP = int.Parse(reader[4].ToString()),
+                    PONEOB = bool.Parse(reader[5].ToString())
                 });
             }
 
@@ -60,9 +61,9 @@ public partial class UserDefinedFunctions
             {
                 parentsOperationsList.Add(new RuleOperations()
                 {
-                    IdRule = Convert.ToInt32(reader[0]),
+                    IdRule = int.Parse(reader[0].ToString()),
                     Title = reader[1].ToString(),
-                    KTOP = Convert.ToInt32(reader[2])
+                    KTOP = int.Parse(reader[2].ToString())
                 });
             }
 
@@ -81,9 +82,9 @@ public partial class UserDefinedFunctions
             {
                 childOperationsList.Add(new RuleOperations()
                 {
-                    IdRule = Convert.ToInt32(reader[0]),
+                    IdRule = int.Parse(reader[0].ToString()),
                     Title = reader[1].ToString(),
-                    KTOP = Convert.ToInt32(reader[2])
+                    KTOP = int.Parse(reader[2].ToString())
                 });
             }
 
@@ -92,7 +93,7 @@ public partial class UserDefinedFunctions
 
             //Группируем родительские правила
             var parentGroups = parentsOperationsList.GroupBy(x => x.IdRule).ToList();
-            var sourceOperations = firstResults.Select(x => x.KTOP).ToList();
+            var sourceOperations = firstResults.Where(x=>x.PONEOB).Select(x => x.KTOP).ToList();
 
             foreach (var group in parentGroups)
             {
@@ -101,7 +102,7 @@ public partial class UserDefinedFunctions
                 //Если в пересечении столько же операций сколько в родительском правиле - идем дальше
                 if (sourceOperations.Intersect(operations).Count() == operations.Count)
                 {
-                    //Второе пересечение Child - Исходник
+                    //Второе пересечение Child - Исходник (PONEOB)
                     var childOpers = childOperationsList.Where(x => x.IdRule == group.Key)
                         .Select(x => x.KTOP)
                         .ToList();
@@ -117,6 +118,6 @@ public partial class UserDefinedFunctions
 
     public static void FillRowGetRouteRules(object obj, out SqlInt32 IDRoutRule)
     {
-        IDRoutRule = Convert.ToInt32(obj);
+        IDRoutRule = int.Parse(obj.ToString());
     }
 }

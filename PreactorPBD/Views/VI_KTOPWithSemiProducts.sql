@@ -7,6 +7,7 @@ CREATE VIEW [InputData].[VI_KTOPWithSemiProducts]
       ,sp.[Title] as spTitle
       ,sp.[SimpleProductId]
 	  ,sqo.KTOP
+      ,toper.PONEOB
   FROM [InputData].[SemiProducts] as sp
 
   INNER JOIN [InputData].[Nomenclature] as nom ON nom.IdNomenclature = sp.NomenclatureID

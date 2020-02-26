@@ -382,7 +382,7 @@ AS
  		SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
-		,t.REL
+		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
 		FROM @table							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
@@ -472,7 +472,7 @@ SELECT DISTINCT
  		SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
-		,t.REL
+		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
 		FROM @table							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout

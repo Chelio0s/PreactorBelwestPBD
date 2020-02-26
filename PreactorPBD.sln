@@ -11,6 +11,11 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RKV_SCAL", "RKV_SCAL\RKV_SC
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "POTREB", "POTREB\POTREB.sqlproj", "{743E160A-1B03-42BF-9C6E-977706B2B7F1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3AB8A5CA-F132-4C81-A13F-8DFAF9A60763}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

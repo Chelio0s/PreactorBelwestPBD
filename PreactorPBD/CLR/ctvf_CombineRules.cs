@@ -22,10 +22,30 @@ public partial class UserDefinedFunctions
         using (SqlConnection sqlConnection
             = new SqlConnection("context connection=true"))
         {
-            SqlCommand command = new SqlCommand($"SELECT * FROM [InputData].[udf_GetRulesForSemiProduct] " +
-                                                    $"({IdSemiProduct})", sqlConnection);
+            SqlCommand command = new SqlCommand($"SELECT TOP(1) SimpleProductId " +
+                                                $"FROM [InputData].[SemiProducts] " +
+                                                $"WHERE IdSemiProduct = {IdSemiProduct} ", sqlConnection);
+
+
             sqlConnection.Open();
+            int? simpleProductId = null;
             var reader = command.ExecuteReader();
+            while (reader.Read())
+                simpleProductId = int.Parse(reader[0].ToString());
+            reader.Close();
+
+            if (simpleProductId == null)
+            {
+                command = new SqlCommand($"SELECT * FROM [InputData].[udf_GetRulesForSemiProduct] " +
+                                         $"({IdSemiProduct}, {default})", sqlConnection);
+            }
+            else
+            {
+                command = new SqlCommand($"SELECT * FROM [InputData].[udf_GetRulesForSemiProduct] " +
+                                         $"({IdSemiProduct}, {simpleProductId})", sqlConnection);
+            }
+
+        reader = command.ExecuteReader();
             List<RoutRules> list = new List<RoutRules>();
             while (reader.Read())
             {
@@ -92,3 +112,6 @@ public partial class UserDefinedFunctions
         GroupId = resObj.GroupId;
     }
 }
+
+
+ 

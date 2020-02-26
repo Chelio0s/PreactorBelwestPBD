@@ -777,4 +777,67 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IsComplex" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="bfa18046-eaa4-41c1-ad66-1f6a43547a44" ChangeDateTime="02/10/2020 10:14:39">
+    <Property Name="ElementName" Value="[InputData].[RelatedProducts].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[RelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdRelatedProduct" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5fc21790-4d7b-4e64-ab5b-a504d5557208" ChangeDateTime="02/10/2020 10:25:26">
+    <Property Name="ElementName" Value="[InputData].[EntryRelatedProducts].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntryRelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SemiProductId " />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e4203191-1628-4130-8568-22ae4f1a35a7" ChangeDateTime="02/10/2020 10:25:58">
+    <Property Name="ElementName" Value="[InputData].[EntryRelatedProducts].[RelatedProductId  ]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntryRelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RelatedProductId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7564bae1-a45f-4c16-8ddf-24cab5ee884f" ChangeDateTime="02/10/2020 10:25:59">
+    <Property Name="ElementName" Value="[InputData].[EntryRelatedProducts].[OperationId ]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntryRelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OperationId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6f4f16b4-26cc-4456-ad27-a2c8dd85c7f8" ChangeDateTime="02/10/2020 10:26:01">
+    <Property Name="ElementName" Value="[InputData].[EntryRelatedProducts].[SemiProductId ]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntryRelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SemiProductId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="1442566c-21cf-44d4-886a-65325ec0f4c0" ChangeDateTime="02/10/2020 10:26:03">
+    <Property Name="ElementName" Value="[InputData].[EntryRelatedProducts].[Count ]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[EntryRelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Count" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fc45ae24-971a-4563-8562-a87d39d70885" ChangeDateTime="02/10/2020 10:50:11">
+    <Property Name="ElementName" Value="[SupportData].[RelatedProducts].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[RelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdSupportRelatedProduct" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9721570c-0a62-4c89-9b5d-a756fd6c16ba" ChangeDateTime="02/10/2020 10:55:21">
+    <Property Name="ElementName" Value="[SupportData].[EntryRelatedProducts].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[EntryRelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SimpleProductId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="ac2e3e2e-dea0-4a94-99d8-3e7c237271d8" ChangeDateTime="02/10/2020 11:16:21">
+    <Property Name="ElementName" Value="[SupportData].[EntryRelatedProducts].[SupportRelatedPeoductId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[EntryRelatedProducts]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SupportRelatedProductId" />
+  </Operation>
 </Operations>
