@@ -313,10 +313,13 @@
     <Build Include="Tables\SupportData\SupportRelatedProducts.sql" />
     <Build Include="Tables\SupportData\SimpleProduct.sql" />
     <Build Include="Tables\SupportData\SupportEntryRelatedProducts.sql" />
-    <Build Include="Triggers\tr_DeleteSimpleProduct.sql" />
+    <Build Include="Triggers\tgr_DeleteSimpleProduct.sql" />
     <Build Include="Views\VI_MissedAutoRoutesBetween9and92.sql" />
     <Build Include="Tables\SupportData\SequenceOperations.sql" />
     <Build Include="Procedures\SP_CHECK_FilterCombineRoutes.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertCombinesSingleArticle.sql" />
+    <Build Include="Users\Login_kovalkov.sql" />
+    <Build Include="Users\ServerRoleMembership_kovalkov.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

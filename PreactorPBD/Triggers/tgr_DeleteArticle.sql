@@ -2,7 +2,7 @@
 ON [InputData].Article INSTEAD OF DELETE
 AS 
 BEGIN TRANSACTION
-DECLARE @IdArt int;
+DECLARE @IdArt int
 SET @IdArt = (SELECT TOP(1) [IdArticle] FROM deleted)
 	DELETE FROM [InputData].Nomenclature
 	WHERE  [ArticleId] = @IdArt

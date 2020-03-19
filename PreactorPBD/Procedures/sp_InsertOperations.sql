@@ -113,6 +113,25 @@ AS
 		OR (Code = 'OP09' and r.AreaId = 20)
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
+  -- 5 цех
+  INSERT INTO @table
+	SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,vi.REL
+	  ,0 -- isMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+  WHERE (r.AreaId = 7) 
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
+
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
   DECLARE @JumpSemiProducts as table (Article nvarchar(99)
 									  , IdMergeRoutes int
@@ -299,25 +318,6 @@ AS
 	  ,ctvf.REL
    ORDER BY IdRout, so.OperOrder
 
- --  --Все для 5 цеха  -- 5 цех пока выкидываем из балансировки
-	--INSERT INTO @table
-	--SELECT DISTINCT
-	--  r.IdRout
-	--  ,[TitlePreactorOper]
-	--     ,vi.[IdSemiProduct]
-	--     ,vi.[IdProfession]
-	--     ,4 as [TypeTime]
-	--  ,CategoryOperation, vi.[OperOrder]
-	--  ,Code
-	--  ,NPP
-	--  ,KTOPN
-	--  ,1 --timemultiply
-	--  ,NULL -- idMappingRule
- -- FROM [InputData].[Rout] as r
- -- INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
- -- WHERE (Code = 'OP05' and r.AreaId = 7) 
- -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
 	--Залив финала 1 цех
 	INSERT INTO [InputData].[Operations]
            ([Title]
@@ -350,7 +350,7 @@ AS
 		,CategoryOperation
 		,Code
 
---Залив финала 1 c jump, и 2 цех и 6/1, 7/1, 8/1, 9/2 цех
+--Залив финала 1 c jump, и 2 цех и 6/1, 7/1, 8/1, 9/2 цех и 5 цех
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -370,7 +370,7 @@ AS
 		,Code
 		,IsMappingRule
 		FROM @table as tt
-		WHERE Code  in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04') and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
+		WHERE Code  in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04', 'OP05') and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
 		and idrout not in (SELECT DISTINCT t.idRout
 							FROM @table						as t
 							INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
@@ -387,7 +387,7 @@ AS
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
 													AND oper.CategoryOperation = t.CategoryOperation
-		WHERE oper.Code in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04')
+		WHERE oper.Code in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04', 'OP05')
 		
 
 

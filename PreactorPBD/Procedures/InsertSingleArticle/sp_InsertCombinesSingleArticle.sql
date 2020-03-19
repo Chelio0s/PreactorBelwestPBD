@@ -1,14 +1,20 @@
-﻿CREATE PROCEDURE [InputData].[sp_InsertCombines]
+﻿CREATE PROCEDURE [InputData].[sp_InsertCombinesSingleArticle]
+	@article nvarchar(10)
 AS
-	
-	DELETE FROM [SupportData].[CombineRules]
+
+	DELETE [SupportData].[CombineRules] 
+	FROM [SupportData].[CombineRules] as cp
+	INNER JOIN [InputData].[VI_SemiProductsWithArticles] as vi ON vi.IdSemiProduct = cp.SemiProductId
+	WHERE vi.TitleArticle = @article
 
 	DECLARE @FilteredTable as table (IdSemiProduct int NOT NULL)
     INSERT INTO @FilteredTable
-    SELECT [IdSemiProduct]
+    SELECT sp.[IdSemiProduct]
     FROM [InputData].[SemiProducts] as sp
+    INNER JOIN [InputData].[VI_SemiProductsWithArticles] as vi ON vi.IdSemiProduct = sp.IdSemiProduct
     --Просееваем заведомо не нужные ПФ (для которых нет RULES)
-    WHERE sp.SimpleProductId IN (SELECT DISTINCT
+    WHERE vi.TitleArticle = @article 
+         AND sp.SimpleProductId IN (SELECT DISTINCT
 								   [SimpleProductId]
 							  FROM [SupportData].[SequenceOperations] as sq
 							  INNER JOIN [SupportData].[OperationСomposition] as oc ON sq.KTOP = oc.KTOP)
@@ -20,7 +26,6 @@ SELECT   sp.[IdSemiProduct]
 		,cc.IDRoutRule
 		,cc.IdCombine
 		,cc.IsParent
-
   FROM [InputData].[SemiProducts] as sp
   INNER JOIN @FilteredTable as filtered ON filtered.IdSemiProduct = sp.IdSemiProduct
   OUTER APPLY [InputData].[ctvf_CombineCombines](sp.[IdSemiProduct]) as cc
@@ -43,5 +48,4 @@ SELECT   sp.[IdSemiProduct]
   FROM [SupportData].[CombineRules] as cr
   INNER JOIN @combinesProducts as cp ON cp.IdSemiProduct = cr.[SemiProductId] 
 										and cp.IdCombine = cr.[Number_]
-
 RETURN 0

@@ -10,7 +10,7 @@ EXEC [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
     tabno,
     OrgUnit,
     fio,
-	dateb
+	TO_CHAR(dateb,''yyyymmdd'') as dateb
 FROM
     belwpr.s_seller
 		WHERE DATEB <= (select sysdate from SYS.dual)

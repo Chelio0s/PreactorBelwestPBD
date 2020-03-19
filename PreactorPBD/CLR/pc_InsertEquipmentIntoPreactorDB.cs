@@ -10,7 +10,6 @@ public partial class StoredProcedures
     [Microsoft.SqlServer.Server.SqlProcedure]
     public static void pc_InsertEquipmentIntoPreactorDB()
     {
-
         using (OracleConnection oracleConnection
             = new OracleConnection(OracleSettings.GetConnectionString(OracleDataBase.MPU)))
         {
@@ -56,7 +55,6 @@ public partial class StoredProcedures
                     sqlCommand.ExecuteNonQuery();
                 }
             }
-
         }
     }
 }

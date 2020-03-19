@@ -92,21 +92,22 @@ public partial class UserDefinedFunctions
 
 
             //Группируем родительские правила
-            var parentGroups = parentsOperationsList.GroupBy(x => x.IdRule).ToList();
-            var sourceOperations = firstResults.Where(x=>x.PONEOB).Select(x => x.KTOP).ToList();
+            var parentGroups = parentsOperationsList.GroupBy(x => x.IdRule);
+            var sourceOperationsParent = firstResults.Where(x=>!x.PONEOB).Select(x => x.KTOP);
+            var sourceOperationsChild = firstResults.Where(x => x.PONEOB).Select(x => x.KTOP);
 
             foreach (var group in parentGroups)
             {
-                var operations = group.Select(x => x.KTOP).ToList();
-                //Первое пересечение Родитель - Исходник
+                var operationsRuleParent = group.Select(x => x.KTOP).ToList();
+                //Первое пересечение Родитель - Исходник (PONEOB = 0) 
                 //Если в пересечении столько же операций сколько в родительском правиле - идем дальше
-                if (sourceOperations.Intersect(operations).Count() == operations.Count)
+                if (sourceOperationsParent.Intersect(operationsRuleParent).Count() == operationsRuleParent.Count)
                 {
-                    //Второе пересечение Child - Исходник (PONEOB)
+                    //Второе пересечение Child - Исходник (PONEOB = 1)
                     var childOpers = childOperationsList.Where(x => x.IdRule == group.Key)
-                        .Select(x => x.KTOP)
-                        .ToList();
-                    if (sourceOperations.Intersect(childOpers).Count() == childOpers.Count)
+                        .Select(x => x.KTOP);
+
+                    if (sourceOperationsChild.Intersect(childOpers).Count() == childOpers.Count())
                     {
                         resultEnum.Add(group.Key);
                     }

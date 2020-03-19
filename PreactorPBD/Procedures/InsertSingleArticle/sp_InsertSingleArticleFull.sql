@@ -8,9 +8,11 @@ AS
 	EXEC [InputData].[sp_CreateCutters]
 	EXEC [InputData].[sp_CreateSecondaryConstraint_Cutters]
 	EXEC [InputData].[sp_CreateConstraintCalendar_Cutters]
-	EXEC [InputData].[sp_InsertRoutesSingleArticle]						@article = @art
 	EXEC [InputData].[sp_FillTempOperationTableSingleArticle]			@article = @art
 	EXEC [InputData].[sp_DeleteInappropriateSemiProducts]				-- Удаляем пустые ПФ
+
+	EXEC [InputData].[sp_InsertCombinesSingleArticle]					@article = @art
+	EXEC [InputData].[sp_InsertRoutesSingleArticle]						@article = @art
 	EXEC [InputData].[sp_InsertOperationsSingleArticle]					@article = @art
 	EXEC [InputData].[sp_DeleteInappropriateRoutes]						-- Удаляем пустые ТМ
 	EXEC [InputData].[sp_InsertConstraintsOnOperationsSingleArticle]	@article = @art

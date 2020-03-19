@@ -1,32 +1,33 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertRoutesSingleArticle]
 	@article nvarchar(99)
 AS
+
 	DELETE [InputData].[Rout] 
     FROM [InputData].[Rout]                 AS r
-    INNER JOIN [InputData].[SemiProducts]   AS sp ON sp.SimpleProductId = r.SemiProductId
+    INNER JOIN [InputData].[SemiProducts]   AS sp ON sp.IdSemiProduct = r.SemiProductId
     INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
     INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
     WHERE a.Title = @article
 
---Инсерт ТМ с правилами для заготовки цех 2
-INSERT INTO [InputData].[Rout]
-           ([Title]
-           ,[SemiProductId]
-           ,[Priority]
-           ,[CombineId]
-		   ,AreaId)
-
-SELECT DISTINCT
+  --Инсерт ТМ с правилами для заготовки цех 2
+  INSERT INTO [InputData].[Rout]
+             ([Title]
+             ,[SemiProductId]
+             ,[Priority]
+             ,[CombineId]
+  		   ,AreaId)
+  
+  SELECT DISTINCT
        'ТМ с набором операций '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ПФ ' + sp.Title + ' цех 2'  AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
 	  ,4
-  FROM [SupportData].[CombineComposition] as cc
-  INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
-  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
-  INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
-  INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
+  FROM [SupportData].[CombineComposition]   AS cc
+  INNER JOIN [SupportData].[CombineRules]   AS cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
+  INNER JOIN [InputData].[SemiProducts]     AS sp ON sp.IdSemiProduct = [SemiProductId]
+  INNER JOIN [InputData].[Nomenclature]     AS n  ON n.IdNomenclature = sp.NomenclatureID
+  INNER JOIN [InputData].[Article]          AS a  ON a.IdArticle = n.ArticleId
   WHERE sp.SimpleProductId in (18,19) AND  a.Title = @article
 
   --Инсерт ТМ всех остальных для 2 цеха
@@ -41,11 +42,11 @@ SELECT DISTINCT
   ,10
   ,NULL
   ,4
-  FROM [InputData].[SemiProducts] as sp
+  FROM [InputData].[SemiProducts]         AS sp
   INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
   INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) 
-  AND SimpleProductId in (18, 19)
+  AND  SimpleProductId in (18, 19)
   AND  a.Title = @article
 
 
@@ -55,15 +56,17 @@ INSERT INTO [InputData].[Rout]
            ,[SemiProductId]
            ,[Priority]
            ,[CombineId]
-		   ,AreaId)
+		   ,AreaId
+           ,IsComplex)
 
-(
+
 	SELECT DISTINCT
-        'ТМ с набором операций '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ПФ ' + sp.Title + ' цех 1'  AS Title
+        'ТМ с набором операций комплекс'+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ПФ ' + sp.Title + ' цех 1'  AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
 	  ,3
+      ,1
   FROM [SupportData].[CombineComposition] as cc
   INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
   INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
@@ -71,16 +74,23 @@ INSERT INTO [InputData].[Rout]
   LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
   WHERE sp.SimpleProductId in (1) 
   AND childKTOP IN (125,209,226,219,126) AND cc.RuleIsParent = 0 
-  AND visp.IsComplex = 1
+  --AND visp.IsComplex = 1 Закоментил потому что разделять ТМ все же надо
   AND visp.TitleArticle = @article
 
-  UNION 
+ INSERT INTO [InputData].[Rout]
+           ([Title]
+           ,[SemiProductId]
+           ,[Priority]
+           ,[CombineId]
+		   ,AreaId
+           ,IsCutters)
   SELECT DISTINCT
        'ТМ с набором операций резаки: '+CONVERT(NVARCHAR(10), cc.RuleId)+ 'для ПФ ' + sp.Title  + ' цех 1' AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
 	  ,3
+      ,1
   FROM [SupportData].[CombineComposition] as cc
   INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
   INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
@@ -89,9 +99,9 @@ INSERT INTO [InputData].[Rout]
   WHERE sp.SimpleProductId in (1) 
   AND childKTOP NOT IN (125,209,226,219,126) 
   AND cc.RuleIsParent = 1 
-  AND visp.IsCutters = 1
+  --AND visp.IsCutters = 1 Закоментил потому что разделять ТМ все же надо
   AND visp.TitleArticle = @article
-  )
+  
 
   --Инсерт ТМ для кроя для 1 цеха для остальных артикулов, у которых нет ТМ с правилами
   INSERT INTO [InputData].[Rout]
@@ -146,11 +156,11 @@ INSERT INTO [InputData].[Rout]
   ,10
   ,NULL
   ,8
-  FROM [InputData].[VI_OperationsWithSemiProducts_FAST] as vi 
-  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = vi.IdSemiProduct
-  INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
-  INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
-  INNER JOIN [InputData].[Areas] as area ON area.Code = vi.Code COLLATE Cyrillic_General_BIN
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST] AS vi 
+  INNER JOIN [InputData].[SemiProducts]                 AS sp ON sp.IdSemiProduct = vi.IdSemiProduct
+  INNER JOIN [InputData].[Nomenclature]                 AS n  ON n.IdNomenclature = sp.NomenclatureID
+  INNER JOIN [InputData].[Article]                      AS a  ON a.IdArticle = n.ArticleId
+  INNER JOIN [InputData].[Areas]                        AS area ON area.Code = vi.Code COLLATE Cyrillic_General_BIN
   WHERE vi.Code in ('OP09') 
   AND vi.SimpleProductId in (1,2,3,4,5,6,7,8,9,10,11,12,13,15,17) 
   AND IdArea > 8
@@ -254,7 +264,7 @@ print 'Создание авто переходящих маршрутов'
   AND (SemiProductId NOT IN (SELECT ROUT.SemiProductId FROM [InputData].[Rout] AS ROUT WHERE ROUT.AreaId = 8))
   AND [InputData].[udf_CanIMapFirstFloorRoute](R.IdRout) = CONVERT(bit, 'true')
   AND a.Title = @article
- 
+
 
   --Создаем маршруты для 6/1 для ПФ 2 цеха
 INSERT INTO [InputData].[Rout]
@@ -266,10 +276,10 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут ' +  ' для цеха 6/1 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут ' + COALESCE(RuleTitle, '') + ' для цеха 6/1 для ПФ: '+ sp.Title 
 , SemiProductId
 , 10
-, NULL
+, CombineId
 , 9
 , 1
 , IdRout
@@ -279,10 +289,13 @@ FROM
 				R.IdRout
 			   ,R.[SemiProductId]
 			   ,[InputData].[udf_CanIMapSecondFloor](R.IdRout, 9)	AS ICan 
+			   ,CAST(cc.RuleId as nvarchar(10))+'/'+CAST(cc.RuleIsParent as NVARCHAR(5)) as RuleTitle
+			   ,r.CombineId
 		  FROM  [InputData].[Rout] as R
            INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
            INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
            INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
+		   LEFT JOIN [SupportData].[CombineComposition] as cc  on cc.CombineRulesId = r.CombineId 
 		  WHERE IdRout NOT IN (SELECT IdRout FROM [InputData].[VI_BannedRoutesForMapping])
 		  AND R.SemiProductId NOT IN (	SELECT IdSemiProduct	
 										FROM [InputData].[VI_OperationsWithSemiProducts_FAST] as fas
@@ -291,11 +304,11 @@ FROM
 		  AND AreaId = 4 
           AND a.Title = @article
 ) as t
-INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = t.SemiProductId
-INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
-INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
-WHERE  ICan = 1 
-AND a.Title = @article
+INNER JOIN [InputData].[SemiProducts]           AS sp ON sp.IdSemiProduct = t.SemiProductId
+INNER JOIN [InputData].[Nomenclature]           AS n  ON n.IdNomenclature = sp.NomenclatureID
+INNER JOIN [InputData].[Article]                AS a  ON a.IdArticle = n.ArticleId
+
+WHERE  ICan = 1 AND a.Title = @article
 
 --Создаем маршруты для 7 для ПФ 2 цеха
 INSERT INTO [InputData].[Rout]
@@ -307,10 +320,10 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут ' +  ' для цеха 7/1 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут '  + COALESCE(RuleTitle, '') +  ' для цеха 7/1 для ПФ: '+ sp.Title 
 , SemiProductId
 , 10
-, NULL
+, CombineId
 , 13
 , 1
 , IdRout
@@ -320,10 +333,13 @@ FROM
 				R.IdRout
 			   ,R.[SemiProductId]
 			   ,[InputData].[udf_CanIMapSecondFloor](R.IdRout, 13)	AS ICan 
+               ,CAST(cc.RuleId as nvarchar(10))+'/'+CAST(cc.RuleIsParent as NVARCHAR(5)) as RuleTitle
+			   ,r.CombineId
 		  FROM  [InputData].[Rout] as R
            INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
            INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
            INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
+           LEFT JOIN [SupportData].[CombineComposition] as cc  on cc.CombineRulesId = r.CombineId 
 		  WHERE IdRout NOT IN (SELECT IdRout FROM [InputData].[VI_BannedRoutesForMapping])
 		  AND R.SemiProductId NOT IN (	SELECT IdSemiProduct	
 										FROM [InputData].[VI_OperationsWithSemiProducts_FAST] as fas
@@ -350,10 +366,10 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут '+  ' для цеха 8/1 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут ' + COALESCE(RuleTitle, '') +  ' для цеха 8/1 для ПФ: '+ sp.Title 
 , SemiProductId
 , 10
-, NULL
+, CombineId
 , 14
 , 1
 , IdRout
@@ -363,10 +379,13 @@ FROM
 				R.IdRout
 			   ,R.[SemiProductId]
 			   ,[InputData].[udf_CanIMapSecondFloor](R.IdRout, 14)	AS ICan 
+                 ,CAST(cc.RuleId as nvarchar(10))+'/'+CAST(cc.RuleIsParent as NVARCHAR(5)) as RuleTitle
+			   ,r.CombineId
 		  FROM  [InputData].[Rout] as R
           INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
-           INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
-           INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
+          INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
+          INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
+          LEFT JOIN [SupportData].[CombineComposition] as cc  on cc.CombineRulesId = r.CombineId 
 		  WHERE IdRout NOT IN (SELECT IdRout FROM [InputData].[VI_BannedRoutesForMapping])
 		  AND R.SemiProductId NOT IN (	SELECT IdSemiProduct	
 										FROM [InputData].[VI_OperationsWithSemiProducts_FAST] as fas
@@ -391,10 +410,10 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут ' +   ' для цеха 9/2 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут '  + COALESCE(RuleTitle, '') +   ' для цеха 9/2 для ПФ: '+ sp.Title 
 , SemiProductId
 , 10
-, NULL
+, CombineId
 , 20
 , 1
 , IdRout
@@ -404,10 +423,13 @@ FROM
 				R.IdRout
 			   ,R.[SemiProductId]
 			   ,[InputData].[udf_CanIMapSecondFloor](R.IdRout, 20)	AS ICan 
+               ,CAST(cc.RuleId as nvarchar(10))+'/'+CAST(cc.RuleIsParent as NVARCHAR(5)) as RuleTitle
+			   ,r.CombineId
 		  FROM  [InputData].[Rout] as R
            INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
            INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
            INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
+           LEFT JOIN [SupportData].[CombineComposition] as cc  on cc.CombineRulesId = r.CombineId 
 		  WHERE IdRout NOT IN (SELECT IdRout FROM [InputData].[VI_BannedRoutesForMapping])
 		  AND R.SemiProductId NOT IN (	SELECT IdSemiProduct	 
 										FROM [InputData].[VI_OperationsWithSemiProducts_FAST] as fas
@@ -425,10 +447,10 @@ AND a.Title = @article
 --Удаляем лишние не согласованные между собой автомаршруты
 DELETE [InputData].[Rout] 
 FROM [InputData].[Rout]	as rout
-INNER JOIN [InputData].[VI_SemiProductsWithArticles]		as visp ON visp.IdSemiProduct = rout.SemiProductId
-INNER JOIN [InputData].[VI_MissedAutoRoutesBetween9and92] as  vi ON vi.articlefirst = visp.TitleArticle 
-																	OR vi.articlesecond = visp.TitleArticle
-																	AND (vi.AreaFirst = rout.AreaId or vi.areasecond = rout.AreaId)
+INNER JOIN [InputData].[VI_SemiProductsWithArticles]		AS  visp    ON visp.IdSemiProduct = rout.SemiProductId
+INNER JOIN [InputData].[VI_MissedAutoRoutesBetween9and92]   AS  vi      ON vi.articlefirst = visp.TitleArticle 
+																	    OR vi.articlesecond = visp.TitleArticle
+																	    AND (vi.AreaFirst = rout.AreaId or vi.areasecond = rout.AreaId)
 WHERE IsAutoGenerated = 1 AND visp.TitleArticle = @article
 
 RETURN 0
