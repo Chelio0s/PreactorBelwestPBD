@@ -147,7 +147,7 @@
     <Build Include="Triggers\tgr_DDLListChange.sql" />
     <Build Include="Schemas\LogData.sql" />
     <Build Include="Tables\Log.sql" />
-    <Build Include="Functions\udf_GetKTOPTitle.sql" />
+    <Build Include="Functions\udf_GetKTOPTitleRKV.sql" />
     <Build Include="Procedures\sp_InsertProfsIntoPreactor.sql" />
     <Build Include="Procedures\sp_InsertOrgUnit.sql" />
     <Build Include="Procedures\sp_InsertActualEmployees.sql" />
@@ -254,7 +254,7 @@
     <Build Include="Tables\OperationWithKTOP.sql" />
     <Build Include="Functions\udf_GetCorrectKTOPForArea.sql" />
     <Build Include="Views\VI_OperationsFullInfo.sql" />
-    <Build Include="Functions\udf_GetKobTitle.sql" />
+    <Build Include="Functions\udf_GetKobTitleRKV.sql" />
     <Build Include="Views\VI_OperationsFromSDBWithResources.sql" />
     <Build Include="Procedures\sp_DeleteInappropriateSemiProducts.sql" />
     <Build Include="Views\VI_OperationsFromSDBWithREL.sql" />
@@ -320,6 +320,7 @@
     <Build Include="Procedures\InsertSingleArticle\sp_InsertCombinesSingleArticle.sql" />
     <Build Include="Users\Login_kovalkov.sql" />
     <Build Include="Users\ServerRoleMembership_kovalkov.sql" />
+    <Build Include="Triggers\tgr_UpdateSequenceOperation.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

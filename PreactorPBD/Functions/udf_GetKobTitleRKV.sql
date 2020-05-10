@@ -1,4 +1,4 @@
-﻿CREATE FUNCTION [InputData].[udf_GetKobTitle]
+﻿CREATE FUNCTION [InputData].[udf_GetKobTitleRKV]
 (
 	@KOB int
 )

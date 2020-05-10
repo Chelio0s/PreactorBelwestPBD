@@ -6,7 +6,7 @@ AS
 	
 DECLARE @tempEmp as table (tabno varchar(15), OrgUnit varchar(15), fio varchar(99), dated date)
 insert @tempEmp
-EXEC [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
+SELECT * FROM OPENQUERY ([OracleMpu], 'SELECT
     tabno,
     OrgUnit,
     fio,
@@ -17,9 +17,10 @@ FROM
     and DATED > (select sysdate from SYS.dual)
     and ESTPOST <> 99999999
 	and tabno not like ''3%''
-	and prozt<>0 
+	and nvl(prozt, ''0'') <> ''0'' 
 	and persg in (''1'',''8'')
-	and btrtl = ''0900'''
+	and btrtl = ''0900''' )  
+
  
 
 

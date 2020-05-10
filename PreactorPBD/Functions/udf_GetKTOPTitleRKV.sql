@@ -1,5 +1,5 @@
 ﻿--Возвращает имя операции по номеру
-CREATE FUNCTION [InputData].[udf_GetKTOPTitle]
+CREATE FUNCTION [InputData].[udf_GetKTOPTitleRKV]
 (
 	@KTOP int
 )

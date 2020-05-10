@@ -8,28 +8,26 @@ DECLARE @tempEmp as table (
 			, trfst varchar(5)
 			, trfs1 varchar(5)
 			, persg varchar(5)
-			, STELL varchar(20)
-			, stext1 varchar(99))
+			, STELL varchar(20))
 
 insert @tempEmp
-EXEC [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
+SELECT * FROM OPENQUERY ([OracleMpu], 'SELECT
     tabno,
     OrgUnit,
     fio,
     trfst,
     trfs1,
     persg,
-    STELL,
-	stext1
+    STELL
 FROM
     belwpr.s_seller
 		WHERE DATEB <= (select sysdate from SYS.dual)
     and DATED > (select sysdate from SYS.dual)
     and ESTPOST <> 99999999
 	and tabno not like ''3%''
-	and prozt<>0 
+	and nvl(prozt, ''0'') <> ''0'' 
 	and persg in (''1'',''8'')
-	and btrtl = ''0900'''
+	and btrtl = ''0900''')
 
 DECLARE @mainProffs as table (tabno varchar(15), MAIN_STELL varchar(15), MAIN_TRFST VARCHAR(5), isPrimary bit, OrgUnit varchar(15) )
 	--Выбираем главные профессии
@@ -52,7 +50,7 @@ INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
 DECLARE @semiproffs table(tabno varchar(15), OrgUnit varchar(15), 
 PROF_STELL varchar(99), PROF_TRFST varchar(99))
 insert @semiproffs
-	EXEC[InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
+	SELECT * FROM OPENQUERY ([OracleMpu], 'SELECT
 		seller.tabno,
 		OrgUnit,
 		PROF_STELL,
@@ -66,12 +64,13 @@ insert @semiproffs
     and s_tab.end > (select sysdate from SYS.dual)
     and ESTPOST <> 99999999
 	and seller.tabno not like ''3%''
-	and prozt<>0 
+	and nvl(prozt, ''0'') <> ''0'' 
 	and persg in (''1'',''8'')
 	and btrtl = ''0900''
 	and PROF_STELL <>''00000000'' 
-	and prozt<> 0 and trfst<>'' ''
-    and PERSK in (''V3'', ''V4'')'
+	and trfst<>'' ''
+    and PERSK in (''V3'', ''V4'')
+	and PROF_TRFST IS NOT NULL')
 	
 	INSERT INTO [InputData].[EmployeesInProfession]
            ([EmployeeId]

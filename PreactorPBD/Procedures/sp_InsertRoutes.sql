@@ -57,9 +57,9 @@ SELECT DISTINCT
   INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
   LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
   WHERE sp.SimpleProductId in (1) 
-  AND ((parentKTOP NOT IN (125,209,226,217,219,126) 
+  AND ((parentKTOP NOT IN (125,127,209,226,217,219,126) 
 		AND cc.RuleIsParent = 1) OR 
-		(childKTOP NOT IN (125,209,226,217,219,126) 
+		(childKTOP NOT IN (125,127,209,226,217,219,126) 
 		AND cc.RuleIsParent = 0))
 
   --ТМ с правилами для 1 цеха - КОМЛПЕКС
@@ -81,9 +81,9 @@ SELECT DISTINCT
   INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
   LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
   WHERE sp.SimpleProductId in (1) 
-   AND ((parentKTOP  IN (125,209,226,217,219,126) 
+   AND ((parentKTOP  IN (125,127,209,226,217,219,126) 
 		AND cc.RuleIsParent = 1) OR 
-		(childKTOP  IN (125,209,226,217,219,126) 
+		(childKTOP  IN (125,127,209,226,217,219,126) 
 		AND cc.RuleIsParent = 0))
   
 

@@ -45,7 +45,7 @@ public partial class UserDefinedFunctions
                                          $"({IdSemiProduct}, {simpleProductId})", sqlConnection);
             }
 
-        reader = command.ExecuteReader();
+            reader = command.ExecuteReader();
             List<RoutRules> list = new List<RoutRules>();
             while (reader.Read())
             {
