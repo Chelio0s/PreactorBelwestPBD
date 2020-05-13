@@ -1,68 +1,60 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertEmployeesInProffs]
 AS
-if object_id(N'tempdb..#tempEmp',N'U') is not null drop table #tempEmp
-create table #tempEmp(tabno varchar(15), orgunit varchar(15), fio varchar(99), 
-trfst varchar(5), trfs1 varchar(5), persg varchar(5), stell varchar(20), stext1 varchar(99))
-insert #tempEmp
-exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
+
+DECLARE @tempEmp as table (
+			tabno varchar(15)
+			, OrgUnit varchar(15)
+			, fio varchar(99)
+			, trfst varchar(5)
+			, trfs1 varchar(5)
+			, persg varchar(5)
+			, STELL varchar(20))
+
+insert @tempEmp
+SELECT * FROM OPENQUERY ([OracleMpu], 'SELECT
     tabno,
-    orgunit,
+    OrgUnit,
     fio,
     trfst,
     trfs1,
     persg,
-    stell,
-	stext1
+    STELL
 FROM
     belwpr.s_seller
 		WHERE DATEB <= (select sysdate from SYS.dual)
     and DATED > (select sysdate from SYS.dual)
     and ESTPOST <> 99999999
 	and tabno not like ''3%''
-	and prozt<>0 
+	and nvl(prozt, ''0'') <> ''0'' 
 	and persg in (''1'',''8'')
-	and btrtl = ''0900'''
+	and btrtl = ''0900''')
 
-	IF object_id(N'tempdb..#tempPrimaryProf',N'U') is not null DROP TABLE #tempPrimaryProf
-CREATE TABLE #tempPrimaryProf(tabno varchar(15), MAIN_STELL varchar(15), MAIN_TRFST VARCHAR(5), PROF_STELL varchar(15), PROF_TRFST varchar(5), isPrimary bit)
+DECLARE @mainProffs as table (tabno varchar(15), MAIN_STELL varchar(15), MAIN_TRFST VARCHAR(5), isPrimary bit, OrgUnit varchar(15) )
 	--Выбираем главные профессии
-INSERT INTO  #tempPrimaryProf
+INSERT INTO  @mainProffs
            (tabno
 		   ,MAIN_STELL
 		   ,MAIN_TRFST
-           ,PROF_STELL
-           ,PROF_TRFST
-           ,[IsPrimary])
+           ,[isPrimary]
+		   ,[OrgUnit])
 SELECT DISTINCT  tabno,
 			CASE WHEN prof.IdProfession  is null THEN 0 ELSE prof.IdProfession END as STELL,
 			trfst, 
-			CASE WHEN prof.IdProfession  is null THEN 0 ELSE prof.IdProfession END as STELL, 
-			trfst, 
 			1
-FROM #tempEmp as sell
-LEFT JOIN [InputData].[Professions] as prof ON sell.stell = prof.IdProfession
+			,sell.OrgUnit
+FROM @tempEmp as sell
+LEFT JOIN [InputData].[Professions] as prof ON sell.STELL = prof.IdProfession
 --Только нужные участки
-INNER JOIN [SupportData].[Orgunit] as org ON org.OrgUnit = sell.orgunit
+INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
 
---Подготовка данных под доп. профы
-
-if object_id(N'tempdb..#tempEmp1',N'U') is not null drop table #tempEmp1
-	CREATE table #tempEmp1(tabno varchar(15), orgunit varchar(15), fio varchar(99), 
-trfst varchar(5), trfs1 varchar(5), persg varchar(5), stell varchar(20), PROF_STELL varchar(99), PROF_TRFST varchar(99), PROF_TRFGR varchar(99), ENDDA varchar(99), prozt varchar(5))
-insert #tempEmp1
-	EXEC[InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
+DECLARE @semiproffs table(tabno varchar(15), OrgUnit varchar(15), 
+PROF_STELL varchar(99), PROF_TRFST varchar(99))
+insert @semiproffs
+	SELECT * FROM OPENQUERY ([OracleMpu], 'SELECT
 		seller.tabno,
-		orgunit,
-		fio,
-		trfst,
-		trfs1,
-		persg,
-		stell,
+		OrgUnit,
 		PROF_STELL,
-		PROF_TRFST,
-		PROF_TRFGR,
-		ENDDA,
-		prozt
+		PROF_TRFST
 		FROM
 		belwpr.s_seller seller 
 	LEFT JOIN belwpr.s_tab_stell_add  s_tab ON s_tab.tabno = seller.tabno
@@ -72,55 +64,45 @@ insert #tempEmp1
     and s_tab.end > (select sysdate from SYS.dual)
     and ESTPOST <> 99999999
 	and seller.tabno not like ''3%''
-	and prozt<>0 
+	and nvl(prozt, ''0'') <> ''0'' 
 	and persg in (''1'',''8'')
 	and btrtl = ''0900''
-	and prof_stell <>''00000000'' 
-	and prozt<> 0 and trfst<>'' ''
-    and PERSK in (''V3'', ''V4'')'
-
-
-  
---Выбираем доп профы с макс. разрядом
-INSERT INTO  #tempPrimaryProf
-           (tabno
-		   ,MAIN_STELL
-		   ,MAIN_TRFST
-           ,PROF_STELL
-           ,PROF_TRFST
+	and PROF_STELL <>''00000000'' 
+	and trfst<>'' ''
+    and PERSK in (''V3'', ''V4'')
+	and PROF_TRFST IS NOT NULL')
+	
+	INSERT INTO [InputData].[EmployeesInProfession]
+           ([EmployeeId]
+           ,[ProfessionId]
+           ,[CategoryProfession]
            ,[IsPrimary])
-SELECT 
-   tabno, 
-   STELL,
-   trfst,
-   PROF_STELL,
-   MAX(PROF_TRFST) as PROF_TRFST,
-   0 
-   FROM #tempEmp1 as sell
-   INNER JOIN [InputData].[Professions] as prof ON sell.stell = prof.IdProfession
-   --Только нужные участки
-   INNER JOIN [SupportData].[Orgunit] as org ON org.OrgUnit = sell.orgunit
- group by  tabno, PROF_STELL,stell , trfst
- order by PROF_STELL
-
- --Дропаем дубли главная = доп. профа  если главный разряд больше доп. профы или они равны
- DELETE FROM #tempPrimaryProf 
- WHERE  MAIN_STELL = PROF_STELL and isPrimary = 0 AND (MAIN_TRFST>PROF_TRFST or MAIN_TRFST=PROF_TRFST)
- 
- --Очищаем таблицу 
- DELETE FROM [InputData].[EmployeesInProfession]
- INSERT INTO [InputData].[EmployeesInProfession]
-			   ([EmployeeId]
-			   ,[ProfessionId]
-			   ,[CategoryProfession]
-			   ,[IsPrimary])
- SELECT tabno, 
-		prof_stell, 
-		prof_trfst, 
-		isPrimary
- FROM #tempPrimaryProf as t 
- INNER JOIN [InputData].[Professions] AS p ON p.IdProfession=t.PROF_STELL
- 
- ORDER BY tabno
-
+	SELECT DISTINCT tabno
+	, MAIN_STELL
+	, trfst
+	, IsPrimary
+	FROM (
+	SELECT agreageteQuery.tabno
+	, agreageteQuery.MAIN_STELL
+	, trfst
+	, CASE WHEN agreageteQuery.MAIN_STELL = main.MAIN_STELL THEN 1 ELSE 0 END as IsPrimary
+	FROM (
+		SELECT DISTINCT tabno
+		,MAIN_STELL
+		,MAX(MAIN_TRFST) OVER(PARTITION BY tabno ,MAIN_STELL) as trfst
+		FROM (
+			SELECT DISTINCT tabno
+			,MAIN_STELL
+			,MAIN_TRFST
+			FROM @mainProffs
+			UNION
+			SELECT DISTINCT tabno 
+			,CASE WHEN prof.IdProfession  is null THEN 0 ELSE prof.IdProfession END as STELL
+			,semi.PROF_TRFST  
+			FROM @semiproffs as semi
+			--Только нужные участки
+			INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = semi.OrgUnit
+			LEFT JOIN [InputData].[Professions] as prof ON semi.PROF_STELL = prof.IdProfession) as unionQuery ) as agreageteQuery
+			LEFT JOIN @mainProffs as main ON main.MAIN_STELL = agreageteQuery.MAIN_STELL
+											AND main.tabno = agreageteQuery.tabno) as q
 RETURN 0

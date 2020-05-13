@@ -4,41 +4,40 @@ CREATE PROCEDURE [InputData].[sp_InsertActualEmployees]
 
 AS
 	
-
-if object_id(N'tempdb..#tempEmp',N'U') is not null drop table #tempEmp
-create table #tempEmp(tabno varchar(15), orgunit varchar(15), fio varchar(99), 
-trfst varchar(5), trfs1 varchar(5), persg varchar(5), stell varchar(20), stext1 varchar(99))
-insert #tempEmp
-exec [InputData].[pc_Select_Oralce_MPU] @selectCommandText = 'SELECT
+DECLARE @tempEmp as table (tabno varchar(15), OrgUnit varchar(15), fio varchar(99), dated date)
+insert @tempEmp
+SELECT * FROM OPENQUERY ([OracleMpu], 'SELECT
     tabno,
-    orgunit,
+    OrgUnit,
     fio,
-    trfst,
-    trfs1,
-    persg,
-    stell,
-	stext1
+	TO_CHAR(dateb,''yyyymmdd'') as dateb
 FROM
     belwpr.s_seller
 		WHERE DATEB <= (select sysdate from SYS.dual)
     and DATED > (select sysdate from SYS.dual)
     and ESTPOST <> 99999999
 	and tabno not like ''3%''
-	and prozt<>0 
+	and nvl(prozt, ''0'') <> ''0'' 
 	and persg in (''1'',''8'')
-	and btrtl = ''0900'''
- 
- ALTER TABLE #tempEmp
-  ALTER COLUMN  STELL VARCHAR(99) COLLATE Cyrillic_General_BIN NULL;
+	and btrtl = ''0900''' )  
 
  
+
+
+ DECLARE @table table (  fio varchar(99), tabno varchar(15), OrgUnit varchar(15), dated date, maxdate date)
+ INSERT INTO @table
+ SELECT DISTINCT fio, tabno, org.OrgUnit, dated, max(dated) over(partition by tabno) from @tempEmp as sell
+ INNER JOIN [SupportData].[OrgUnit] as org ON org.OrgUnit = sell.OrgUnit
+ ORDER BY fio
+
+
  DELETE FROM [InputData].[Employees]
  INSERT INTO [InputData].[Employees]
            ([Name]
            ,[TabNum]
-           ,org.[Orgunit])
- select distinct fio, tabno, org.orgunit from #tempEmp as sell
- INNER JOIN [SupportData].[Orgunit] as org ON org.OrgUnit = sell.orgunit
- order by fio
+           ,org.[OrgUnit])
+ SELECT fio, tabno, orgunit
+ FROM @table 
+ WHERE dated = maxdate
 
 RETURN 0

@@ -1,0 +1,15 @@
+﻿CREATE TABLE [dbo].[s_top2](
+	[KTOP] [numeric](4, 0) NOT NULL,
+	[NTOP] [char](105) NULL,
+	[NTOPL] [char](105) NULL,
+	[KPROF] [decimal](5, 0) NOT NULL,
+	[RD] [decimal](2, 0) NOT NULL,
+	[GR] [decimal](5, 0) NOT NULL,
+	[DATE_S] [datetime] NOT NULL,
+	[USER_S] [char](30) NOT NULL,
+	[PC_S] [varchar](99) NOT NULL,
+	[DATEKRKV] [datetime] NULL,
+	[USERKRKV] [char](15) NULL,
+	[PODRKRKV] [char](30) NULL,
+	[VRED] [bit] NOT NULL,
+	[UKR] [decimal](5, 0) NOT NULL)

@@ -1,0 +1,39 @@
+﻿CREATE VIEW [InputData].[VI_OperationArticle_FAST]
+	AS 
+	SELECT
+      [Article]
+      ,[KPO]
+      ,[Code]
+      ,[KTOPN]
+      ,[NTOP]
+      ,[PONEOB]
+      ,[NORMATIME]
+      ,[KOB]
+      ,[MOB]
+      ,[KPROF]
+      ,[IdProfession]
+      ,[CategoryOperation]
+      ,[TitlePreactorOper]
+      ,[SimpleProductId]
+      ,[OperOrder]
+	  ,NPP
+	  ,REL
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]
+  GROUP BY 
+		   [Article]
+		  ,[KPO]
+		  ,[Code]
+		  ,[KTOPN]
+		  ,[NTOP]
+		  ,[PONEOB]
+		  ,[NORMATIME]
+		  ,[KOB]
+		  ,[MOB]
+		  ,[KPROF]
+		  ,[IdProfession]
+		  ,[CategoryOperation]
+		  ,[TitlePreactorOper]
+		  ,[SimpleProductId]
+		  ,[OperOrder]
+		  ,NPP
+		  ,REL

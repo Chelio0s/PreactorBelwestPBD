@@ -57,6 +57,31 @@
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
   <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
@@ -73,6 +98,13 @@
     <Folder Include="Maintenance\Servers" />
     <Folder Include="Triggers" />
     <Folder Include="Scripts" />
+    <Folder Include="Snapshots" />
+    <Folder Include="Tables\SupportData" />
+    <Folder Include="Entity\Combinator" />
+    <Folder Include="Tables\SupportData\MappingRoutes" />
+    <Folder Include="Tables\SupportData\AltRoutes" />
+    <Folder Include="Entity\MappingRules" />
+    <Folder Include="Procedures\InsertSingleArticle" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -92,14 +124,14 @@
     <Build Include="Tables\Operation.sql" />
     <Build Include="Tables\OperationInResource.sql" />
     <Build Include="Tables\UseConstraintResources.sql" />
-    <Build Include="Tables\Calendar.sql" />
+    <Build Include="Tables\ConstraintsCalendar.sql" />
     <Build Include="Tables\Specifications.sql" />
     <Build Include="Schemas\InputData.sql" />
     <Build Include="Tables\SemiProduct.sql" />
     <Build Include="Tables\EntrySemiProduct.sql" />
     <Build Include="Tables\Areas.sql" />
-    <Build Include="Users\Login_kovalkov.sql" />
-    <Build Include="Users\ServerRoleMembership_kovalkov.sql" />
+    <Build Include="Users\Login_plm.sql" />
+    <Build Include="Users\ServerRoleMembership_plm.sql" />
     <Build Include="Tables\EmployeesCalendar.sql" />
     <Build Include="Schemas\SupportData.sql" />
     <Build Include="Tables\DepartComposition.sql" />
@@ -108,8 +140,6 @@
     <Build Include="Maintenance\Servers\RKV.sql" />
     <Build Include="Tables\GroupsOperations.sql" />
     <Build Include="Tables\GroupKTOP.sql" />
-    <Build Include="Tables\SequenceOperations.sql" />
-    <Build Include="Tables\SimpleProduct.sql" />
     <Build Include="Tables\Orgunit.sql" />
     <Build Include="Tables\EntrySimpleProduct.sql" />
     <Build Include="Functions\udf_GetRKVCodeProfession.sql" />
@@ -117,9 +147,7 @@
     <Build Include="Triggers\tgr_DDLListChange.sql" />
     <Build Include="Schemas\LogData.sql" />
     <Build Include="Tables\Log.sql" />
-    <Build Include="Functions\udf_GetKTOPTitle.sql" />
-    <Build Include="Tables\AltOperations.sql" />
-    <Build Include="Tables\AltOperationRule.sql" />
+    <Build Include="Functions\udf_GetKTOPTitleRKV.sql" />
     <Build Include="Procedures\sp_InsertProfsIntoPreactor.sql" />
     <Build Include="Procedures\sp_InsertOrgUnit.sql" />
     <Build Include="Procedures\sp_InsertActualEmployees.sql" />
@@ -130,9 +158,7 @@
     <Build Include="Tables\SettingShift.sql" />
     <Build Include="Tables\WorkDays.sql" />
     <Build Include="Procedures\sp_InsertWorkDays.sql" />
-    <Build Include="Tables\UseConstraintOperations.sql" />
     <Build Include="Functions\udf_GetStartTimeForShift.sql" />
-    <Build Include="Views\VI_EmployeesWorkHours.sql" />
     <Build Include="Views\VI_OrgUnitsWithAreas.sql" />
     <Build Include="Views\VI_WorkHoursForOrgUnit.sql" />
     <Build Include="Functions\udf_GetShiftNumber.sql" />
@@ -140,6 +166,161 @@
     <Build Include="Users\ServerRoleMembership_MPU.sql" />
     <Build Include="Views\VI_CheckKOBGroups.sql" />
     <Build Include="Tables\Cutters.sql" />
+    <Build Include="Procedures\sp_CreateNomenclature.sql" />
+    <Build Include="Views\VI_PercentageNomenclature.sql" />
+    <Build Include="Procedures\sp_InsertMaterials.sql" />
+    <Build Include="Maintenance\Servers\MPU.sql" />
+    <Build Include="Procedures\sp_CreateSemiProducts.sql" />
+    <Build Include="Procedures\sp_CreateEntrySemiProducts.sql" />
+    <Build Include="Views\VI_EntrySemiProductsForEachNomenclature.sql" />
+    <Build Include="Procedures\sp_CreateCutters.sql" />
+    <Build Include="Tables\TypeConstraint.sql" />
+    <Build Include="Procedures\sp_CreateConstraintCalendar_Cutters.sql" />
+    <Build Include="Views\VI_OperationsFromRKV.sql">
+      <SuppressTSqlWarnings>
+      </SuppressTSqlWarnings>
+    </Build>
+    <Build Include="Functions\udf_GetOperationsArticleFromRKV.sql" />
+    <Build Include="Functions\udf_GetTitleOperation.sql" />
+    <Build Include="Views\VI_OperationsRKVPreactor.sql" />
+    <Build Include="Functions\udf_CheckOperations.sql" />
+    <Build Include="Procedures\sp_CheckRoutes.sql" />
+    <Build Include="Procedures\sp_InsertAll.sql" />
+    <Build Include="Procedures\sp_InsertEquipmentWithDelete.sql" />
+    <Build Include="Views\VI_OperationsRKVOnSemiProducts_SLOW.sql" />
+    <Build Include="Triggers\tgr_DeleteSemiProduct.sql" />
+    <Build Include="Triggers\tgr_DeleteNomenclature.sql" />
+    <Build Include="Triggers\tgr_DeleteArticle.sql" />
+    <Build Include="Functions\udf_GetOperationForTableOperation.sql" />
+    <Build Include="Tables\TempOperations.sql" />
+    <Build Include="Procedures\sp_FillTempOperationTable.sql" />
+    <Build Include="Views\VI_OperationsWithSemiProducts_FAST.sql" />
+    <Build Include="Maintenance\sp_rebuildIndexes.sql" />
+    <Build Include="Schemas\System.sql" />
+    <Build Include="Procedures\sp_InsertOperations.sql" />
+    <Build Include="Procedures\sp_InsertOrgUnitsCalendars.sql" />
+    <Build Include="Views\VI_OperationArticle_FAST.sql" />
+    <Build Include="Procedures\sp_InsertOperationsInResources.sql" />
+    <Build Include="Tables\TempMaterials.sql" />
+    <Build Include="Views\VI_MaterialsFromRKV_SLOW.sql" />
+    <Build Include="Procedures\sp_FillTempMaterials.sql" />
+    <Build Include="Procedures\sp_InsertSpecifications.sql" />
+    <Build Include="Maintenance\sp_BackUp_Full.sql" />
+    <Build Include="Users\Login_admin.sql" />
+    <Build Include="Users\ServerRoleMembership_admin.sql" />
+    <Build Include="Views\VI_EmployeesWithProfs.sql" />
+    <Build Include="Tables\Rout.sql" />
+    <Build Include="Views\VI_KTOPWithSemiProducts.sql" />
+    <Build Include="Views\VI_OperationsRoutRules.sql" />
+    <Build Include="Procedures\sp_InsertRoutes.sql" />
+    <Build Include="Functions\udf_GetRuslesForSemiProduct.sql" />
+    <Build Include="Procedures\sp_InsertCombines.sql" />
+    <Build Include="Views\VI_RulesWithOperations.sql" />
+    <Build Include="Views\VI_SemiProductsWithRules.sql" />
+    <Build Include="Views\VI_SemiProductsWithArticles.sql" />
+    <Build Include="Views\VI_RoutWithOperationsRoutRules.sql" />
+    <Build Include="Functions\udf_GetOperationsRule.sql" />
+    <Build Include="Maintenance\sp_SrinkDb.sql" />
+    <Build Include="Views\VI_OperationsFromSDB.sql" />
+    <Build Include="Views\VI_MissingOperations.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithTimes.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\CombineComposition.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\CombineRules.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\ComposeOperation.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\OperationComposition.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\RoutRoules.sql" />
+    <Build Include="Tables\SupportData\AltRoutes\RuleGroup.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingComposeResource.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingResourceComposition.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingComposeOperation.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingOperationComposition.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingRules.sql" />
+    <Build Include="Views\VI_MappingRules.sql" />
+    <Build Include="Functions\udf_GetOperationsForSemiProduct.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\NotMappingOperations.sql" />
+    <Build Include="Functions\udf_GetOperationsForArticle.sql" />
+    <Build Include="Functions\udf_CompareRouts.sql" />
+    <Build Include="Functions\udf_GetAviableequipmentForMappingOperation.sql" />
+    <Build Include="Functions\udf_GetCountEquipmentInArea.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\MappingNeed.sql" />
+    <Build Include="Functions\udf_GetMaxCountEquipmentInAreaForOperation.sql" />
+    <Build Include="Views\VI_CheckList_CheckModelExistense.sql" />
+    <Build Include="Views\VI_CheckList_Persentage.sql" />
+    <Build Include="Views\VI_GetAviablesMappingRouts.sql" />
+    <Build Include="Views\VI_RoutesWithArticle.sql" />
+    <Build Include="Views\VI_ResourcesOnDepartments.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithResGroups.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithConcreetResources.sql" />
+    <Build Include="Tables\OperationWithKTOP.sql" />
+    <Build Include="Functions\udf_GetCorrectKTOPForArea.sql" />
+    <Build Include="Views\VI_OperationsFullInfo.sql" />
+    <Build Include="Functions\udf_GetKobTitleRKV.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithResources.sql" />
+    <Build Include="Procedures\sp_DeleteInappropriateSemiProducts.sql" />
+    <Build Include="Views\VI_OperationsFromSDBWithREL.sql" />
+    <Build Include="Tables\TypeTimes.sql" />
+    <Build Include="Tables\MergeRoutes.sql" />
+    <Build Include="Views\VI_OperationsMappingRules.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\IgnoreMappingOperations.sql" />
+    <Build Include="Functions\udf_GetMergedRouteForSemiProduct.sql" />
+    <Build Include="Views\VI_GetOperationsForMappingFirstFloor.sql" />
+    <Build Include="Views\VI_MappingRuleForFirstFloor.sql" />
+    <Build Include="Functions\udf_CanIMapFirstFloor.sql" />
+    <Build Include="Tables\SupportData\MappingRoutes\TempOperationForMapping.sql" />
+    <Build Include="Functions\udf_GetCompareRoutesFIsrtsFlorrAnd9-1.sql" />
+    <Build Include="Views\VI_GetOperationsForMappingSecondFloor.sql" />
+    <Build Include="Functions\udf_GetMappingTime.sql" />
+    <Build Include="Views\VI_MappingRuleForSecondFloor.sql" />
+    <Build Include="Views\VI_BannedRoutesForMapping.sql" />
+    <Build Include="Functions\udf_CanIMapSecondFloor.sql" />
+    <Build Include="Functions\udf_CanIMapFirstFloorRoute.sql" />
+    <Build Include="Procedures\sp_DeleteInappropriateRoutes.sql" />
+    <Build Include="Functions\tvf_GetMaterialForArticleRKVSlow.sql" />
+    <Build Include="Views\VI_MaterialsForArticleWithNomenclatureFAST.sql" />
+    <Build Include="Tables\KEI.sql" />
+    <Build Include="Tables\ResourcesRepairs.sql" />
+    <Build Include="Tables\Repairs.sql" />
+    <Build Include="Views\VI_ResourcesOnRepair.sql" />
+    <Build Include="Procedures\sp_PutResourcesOnRepair.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertToArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_CreateSemiProductFroSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_CreateNomenclatureForSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertSingleArticleFull.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_EntriSemiProductForArticle.sql" />
+    <Build Include="Procedures\sp_KillConnections.sql" />
+    <Build Include="Functions\udf_GetModelForArticle.sql" />
+    <Build Include="Tables\SupportData\ArticleModels.sql" />
+    <Build Include="Procedures\sp_InsertArticleModels.sql" />
+    <Build Include="Tables\SupportData\CuttersForKTOPs.sql" />
+    <Build Include="Tables\SupportData\CutterType.sql" />
+    <Build Include="Tables\SupportData\CuttersRaw.sql" />
+    <Build Include="Procedures\sp_CreateSecondaryConstraint_Cutters.sql" />
+    <Build Include="Procedures\sp_InsertContraintsOnOperations.sql" />
+    <Build Include="Tables\UseConstraintOperations.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_CreateConstraintCalendar_CuttersSingle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertRoutesSingleArticle.sql" />
+    <Build Include="Functions\udf_DistanceLevenstain.sql" />
+    <Build Include="Views\VI_ResourcesInGroups.sql" />
+    <Build Include="Procedures\sp_PutResourcesIntoGroups.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertOperationsSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_FillTempOperationTableSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertConstraintsOnOperationsSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertOperationsInResourcesSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_FillTempMaterialsSingleArticle.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertSpecificationsSingleArticle.sql" />
+    <Build Include="Tables\RelatedProducts.sql" />
+    <Build Include="Tables\EntryRelatedProducts.sql" />
+    <Build Include="Tables\SupportData\SupportRelatedProducts.sql" />
+    <Build Include="Tables\SupportData\SimpleProduct.sql" />
+    <Build Include="Tables\SupportData\SupportEntryRelatedProducts.sql" />
+    <Build Include="Triggers\tgr_DeleteSimpleProduct.sql" />
+    <Build Include="Views\VI_MissedAutoRoutesBetween9and92.sql" />
+    <Build Include="Tables\SupportData\SequenceOperations.sql" />
+    <Build Include="Procedures\SP_CHECK_FilterCombineRoutes.sql" />
+    <Build Include="Procedures\InsertSingleArticle\sp_InsertCombinesSingleArticle.sql" />
+    <Build Include="Users\Login_kovalkov.sql" />
+    <Build Include="Users\ServerRoleMembership_kovalkov.sql" />
+    <Build Include="Triggers\tgr_UpdateSequenceOperation.sql" />
     <Build Include="Triggers\tgr_Operation_DELETE.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +328,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PreactorPBD.publish.xml" />
+    <None Include="Triggers\tgr_RestrictionDeleteOrgUnit.sql" />
+    <PreDeploy Include="Maintenance\ChangeOwner.sql" />
+    <None Include="Maintenance\CreateJobBackUp.sql" />
+    <None Include="Maintenance\CreateOperator.sql" />
+    <None Include="Maintenance\AddAssemblies.sql" />
+    <None Include="Maintenance\Servers\CurrentServer.sql" />
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLR\pc_Select_Oralce_SAP.cs" />
@@ -162,23 +352,102 @@
     <Compile Include="Entity\WorkTime.cs" />
     <Compile Include="CLR\ctvf_GetWorkTime1Shift.cs" />
     <Compile Include="CLR\ctvf_GetWorkTime2Shifts.cs" />
+    <Compile Include="CLR\ctvf_GetModelArticle.cs" />
+    <Compile Include="CLR\ctvf_ConcatWithoutDublicates.cs" />
+    <Compile Include="CLR\ctvf_GetRouteRules.cs" />
+    <Compile Include="Entity\KTOPWithSemiProducts.cs" />
+    <Compile Include="Entity\RoutOperations.cs" />
+    <Compile Include="Entity\Combinator\CombineData.cs" />
+    <Compile Include="Entity\Combinator\CombineExtension.cs" />
+    <Compile Include="CLR\ctvf_CombineRules.cs" />
+    <Compile Include="Entity\Combinator\CombineResult.cs" />
+    <Compile Include="CLR\ctvf_CombineCombines.cs" />
+    <Compile Include="Entity\Combinator\CombineRouts.cs" />
+    <Compile Include="Entity\Combinator\CombineItem.cs" />
+    <Compile Include="Entity\Combinator\CombineItemResult.cs" />
+    <Compile Include="Entity\Combinator\RoutRule.cs" />
+    <Compile Include="Entity\Combinator\RoutRules.cs" />
+    <Compile Include="CLR\ctvf_GetDisableOperationsForRout.cs" />
+    <Compile Include="Entity\RoutRulesOperation.cs" />
+    <Compile Include="Entity\DisableOperations.cs" />
+    <Compile Include="Entity\RoutRulesOperationSmall.cs" />
+    <Compile Include="Entity\Sizes.cs" />
+    <Compile Include="CLR\ctvf_GetMappingRulesForSemiProduct.cs" />
+    <Compile Include="Entity\MappingRules\OperationData.cs" />
+    <Compile Include="Entity\MappingRules\Operation.cs" />
+    <Compile Include="CLR\ctvf_GetFinalRoutForOtherPlaceSemiProduct.cs" />
+    <Compile Include="Entity\MappingRules\MappingRule.cs" />
+    <Compile Include="CLR\ctvf_GetMappingrulesForArticle.cs" />
+    <Compile Include="CLR\ctvf_GetFinalRoutForOterPlaceArticle.cs" />
+    <Compile Include="CLR\ctvf_GetAltRouteForFirstFloor.cs" />
+    <Compile Include="Entity\MappingRules\MappingRuleFull.cs" />
+    <Compile Include="Entity\MappingRules\OperationWithTimeAndProffs.cs" />
+    <Compile Include="CLR\ctvf_GetAltRouteForSecondFloor.cs" />
+    <Compile Include="CLR\ctvf_FilterRouteRules.cs" />
+    <Compile Include="Entity\Combinator\FilteredRoutRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
     <Reference Include="Oracle.ManagedDataAccess">
-      <HintPath>..\..\SQLCLR\Assemblies\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\AddExtendedProp.sql" />
+    <DeploymentExtensionConfiguration Include="Maintenance\AddJobUpdateTempOperTable.sql" />
   </ItemGroup>
   <ItemGroup>
-    <ArtifactReference Include="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
+    <SqlCmdVariable Include="PLANT">
+      <DefaultValue>PLANT</DefaultValue>
+      <Value>$(SqlCmdVar__16)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="POTREB">
+      <DefaultValue>POTREB</DefaultValue>
+      <Value>$(SqlCmdVar__26)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="RKV">
+      <DefaultValue>RKV</DefaultValue>
+      <Value>$(SqlCmdVar__27)</Value>
+    </SqlCmdVariable>
+    <SqlCmdVariable Include="RKV_SCAL">
+      <DefaultValue>RKV_SCAL</DefaultValue>
+      <Value>$(SqlCmdVar__24)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac">
       <HintPath>$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\110\SqlSchemas\master.dacpac</HintPath>
-      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RKV\PLANT.sqlproj">
+      <Name>PLANT</Name>
+      <Project>{65d31ee6-93cb-4fa8-95e7-e1339a5bde25}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>PLANT</DatabaseSqlCmdVariable>
+      <ServerSqlCmdVariable>RKV</ServerSqlCmdVariable>
+    </ProjectReference>
+    <ProjectReference Include="..\RKV_SCAL\RKV_SCAL.sqlproj">
+      <Name>RKV_SCAL</Name>
+      <Project>{c9eae401-a701-4cf2-9ad0-952188ee67e0}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>RKV_SCAL</DatabaseSqlCmdVariable>
+      <ServerSqlCmdVariable>RKV</ServerSqlCmdVariable>
+    </ProjectReference>
+    <ProjectReference Include="..\POTREB\POTREB.sqlproj">
+      <Name>POTREB</Name>
+      <Project>{743e160a-1b03-42bf-9c6e-977706b2b7f1}</Project>
+      <Private>True</Private>
+      <SuppressMissingDependenciesErrors>True</SuppressMissingDependenciesErrors>
+      <DatabaseSqlCmdVariable>POTREB</DatabaseSqlCmdVariable>
+      <ServerSqlCmdVariable>RKV</ServerSqlCmdVariable>
+    </ProjectReference>
   </ItemGroup>
 </Project>

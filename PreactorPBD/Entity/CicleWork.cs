@@ -5,12 +5,20 @@ namespace PreactorPBD
     /// <summary>
     /// Класс для хранения рабочего цикла для Shft + Area
     /// </summary>
-    internal class CicleWork
+    readonly struct CicleWork
     {
-        public int IdCicle { get; set; }
-        public int ShiftId { get; set; }
-        public TimeSpan DurationOn { get; set; }
-        public TimeSpan DurationOff { get; set; }
-        public int AreaId { get; set; }
+        public CicleWork(int idCicle, int shiftId, TimeSpan durationOn, TimeSpan durationOff, int areaId)
+        {
+            IdCicle = idCicle;
+            ShiftId = shiftId;
+            DurationOn = durationOn;
+            DurationOff = durationOff;
+            AreaId = areaId;
+        }
+        public int IdCicle { get;  }
+        public int ShiftId { get; }
+        public TimeSpan DurationOn { get;  }
+        public TimeSpan DurationOff { get;  }
+        public int AreaId { get;  }
     }
 }

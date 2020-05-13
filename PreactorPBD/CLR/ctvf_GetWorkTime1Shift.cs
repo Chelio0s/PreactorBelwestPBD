@@ -29,7 +29,7 @@ public partial class UserDefinedFunctions
                                     ,wdays.ShiftId
                                     ,areas.IdArea
                                     ,[InputData].[udf_GetStartTimeForShift] ([OrgUnit], wdays.ShiftId) as timeStart
-                            FROM       [SupportData].[Orgunit] as org
+                            FROM       [SupportData].[OrgUnit] as org
                             INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
                             CROSS JOIN [SupportData].[WorkDays] as wdays " +
                      $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = @date and ShiftId = 1";
@@ -39,12 +39,12 @@ public partial class UserDefinedFunctions
             comm.Parameters["@date"].Value = DateWorkDay.Date;
 
             SqlDataReader reader;
-            ShiftSetting shiftSetting = null;
+            ShiftSetting shiftSetting =null;
             try
             {
                 reader = comm.ExecuteReader();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new Exception("Ошибка при выполнении запроса" + Environment.NewLine +
                                     cmdText);
@@ -108,14 +108,14 @@ public partial class UserDefinedFunctions
 
             while (reader.Read())
             {
-                var cw = new CicleWork();
+                CicleWork cw = new CicleWork();
                 try
                 {
-                    cw.IdCicle = Convert.ToInt32(reader[0]);
-                    cw.AreaId = Convert.ToInt32(reader[1]);
-                    cw.DurationOn = TimeSpan.Parse(reader[2].ToString());
-                    cw.DurationOff = TimeSpan.Parse(reader[3].ToString());
-                    cw.ShiftId = Convert.ToInt32(reader[4]);
+                    cw = new CicleWork(Convert.ToInt32(reader[0])
+                                    ,Convert.ToInt32(reader[1])
+                                    ,TimeSpan.Parse(reader[2].ToString())
+                                    ,TimeSpan.Parse(reader[3].ToString())
+                                    ,Convert.ToInt32(reader[4]));
                 }
                 catch
                 {
@@ -129,9 +129,7 @@ public partial class UserDefinedFunctions
             var timeStart = shiftSetting.DateWorkDay + shiftSetting.TimeStart;
             foreach (var c in cicles)
             {
-                var wt = new WorkTime();
-                wt.StartWork = timeStart;
-                wt.EndWork = wt.StartWork + c.DurationOn;
+                var wt = new WorkTime(timeStart, timeStart + c.DurationOn);
                 timeStart = wt.EndWork + c.DurationOff;
                 workTimes.Add(wt);
 
@@ -141,5 +139,5 @@ public partial class UserDefinedFunctions
         return workTimes;
     }
 
-   
+
 }

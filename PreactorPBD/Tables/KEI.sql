@@ -1,0 +1,5 @@
+﻿CREATE TABLE [SupportData].[KEI]
+(
+	[KEI] INT				NOT NULL PRIMARY KEY, 
+    [NEI] NVARCHAR(10)		NOT NULL
+)

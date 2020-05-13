@@ -1,0 +1,1 @@
+﻿CREATE LOGIN [plm] WITH PASSWORD = 'biw6d8'

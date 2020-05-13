@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[fabr1]
+(
+	[Id] INT NOT NULL PRIMARY KEY, 
+    [FKGR1] NCHAR(10) NULL, 
+    [KC] NCHAR(10) NULL, 
+    [REL] NCHAR(10) NULL
+)

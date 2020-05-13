@@ -37,7 +37,7 @@ namespace PreactorPBD
                 {
                     Host = "prod.vit.belwest.com";
                     Port = 1521;
-                    Sid = "orcl.Belw-MPUDB";
+                    Sid = "ORCL.Belw-MPUDB";
                     User = "SergeyTrofimov";
                     Password = "jC7EGzQ1pX";
                 }
