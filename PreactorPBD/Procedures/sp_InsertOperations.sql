@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperations]
 AS
-	DELETE FROM [InputData].[OperationWithKTOP]
+	--DELETE FROM [InputData].[OperationWithKTOP]
 	DELETE FROM  [InputData].[Operations]
 		DECLARE @table as table(idRout int, 
 		TitleOperPr nvarchar(99), 
