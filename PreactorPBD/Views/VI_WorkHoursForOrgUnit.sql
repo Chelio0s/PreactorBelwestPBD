@@ -35,7 +35,8 @@ WHERE OrgUnit in (50000451
 , 50008990
 , 50001844
 , 50001846
-, 50000149) and ShiftId = 1 
+, 50000149
+, 50044765) and ShiftId = 1 
 --Отсев субботы и вс.
 and (DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 5 and DATEDIFF ( dd , '01.01.1900' , DateWorkDay ) % 7 <> 6)
 
