@@ -1,5 +1,5 @@
 ﻿--11.05.2020 Kovalkov
-CREATE TRIGGER [tgr_Operation_DELETE]
+CREATE TRIGGER [InputData].[tgr_DeleteOperation]
 ON [InputData].[Operations]
 AFTER DELETE
 AS

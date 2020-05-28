@@ -840,4 +840,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="SupportRelatedProductId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="38362e53-998f-476f-a95c-e929e2da037b" ChangeDateTime="05/28/2020 06:29:01">
+    <Property Name="ElementName" Value="[InputData].[CicleUseFrom].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[CicleUseFrom]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdCicleUseFrom" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c5e0eb6c-a454-4cda-ad6b-6ef58e1acaee" ChangeDateTime="05/28/2020 06:39:18">
+    <Property Name="ElementName" Value="[InputData].[SettingShiftUseFrom].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[SettingShiftUseFrom]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdSettingShiftUseFrom" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="398afaa5-4190-4e12-994e-77adeabf273e" ChangeDateTime="05/28/2020 06:39:42">
+    <Property Name="ElementName" Value="[InputData].[SettingShiftUseFrom].[Date]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[SettingShiftUseFrom]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StartUseFrom" />
+  </Operation>
 </Operations>

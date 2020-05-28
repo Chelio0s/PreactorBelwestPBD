@@ -4,7 +4,7 @@ AS
 
 DELETE FROM [InputData].[Rout]
 
---Инсерт ТМ с правилами для заготовки цех 2
+--Инсерт ТМ с правилами для заготовки цех 2 
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -44,13 +44,15 @@ INSERT INTO [InputData].[Rout]
            ,[SemiProductId]
            ,[Priority]
            ,[CombineId]
-		   ,AreaId)
+		   ,AreaId
+           ,IsCutters)
 SELECT DISTINCT
        'ТМ с набором операций резаки: '+CONVERT(NVARCHAR(10), cc.RuleId)+ ' для ' + sp.Title  + ' цех 1' AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
 	  ,3
+      ,1
   FROM [SupportData].[CombineComposition] as cc
   INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
   INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
@@ -68,13 +70,15 @@ SELECT DISTINCT
            ,[SemiProductId]
            ,[Priority]
            ,[CombineId]
-		   ,AreaId)
+		   ,AreaId
+           ,IsComplex)
   SELECT DISTINCT
         'ТМ с набором операций комплекс '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ' + sp.Title + ' цех 1'  AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
 	  ,3
+      ,1
   FROM [SupportData].[CombineComposition] as cc
   INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
   INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
