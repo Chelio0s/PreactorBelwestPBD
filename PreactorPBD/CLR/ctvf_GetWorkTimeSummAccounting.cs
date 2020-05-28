@@ -3,19 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Microsoft.SqlServer.Server;
 using PreactorPBD;
 
 public partial class UserDefinedFunctions
 {
-    [Microsoft.SqlServer.Server.SqlFunction(
+    [SqlFunction(
         FillRowMethodName = "FillRowWorks", SystemDataAccess = SystemDataAccessKind.Read,
         DataAccess = DataAccessKind.Read,
         TableDefinition =
             "StartWork datetime, " +
             "EndWork datetime")]
 
-    public static IEnumerable ctvf_GetWorkTimeSummAccounting(int OrgUnit, DateTime DateWorkDay)
+    public static IEnumerable ctvf_GetWorkTimeSummAccounting(int orgUnit, DateTime dateWorkDay)
     {
         List<WorkTime> workTimes = new List<WorkTime>();
 
@@ -28,15 +29,15 @@ public partial class UserDefinedFunctions
                                     ,wdays.DateWorkDay
                                     ,wdays.ShiftId
                                     ,areas.IdArea
-                                    ,[InputData].[udf_GetStartTimeForShift] ([OrgUnit], wdays.ShiftId) as timeStart
-                            FROM       [SupportData].[OrgUnit] as org
-                            INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
-                            INNER JOIN [SupportData].[WorkDays] as wdays ON wdays.Crew = org.Crew" +
-                     $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = @date";
+                                    ,[InputData].[udf_GetStartTimeForShift] (OrgUnit, wdays.ShiftId, wdays.DateWorkDay) as timeStart
+                                   FROM       [SupportData].[OrgUnit] as org
+                                   INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
+                                   INNER JOIN [SupportData].[WorkDays] as wdays ON wdays.Crew = org.Crew" +
+                             $" WHERE OrgUnit = {orgUnit} and DateWorkDay = @date";
 
             SqlCommand comm = new SqlCommand(cmdText, con);
             comm.Parameters.Add("@date", SqlDbType.Date);
-            comm.Parameters["@date"].Value = DateWorkDay.Date;
+            comm.Parameters["@date"].Value = dateWorkDay.Date;
 
             SqlDataReader reader;
             ShiftSetting shiftSetting = null;
@@ -68,31 +69,38 @@ public partial class UserDefinedFunctions
                     }
                     catch
                     {
-                        throw new Exception("Ошибка при преобразовании типов после выборки SettingShift" + Environment.NewLine +
-                                            "OrgUnit:" + shiftSetting.OrgUnit + " Date:" + shiftSetting.DateWorkDay + " ShiftId:" + shiftSetting.ShiftId);
+                        throw new Exception("Ошибка при преобразовании типов после выборки SettingShift" +
+                                            Environment.NewLine +
+                                            "OrgUnit:" + shiftSetting.OrgUnit + " Date:" +
+                                            shiftSetting.DateWorkDay + " ShiftId:" + shiftSetting.ShiftId);
                     }
 
                     counter++;
                 }
                 else
                     throw new Exception(
-                            "Выборка настройки времени начала смены для OrgUnit + DateWorkDay вернула больше одной строки! " + Environment.NewLine +
-                             $"OrgUnit:{OrgUnit}, DateWorkDay:{DateWorkDay}");
+                        "Выборка настройки времени начала смены для OrgUnit + DateWorkDay вернула больше одной строки! " +
+                        Environment.NewLine +
+                        $"OrgUnit:{orgUnit}, DateWorkDay:{dateWorkDay}");
             }
 
             if (shiftSetting == null)
                 return workTimes;
 
-
-            cmdText = @"SELECT [IdCicle]
-                          ,[AreaId]
-                          ,[DurationWork]
-                          ,[DurationOff]
-                          ,[ShiftId]
-                      FROM [SupportData].[Cicle]" +
-              $"  WHERE AreaId = {shiftSetting.AreaId} and ShiftId = {shiftSetting.ShiftId}";
+            cmdText = @"SELECT     [IdCicle]
+                                  ,[AreaId]
+                                  ,[DurationWork]
+                                  ,[DurationOff]
+                                  ,[ShiftId]
+                                  ,[StartUseFrom]
+                            FROM       [SupportData].[Cicle] as cc
+                            INNER JOIN [SupportData].[CicleUseFrom] as cuf ON cuf.[CicleId] = cc.IdCicle" +
+                       $@"  WHERE AreaId = {shiftSetting.AreaId} AND ShiftId = {shiftSetting.ShiftId} AND [StartUseFrom] <= @date
+                            ORDER BY StartUseFrom DESC";
 
             comm = new SqlCommand(cmdText, con);
+            comm.Parameters.Add("@date", SqlDbType.Date);
+            comm.Parameters["@date"].Value = dateWorkDay.Date;
             reader.Close();
 
             try
@@ -101,10 +109,10 @@ public partial class UserDefinedFunctions
             }
             catch
             {
-                throw new Exception("Ошибка при выполнении запроса" + Environment.NewLine +
-                                    cmdText);
+                throw new Exception($"Ошибка при выполнении запроса {Environment.NewLine} {cmdText}");
             }
-            List<CicleWork> cicles = new List<CicleWork>();
+
+            var cicles = new List<CicleWork>();
 
             while (reader.Read())
             {
@@ -115,34 +123,34 @@ public partial class UserDefinedFunctions
                         , Convert.ToInt32(reader[1])
                         , TimeSpan.Parse(reader[2].ToString())
                         , TimeSpan.Parse(reader[3].ToString())
-                        , Convert.ToInt32(reader[4]));
+                        , Convert.ToInt32(reader[4])
+                        , Convert.ToDateTime(reader[5]));
                 }
                 catch
                 {
-                    throw new Exception("Ошибка при преобразовании типов после выборки Cicle " + Environment.NewLine +
-                                        "AreaId:" + cw.AreaId + " ShiftId:" + cw.ShiftId);
+                    throw new Exception($"Ошибка при преобразовании типов после выборки Cicle {Environment.NewLine} " +
+                                        $" AreaId: {cw.AreaId} ShiftId: {cw.ShiftId}");
                 }
                 cicles.Add(cw);
             }
 
-
             var timeStart = shiftSetting.DateWorkDay + shiftSetting.TimeStart;
-            foreach (var c in cicles)
+            var max = cicles.Max(x => x.CicleDate);
+            foreach (var c in cicles.Where(x => x.CicleDate == max))
             {
                 var wt = new WorkTime(timeStart, timeStart + c.DurationOn);
                 timeStart = wt.EndWork + c.DurationOff;
                 workTimes.Add(wt);
-
-                Console.WriteLine(wt.StartWork + "   " + wt.EndWork);
             }
         }
+
         return workTimes;
     }
 
-    public static void FillRowWorks(object obj, out DateTime StartWork, out DateTime EndWork)
+    public static void FillRowWorks(object obj, out DateTime startWork, out DateTime endWork)
     {
         var wt = (WorkTime)obj;
-        StartWork = wt.StartWork;
-        EndWork = wt.EndWork;
+        startWork = wt.StartWork;
+        endWork = wt.EndWork;
     }
 }

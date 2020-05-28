@@ -6,24 +6,21 @@ AS
 	
 DECLARE @tempEmp as table (tabno varchar(15), OrgUnit varchar(15), fio varchar(99), dated date)
 insert @tempEmp
-SELECT * FROM OPENQUERY ([OracleMpu], 'SELECT
+SELECT * FROM OPENQUERY ([Mpu], 'SELECT
     tabno,
     OrgUnit,
     fio,
 	TO_CHAR(dateb,''yyyymmdd'') as dateb
 FROM
     belwpr.s_seller
-		WHERE DATEB <= (select sysdate from SYS.dual)
+WHERE DATEB <= (select sysdate from SYS.dual)
     and DATED > (select sysdate from SYS.dual)
     and ESTPOST <> 99999999
 	and tabno not like ''3%''
 	and nvl(prozt, ''0'') <> ''0'' 
 	and persg in (''1'',''8'')
 	and btrtl = ''0900''' )  
-
  
-
-
  DECLARE @table table (  fio varchar(99), tabno varchar(15), OrgUnit varchar(15), dated date, maxdate date)
  INSERT INTO @table
  SELECT DISTINCT fio, tabno, org.OrgUnit, dated, max(dated) over(partition by tabno) from @tempEmp as sell

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Microsoft.SqlServer.Server;
 using PreactorPBD;
 
@@ -15,7 +16,7 @@ public partial class UserDefinedFunctions
             "StartWork datetime, " +
             "EndWork datetime")]
 
-    public static IEnumerable ctvf_GetWorkTime2Shifts(int OrgUnit, DateTime DateWorkDay)
+    public static IEnumerable ctvf_GetWorkTime2Shifts(int OrgUnit, DateTime dateWorkDay)
     {
         List<WorkTime> workTimes = new List<WorkTime>();
 
@@ -24,19 +25,20 @@ public partial class UserDefinedFunctions
             con.Open();
             string cmdText = @"SELECT [OrgUnit]
                                     , org.[Title]
-                                    ,org.Crew
-                                    ,wdays.DateWorkDay
-                                    ,wdays.ShiftId
-                                    ,areas.IdArea
-                                    ,[InputData].[udf_GetStartTimeForShift] ([OrgUnit], wdays.ShiftId) as timeStart
+                                    , org.Crew
+                                    , wdays.DateWorkDay
+                                    , wdays.ShiftId
+                                    , areas.IdArea
+                                    , [InputData].[udf_GetStartTimeForShift] ([OrgUnit], wdays.ShiftId, wdays.DateWorkDay) as timeStart
                             FROM       [SupportData].[OrgUnit] as org
                             INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
                             CROSS JOIN [SupportData].[WorkDays] as wdays " +
-                     $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = @date and ShiftId = [InputData].[udf_GetShiftNumber](OrgUnit, wdays.DateWorkDay)";
+                     $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = @date" +
+                     $" and ShiftId = [InputData].[udf_GetShiftNumber](OrgUnit, wdays.DateWorkDay)";
 
             SqlCommand comm = new SqlCommand(cmdText, con);
             comm.Parameters.Add("@date", SqlDbType.Date);
-            comm.Parameters["@date"].Value = DateWorkDay.Date;
+            comm.Parameters["@date"].Value = dateWorkDay.Date;
 
             SqlDataReader reader;
             ShiftSetting shiftSetting = null;
@@ -77,22 +79,27 @@ public partial class UserDefinedFunctions
                 else
                     throw new Exception(
                             "Выборка настройки времени начала смены для OrgUnit + DateWorkDay вернула больше одной строки! " + Environment.NewLine +
-                             $"OrgUnit:{OrgUnit}, DateWorkDay:{DateWorkDay}");
+                             $"OrgUnit:{OrgUnit}, DateWorkDay:{dateWorkDay}");
             }
 
             if (shiftSetting == null)
                 return workTimes;
 
 
-            cmdText = @"SELECT [IdCicle]
-                          ,[AreaId]
-                          ,[DurationWork]
-                          ,[DurationOff]
-                          ,[ShiftId]
-                      FROM [SupportData].[Cicle]" +
-              $"  WHERE AreaId = {shiftSetting.AreaId} and ShiftId = {shiftSetting.ShiftId}";
+            cmdText = @"SELECT     [IdCicle]
+                                  ,[AreaId]
+                                  ,[DurationWork]
+                                  ,[DurationOff]
+                                  ,[ShiftId]
+                                  ,[StartUseFrom]
+                            FROM       [SupportData].[Cicle] as cc
+                            INNER JOIN [SupportData].[CicleUseFrom] as cuf ON cuf.[CicleId] = cc.IdCicle" +
+                       $@"  WHERE AreaId = {shiftSetting.AreaId} AND ShiftId = {shiftSetting.ShiftId} AND [StartUseFrom] <= @date
+                            ORDER BY StartUseFrom DESC";
 
             comm = new SqlCommand(cmdText, con);
+            comm.Parameters.Add("@date", SqlDbType.Date);
+            comm.Parameters["@date"].Value = dateWorkDay.Date;
             reader.Close();
 
             try
@@ -115,7 +122,8 @@ public partial class UserDefinedFunctions
                         , Convert.ToInt32(reader[1])
                         , TimeSpan.Parse(reader[2].ToString())
                         , TimeSpan.Parse(reader[3].ToString())
-                        , Convert.ToInt32(reader[4]));
+                        , Convert.ToInt32(reader[4])
+                        , Convert.ToDateTime(reader[5]));
                 }
                 catch
                 {
@@ -127,14 +135,12 @@ public partial class UserDefinedFunctions
 
 
             var timeStart = shiftSetting.DateWorkDay + shiftSetting.TimeStart;
-            foreach (var c in cicles)
+            var max = cicles.Max(x => x.CicleDate);
+            foreach (var c in cicles.Where(x => x.CicleDate == max))
             {
                 var wt = new WorkTime(timeStart, timeStart + c.DurationOn);
-           
                 timeStart = wt.EndWork + c.DurationOff;
                 workTimes.Add(wt);
-
-                Console.WriteLine(wt.StartWork + "   " + wt.EndWork);
             }
         }
         return workTimes;

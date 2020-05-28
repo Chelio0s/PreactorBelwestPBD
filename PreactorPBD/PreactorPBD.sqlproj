@@ -321,7 +321,9 @@
     <Build Include="Users\Login_kovalkov.sql" />
     <Build Include="Users\ServerRoleMembership_kovalkov.sql" />
     <Build Include="Triggers\tgr_UpdateSequenceOperation.sql" />
-    <Build Include="Triggers\tgr_Operation_DELETE.sql" />
+    <Build Include="Triggers\tgr_DeleteOperation.sql" />
+    <Build Include="Tables\SupportData\CicleUseFrom.sql" />
+    <Build Include="Tables\SupportData\SettingShiftUseFrom.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

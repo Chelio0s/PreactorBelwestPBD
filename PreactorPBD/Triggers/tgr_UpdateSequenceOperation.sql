@@ -1,4 +1,4 @@
-﻿CREATE TRIGGER [tgr_UpdateSequenceOperation]
+﻿CREATE TRIGGER [SupportData].[tgr_UpdateSequenceOperation]
 ON [SupportData].[SequenceOperations] AFTER UPDATE
 AS
 BEGIN TRANSACTION
