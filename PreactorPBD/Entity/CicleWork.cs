@@ -7,7 +7,13 @@ namespace PreactorPBD
     /// </summary>
     readonly struct CicleWork
     {
-        public CicleWork(int idCicle, int shiftId, TimeSpan durationOn, TimeSpan durationOff, int areaId, DateTime cicleDate)
+        public CicleWork( int idCicle
+                        , int shiftId 
+                        , TimeSpan durationOn
+                        , TimeSpan durationOff
+                        , int areaId
+                        , DateTime cicleDate
+                        , int? specificOrgUnit)
         {
             IdCicle = idCicle;
             ShiftId = shiftId;
@@ -15,6 +21,7 @@ namespace PreactorPBD
             DurationOff = durationOff;
             AreaId = areaId;
             CicleDate = cicleDate;
+            SpecificOrgUnit = specificOrgUnit;
         }
         public int IdCicle { get;  }
         public int ShiftId { get; }
@@ -22,5 +29,6 @@ namespace PreactorPBD
         public TimeSpan DurationOff { get;  }
         public int AreaId { get;  }
         public DateTime CicleDate { get; }
+        public int? SpecificOrgUnit { get; }
     }
 }

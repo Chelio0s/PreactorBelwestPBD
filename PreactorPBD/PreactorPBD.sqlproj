@@ -326,6 +326,9 @@
     <Build Include="Tables\SupportData\SettingShiftUseFrom.sql" />
     <Build Include="Triggers\tgr_UpdateCicleUseFrom.sql" />
     <Build Include="Triggers\tgr_UpdateSettingsShiftUseFrom.sql" />
+    <Build Include="Views\VI_SttingShiftWithDateStart.sql" />
+    <Build Include="Views\VI_CicleWithDateStart.sql" />
+    <Build Include="Triggers\tgr_UpdateSettingShift.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

@@ -861,4 +861,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="StartUseFrom" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="bb727903-06e4-44dd-a656-6275961ee956" ChangeDateTime="05/28/2020 13:45:21">
+    <Property Name="ElementName" Value="[SupportData].[CicleUseFrom].[Cpe]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[CicleUseFrom]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SpecificOrgUnit" />
+  </Operation>
 </Operations>
