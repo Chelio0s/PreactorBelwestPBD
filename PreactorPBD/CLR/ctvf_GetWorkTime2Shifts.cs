@@ -16,7 +16,7 @@ public partial class UserDefinedFunctions
             "StartWork datetime, " +
             "EndWork datetime")]
 
-    public static IEnumerable ctvf_GetWorkTime2Shifts(int OrgUnit, DateTime dateWorkDay)
+    public static IEnumerable ctvf_GetWorkTime2Shifts(int orgUnit, DateTime dateWorkDay)
     {
         List<WorkTime> workTimes = new List<WorkTime>();
 
@@ -33,7 +33,7 @@ public partial class UserDefinedFunctions
                             FROM       [SupportData].[OrgUnit] as org
                             INNER JOIN [InputData].[Areas] as areas ON areas.IdArea = org.AreaId
                             CROSS JOIN [SupportData].[WorkDays] as wdays " +
-                     $" WHERE OrgUnit = {OrgUnit} and DateWorkDay = @date" +
+                     $" WHERE OrgUnit = {orgUnit} and DateWorkDay = @date" +
                      $" and ShiftId = [InputData].[udf_GetShiftNumber](OrgUnit, wdays.DateWorkDay)";
 
             SqlCommand comm = new SqlCommand(cmdText, con);
@@ -79,23 +79,25 @@ public partial class UserDefinedFunctions
                 else
                     throw new Exception(
                             "Выборка настройки времени начала смены для OrgUnit + DateWorkDay вернула больше одной строки! " + Environment.NewLine +
-                             $"OrgUnit:{OrgUnit}, DateWorkDay:{dateWorkDay}");
+                             $"OrgUnit:{orgUnit}, DateWorkDay:{dateWorkDay}");
             }
 
             if (shiftSetting == null)
                 return workTimes;
 
 
-            cmdText = @"SELECT     [IdCicle]
+            cmdText = $@"SELECT    [IdCicle]
                                   ,[AreaId]
                                   ,[DurationWork]
                                   ,[DurationOff]
                                   ,[ShiftId]
                                   ,[StartUseFrom]
+								  ,[SpecificOrgUnit]
                             FROM       [SupportData].[Cicle] as cc
-                            INNER JOIN [SupportData].[CicleUseFrom] as cuf ON cuf.[CicleId] = cc.IdCicle" +
-                       $@"  WHERE AreaId = {shiftSetting.AreaId} AND ShiftId = {shiftSetting.ShiftId} AND [StartUseFrom] <= @date
-                            ORDER BY StartUseFrom DESC";
+                            INNER JOIN [SupportData].[CicleUseFrom] as cuf ON cuf.[CicleId] = cc.IdCicle
+                            WHERE AreaId = {shiftSetting.AreaId} AND ShiftId = {shiftSetting.ShiftId} AND [StartUseFrom] <= @date 
+						    AND ([SpecificOrgUnit] = {orgUnit} OR [SpecificOrgUnit] is NULL)
+                            ORDER BY [SpecificOrgUnit] desc, StartUseFrom DESC";
 
             comm = new SqlCommand(cmdText, con);
             comm.Parameters.Add("@date", SqlDbType.Date);
@@ -118,12 +120,23 @@ public partial class UserDefinedFunctions
                 var cw = new CicleWork();
                 try
                 {
-                    cw = new CicleWork(Convert.ToInt32(reader[0])
+                    if (int.TryParse(reader[6].ToString(), out var xResult))
+                    {
+                        cw = new CicleWork(Convert.ToInt32(reader[0])
+                            , Convert.ToInt32(reader[1])
+                            , TimeSpan.Parse(reader[2].ToString())
+                            , TimeSpan.Parse(reader[3].ToString())
+                            , Convert.ToInt32(reader[4])
+                            , Convert.ToDateTime(reader[5])
+                            , xResult);
+                    }
+                    else cw = new CicleWork(Convert.ToInt32(reader[0])
                         , Convert.ToInt32(reader[1])
                         , TimeSpan.Parse(reader[2].ToString())
                         , TimeSpan.Parse(reader[3].ToString())
                         , Convert.ToInt32(reader[4])
-                        , Convert.ToDateTime(reader[5]));
+                        , Convert.ToDateTime(reader[5])
+                        , null);
                 }
                 catch
                 {
@@ -135,12 +148,26 @@ public partial class UserDefinedFunctions
 
 
             var timeStart = shiftSetting.DateWorkDay + shiftSetting.TimeStart;
-            var max = cicles.Max(x => x.CicleDate);
-            foreach (var c in cicles.Where(x => x.CicleDate == max))
+            var max = cicles.First().CicleDate;
+            if (cicles.First().SpecificOrgUnit != null)
             {
-                var wt = new WorkTime(timeStart, timeStart + c.DurationOn);
-                timeStart = wt.EndWork + c.DurationOff;
-                workTimes.Add(wt);
+                foreach (var c in cicles.Where(x => x.CicleDate == max
+                                                    && x.SpecificOrgUnit != null))
+                {
+                    var wt = new WorkTime(timeStart, timeStart + c.DurationOn);
+                    timeStart = wt.EndWork + c.DurationOff;
+                    workTimes.Add(wt);
+                }
+            }
+            else
+            {
+                foreach (var c in cicles.Where(x => x.CicleDate == max
+                                                    && x.SpecificOrgUnit == null))
+                {
+                    var wt = new WorkTime(timeStart, timeStart + c.DurationOn);
+                    timeStart = wt.EndWork + c.DurationOff;
+                    workTimes.Add(wt);
+                }
             }
         }
         return workTimes;

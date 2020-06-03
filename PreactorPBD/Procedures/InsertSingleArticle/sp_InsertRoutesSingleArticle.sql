@@ -73,7 +73,10 @@ INSERT INTO [InputData].[Rout]
   INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
   LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
   WHERE sp.SimpleProductId in (1) 
-  AND childKTOP IN (125,209,226,219,126) AND cc.RuleIsParent = 0 
+  AND ((parentKTOP  IN (125,127,209,226,217,219,126) 
+		AND cc.RuleIsParent = 1) OR 
+		(childKTOP  IN (125,127,209,226,217,219,126) 
+		AND cc.RuleIsParent = 0))
   --AND visp.IsComplex = 1 Закоментил потому что разделять ТМ все же надо
   AND visp.TitleArticle = @article
 
@@ -97,8 +100,10 @@ INSERT INTO [InputData].[Rout]
   INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
   LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
   WHERE sp.SimpleProductId in (1) 
-  AND childKTOP NOT IN (125,209,226,219,126) 
-  AND cc.RuleIsParent = 1 
+  AND ((parentKTOP NOT IN (125,127,209,226,217,219,126) 
+		AND cc.RuleIsParent = 1) OR 
+		(childKTOP NOT IN (125,127,209,226,217,219,126) 
+		AND cc.RuleIsParent = 0))
   --AND visp.IsCutters = 1 Закоментил потому что разделять ТМ все же надо
   AND visp.TitleArticle = @article
   
@@ -214,7 +219,16 @@ INSERT INTO [InputData].[Rout]
   FROM [InputData].[SemiProducts] as sp
   INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
   INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
-  WHERE SimpleProductId in (19)
+  WHERE SimpleProductId in 
+  ( 30        -- - Формованная вкладная стелька
+  , 1029      -- - Подошва
+  , 1030      -- - Простил
+  , 1031      -- - Подкаблучник
+  , 29        -- - Стойка
+  , 21        -- - Задник
+  , 1032      -- - Вкладыши 5 цех
+  , 19        -- - Стелька вкл. 
+  )
   AND a.Title = @article
 
   -- создание ТМ для 6 7 8 9 цехов (стандартные ТМ) т.е. такие ТМ есть в РКВ
@@ -254,7 +268,7 @@ print 'Создание авто переходящих маршрутов'
   ,NULL
   ,8
   ,1
-  ,R.IdRout
+  ,FIRST_VALUE(R.IdRout) OVER(PARTITION BY 'Автоматический ТМ для '+ sp.Title + ' цех 9/1' ORDER BY SemiProductId)
   FROM [InputData].[Rout]					AS R  
   INNER JOIN [InputData].[SemiProducts]		AS SP ON SP.IdSemiProduct = R.SemiProductId
   INNER JOIN [InputData].[Nomenclature]     AS n  ON n.IdNomenclature = sp.NomenclatureID
