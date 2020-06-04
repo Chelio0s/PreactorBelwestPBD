@@ -4,7 +4,7 @@ AS
  	DELETE [InputData].[Operations]
     FROM [InputData].[Operations]           AS op
     INNER JOIN [InputData].[Rout]           AS r  ON r.IdRout = op.RoutId
-    INNER JOIN [InputData].[SemiProducts]   AS sp ON sp.SimpleProductId = r.SemiProductId
+    INNER JOIN [InputData].[SemiProducts]   AS sp ON sp.IdSemiProduct = r.SemiProductId
     INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
     INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
     WHERE a.Title = @article
@@ -533,7 +533,7 @@ SELECT DISTINCT
  		SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
-		,t.REL
+		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
 		FROM @table							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
