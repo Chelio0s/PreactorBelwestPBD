@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperationsInResources]
 AS
+
 DELETE FROM [InputData].[OperationInResource]
 INSERT INTO [InputData].[OperationInResource]
            ([OperationId]
@@ -8,6 +9,6 @@ INSERT INTO [InputData].[OperationInResource]
   SELECT DISTINCT 
       IdOperation
 	  ,IdResource
-      ,[NORMATIME]
+      ,MAX([NORMATIME]) OVER(PARTITION BY IdOperation ,IdResource)
   FROM [InputData].[VI_OperationsFromSDBWithConcreetResources]								 
 RETURN 0

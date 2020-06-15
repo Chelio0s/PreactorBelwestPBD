@@ -329,6 +329,7 @@
     <Build Include="Views\VI_SttingShiftWithDateStart.sql" />
     <Build Include="Views\VI_CicleWithDateStart.sql" />
     <Build Include="Triggers\tgr_UpdateSettingShift.sql" />
+    <Build Include="Views\VI_CHECK_OperationWithoutResources.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

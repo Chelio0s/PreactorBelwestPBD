@@ -6,5 +6,6 @@
     CONSTRAINT [FK_EntrySimpleProduct_ToSimpleProduct1] FOREIGN KEY (SimpleProductId) 
     REFERENCES [SupportData].[SimpleProduct]([IdSimpleProduct]), 
     CONSTRAINT [FK_EntrySimpleProduct_ToSimpleProduct2] FOREIGN KEY (SimpleProductIdChild) 
-    REFERENCES [SupportData].[SimpleProduct]([IdSimpleProduct])
+    REFERENCES [SupportData].[SimpleProduct]([IdSimpleProduct]),
+    CONSTRAINT [CK_NotEqualsSimpleProductId] CHECK (SimpleProductId <> SimpleProductIdChild)
 )
