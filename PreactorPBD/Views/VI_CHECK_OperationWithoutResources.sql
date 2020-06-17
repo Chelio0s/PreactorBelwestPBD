@@ -4,6 +4,10 @@ O.IdOperation
 ,O.Title
 ,O.RoutId
 ,O.Code	
-FROM InputData.Operations				AS O
-LEFT JOIN InputData.OperationInResource AS OIR ON (OIR.OperationId=O.IdOperation)
+,VI.TitleArticle
+,KT.KTOP
+FROM [InputData].[Operations]					AS O
+LEFT JOIN  [InputData].[OperationInResource]	AS OIR	ON OIR.OperationId=O.IdOperation
+INNER JOIN [InputData].[VI_RoutesWithArticle]	AS VI	ON VI.IdRout = O.RoutId
+LEFT JOIN  [InputData].[OperationWithKTOP]		AS KT	ON KT.OperationId = O.IdOperation
 WHERE OIR.IdOpInResource is NULL

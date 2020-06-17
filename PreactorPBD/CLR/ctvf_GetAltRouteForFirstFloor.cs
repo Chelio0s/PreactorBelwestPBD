@@ -33,8 +33,7 @@ public partial class UserDefinedFunctions
     public static IEnumerable ctvf_GetAltRouteForFirstFloor(int idRoute)
     {
         string Article = null;
-        using (SqlConnection sqlConnection = new SqlConnection("context connection=true")
-        )
+        using (SqlConnection sqlConnection = new SqlConnection("context connection=true"))
         {
             SqlCommand command = new SqlCommand(
                 @"SELECT [IdRule]

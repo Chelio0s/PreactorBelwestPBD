@@ -2,9 +2,11 @@
 
 AS
 
+PRINT 'DELETE FROM [InputData].[Rout] '
 DELETE FROM [InputData].[Rout]
 
 --Инсерт ТМ с правилами для заготовки цех 2 
+PRINT 'Инсерт ТМ с правилами для заготовки цех 2 '
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -24,6 +26,7 @@ SELECT DISTINCT
   WHERE sp.SimpleProductId in (18,19)
 
   --Инсерт ТМ всех остальных для 2 цеха
+  PRINT 'Инсерт ТМ всех остальных для 2 цеха '
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -39,6 +42,7 @@ SELECT DISTINCT
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (18, 19)
 
 --ТМ с правилами для 1 цеха - РЕЗАКИ
+PRINT 'ТМ с правилами для 1 цеха - РЕЗАКИ '
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -65,6 +69,7 @@ SELECT DISTINCT
 		AND cc.RuleIsParent = 0))
 
   --ТМ с правилами для 1 цеха - КОМЛПЕКС
+  PRINT 'ТМ с правилами для 1 цеха - КОМЛПЕКС '
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -92,6 +97,7 @@ SELECT DISTINCT
   
 
   --Инсерт ТМ для кроя для 1 цеха для остальных артикулов, у которых нет ТМ с правилами
+  PRINT 'Инсерт ТМ для кроя для 1 цеха для остальных артикулов, у которых нет ТМ с правилами'
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -108,7 +114,8 @@ SELECT DISTINCT
 
  
 
-   --Инсерт ТМ всех остальных ПФ для других цехов
+--Инсерт ТМ всех остальных ПФ для других цехов
+PRINT 'Инсерт ТМ всех остальных ПФ для других цехов'
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -124,6 +131,7 @@ INSERT INTO [InputData].[Rout]
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (2,3,4,5,6,7,8,9,10,11,12,13,14,15,17)
 
   -- Стандартный ТМ для 9/1 - тот что есть в РКВ
+  PRINT 'Стандартный ТМ для 9/1 - тот что есть в РКВ'
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -140,6 +148,8 @@ INSERT INTO [InputData].[Rout]
   INNER JOIN [InputData].[Areas] as area ON area.Code = vi.Code COLLATE Cyrillic_General_BIN
   WHERE vi.Code in ('OP09') AND vi.SimpleProductId in (1,2,3,4,5,6,7,8,9,10,11,12,13,15,17) AND IdArea > 8
 
+  -- Стандартный ТМ 3 цеха
+  PRINT 'Стандартный ТМ 3 цеха'
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -154,6 +164,8 @@ INSERT INTO [InputData].[Rout]
   FROM [InputData].[SemiProducts] as sp
   WHERE  SimpleProductId in (20)
 
+  -- Стандартный ТМ 4 цеха
+  PRINT 'Стандартный ТМ 4 цеха'
     INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -168,6 +180,8 @@ INSERT INTO [InputData].[Rout]
   FROM [InputData].[SemiProducts] as sp
   WHERE SimpleProductId in (20)
 
+  -- Стандартный ТМ 5 цеха
+  PRINT 'Стандартный ТМ 5 цеха'
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -192,6 +206,7 @@ INSERT INTO [InputData].[Rout]
   )
 
   -- создание ТМ для 6 7 8 9 цехов (стандартные ТМ) т.е. такие ТМ есть в РКВ
+  PRINT 'создание ТМ для 6 7 8 9 цехов'
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -213,6 +228,7 @@ print 'Создание авто переходящих маршрутов'
 ----Маппинг маршрутов для других цехов
 
  -- АВТО ТМ для 9/1  - МАППИНГ
+  print 'АВТО ТМ для 9/1  - МАППИНГ'
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -238,6 +254,7 @@ print 'Создание авто переходящих маршрутов'
  
 
   --Создаем маршруты для 6/1 для ПФ 2 цеха
+print 'Создаем маршруты для 6/1 для ПФ 2 цеха'
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -274,6 +291,7 @@ INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = t.SemiProductI
 WHERE  ICan = 1
 
 --Создаем маршруты для 7 для ПФ 2 цеха
+print 'Создаем маршруты для 7 для ПФ 2 цеха'
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -311,6 +329,7 @@ WHERE  ICan = 1
 
 
 --Создаем маршруты для 7 для ПФ 2 цеха
+print 'Создаем маршруты для 7 для ПФ 2 цеха'
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -348,6 +367,7 @@ WHERE  ICan = 1
 
 
 --Создаем маршруты для 9/2 для ПФ 2 цеха
+print 'Создаем маршруты для 9/2 для ПФ 2 цеха'
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -384,6 +404,7 @@ INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = t.SemiProductI
 WHERE  ICan = 1
 
 --Удаляем лишние не согласованные между собой автомаршруты
+print 'Удаляем лишние не согласованные между собой автомаршруты'
 DELETE [InputData].[Rout] 
 FROM [InputData].[Rout]	as rout
 INNER JOIN [InputData].[VI_SemiProductsWithArticles]		as visp ON visp.IdSemiProduct = rout.SemiProductId

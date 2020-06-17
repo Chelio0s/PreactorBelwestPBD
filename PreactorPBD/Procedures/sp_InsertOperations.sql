@@ -424,26 +424,17 @@ SELECT DISTINCT
  -- -- Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)
   DELETE FROM [SupportData].[TempOperationForMapping]
   INSERT INTO [SupportData].[TempOperationForMapping]
-SELECT DISTINCT
-	  R.IdRout
-	  ,[InputData].[udf_GetTitleOperation](FN.KTOPChild, SO.Title)					AS TitleOperation
-      ,R.SemiProductId
-      ,FN.KPROF																		AS [idProfesson]																
-	  ,FN.CategoryOperation
-	  ,AR.Code
-	  ,FN.KTOPChild
-	  ,FN.KOBChild
-	  ,FN.NormaTimeNew
-	  ,FN.REL
-  FROM [InputData].[Rout]															AS R
-  CROSS APPLY [InputData].[ctvf_GetAltRouteForSecondFloor](ParentRouteId, Areaid)	AS FN
-  INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = FN.KTOPChild
-  RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = R.SemiProductId
-																							AND FAS.KTOPN = FN.KTOPParent
-  INNER JOIN  [InputData].[Areas]													AS AR	ON AR.IdArea = R.AreaId
-  WHERE ParentRouteId IS NOT NULL 
-  AND R.AreaId IN (9,13,14,20)
-  ORDER BY R.IdRout
+  SELECT [IdRout]
+      ,[TitleOperation]
+      ,[SemiProductId]
+      ,[idProfesson]
+      ,[CategoryOperation]
+      ,[Code]
+      ,[KTOPChild]
+      ,[KOBChild]
+      ,[NormaTimeNew]
+      ,[REL]
+  FROM [InputData].[VI_OperationsAfterMapping]
 
  -- залив финала  6/1, 7/1, 8/1, 9/2 цех переходящие маршруты
 	INSERT INTO [InputData].[Operations]
