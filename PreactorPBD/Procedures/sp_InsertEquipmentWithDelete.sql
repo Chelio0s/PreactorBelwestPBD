@@ -1,7 +1,20 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertEquipmentWithDelete]
 AS
 	DELETE FROM [InputData].[Resources]
-	EXEC [InputData].[pc_InsertEquipmentIntoPreactorDB]
+    INSERT INTO [InputData].[Resources]
+           ([IdResource]
+           ,[Title]
+           ,[TitleWorkPlace]
+           ,[DepartmentId]
+           ,[KOB])
+    SELECT ROW_NUMBER() OVER(ORDER BY KPLOT, WP) as Id
+    ,  CONCAT ( mob, ' : Уч-ок ',KPLOT  ,' : Раб. место: ', WP )   as Title  
+    ,WP
+    ,KPLOT
+    ,KOB
+    FROM OPENQUERY(MPU,'SELECT KPLOT, WP, bind.KOB, obor.mob FROM belwpr.ri_bind_ob bind 
+                INNER JOIN belwpr.st_obor obor ON bind.KOB = obor.KOB
+				ORDER BY KPLOT, WP')
 
 	INSERT INTO [InputData].[Resources]
            ([IdResource]

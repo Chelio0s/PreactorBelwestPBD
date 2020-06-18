@@ -353,8 +353,6 @@
     <Compile Include="CLR\pc_Select_Oralce_MPU.cs" />
     <Compile Include="CLR\ctvf_GetMkz_Art.cs" />
     <Compile Include="CLR\ctvf_GetSizes.cs" />
-    <Compile Include="CLR\pc_InsertEquipmentIntoPreactorDB.cs" />
-    <Compile Include="Entity\Equipment.cs" />
     <Compile Include="Entity\OracleSetting.cs" />
     <Compile Include="Entity\ShiftSetting.cs" />
     <Compile Include="Entity\CicleWork.cs" />

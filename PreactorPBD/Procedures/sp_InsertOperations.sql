@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperations]
 AS
 	--DELETE FROM [InputData].[OperationWithKTOP]
+	PRINT 'DELETE FROM [InputData].[OperationWithKTOP]'
 	DELETE FROM  [InputData].[Operations]
 		DECLARE @table as table(idRout int, 
 		TitleOperPr nvarchar(99), 
@@ -16,6 +17,7 @@ AS
 		IsMappingRule bit)
 
   --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
+  PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
   INSERT INTO @table
   SELECT DISTINCT 	
 	  r.IdRout
@@ -35,6 +37,7 @@ AS
   AND code = 'OP01' and r.AreaId = 3
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 	--Все для 1 цеха (там операции строго сортированы по правилам)
+	PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'
 	INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -54,6 +57,7 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все для 2 цеха с правилами (комбинациями), сортировка по NPP
+  PRINT 'Все для 2 цеха с правилами (комбинациями), сортировка по NPP'
   INSERT INTO @table
   SELECT DISTINCT 	
 	  r.IdRout
@@ -73,6 +77,7 @@ AS
   AND code = 'OP02' and r.AreaId = 4
   ORDER BY r.IdRout, NPP
   --Все для 2 цеха без правил, сортировка по NPP
+   PRINT 'Все для 2 цеха без правил, сортировка по NPP'
     INSERT INTO @table
     SELECT DISTINCT 	 
 	  r.IdRout
@@ -92,6 +97,7 @@ AS
   ORDER BY r.IdRout, NPP
 
 --Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
+PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами '
 	INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -114,6 +120,7 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   -- 5 цех
+  PRINT '5 цех'
   INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -133,6 +140,7 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
+  PRINT 'Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"'
   DECLARE @JumpSemiProducts as table (Article nvarchar(99)
 									  , IdMergeRoutes int
 									  , IdSemiProduct int
@@ -169,6 +177,7 @@ AS
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ   3 и 4
+  PRINT 'Залив прыгающих ТМ   3 и 4'
   INSERT INTO @table
   SELECT DISTINCT
 	  r.IdRout
@@ -188,6 +197,7 @@ AS
   CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	as vi
 
   --Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами 
+	PRINT 'Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами'
 	INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -208,7 +218,10 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
     --Чистим таблицу от прошлых прыгающих ТМок
+  PRINT 'Чистим таблицу от прошлых прыгающих ТМок'
   DELETE FROM @JumpSemiProducts
+
+  PRINT 'Выборка таких маршрутов 9/1 цеха, которые могут "прыгать из цеха в цех"'
    --Выборка таких маршрутов 9/1 цеха, которые могут "прыгать из цеха в цех"
   INSERT INTO @JumpSemiProducts
   SELECT
@@ -237,6 +250,7 @@ AS
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ 
+  PRINT 'Залив прыгающих ТМ '
   INSERT INTO @table
   SELECT DISTINCT
 	  r.IdRout
@@ -257,6 +271,7 @@ AS
 
 
   --Все для 9/1 цеха кроме маршрутов с Jump
+  PRINT 'Все для 9/1 цеха кроме маршрутов с Jump'
 	INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -277,6 +292,7 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все маршруты для 9/1 для которых нет операций ТМ в базе (пробуем создать операции автоматом)
+  PRINT 'Все маршруты для 9/1 для которых нет операций ТМ в базе (пробуем создать операции автоматом)'
   DECLARE @routes AS TABLE (IdRoute int, Article nvarchar(99))
   INSERT INTO @routes
   SELECT DISTINCT
@@ -290,35 +306,30 @@ AS
 
  
   -- Маппим 1 в 9/1
+  PRINT 'Маппим 1 в 9/1'
   INSERT INTO @table
-  SELECT  DISTINCT
+    SELECT  DISTINCT
 	   IdRout
-	  ,[InputData].[udf_GetTitleOperation] (KTOPChild, so.Title) as [PreactorOperation]
-      ,[IdSemiProduct]
-      ,[KPROF]
-      ,4 as [TypeTime]
-	  ,CategoryOperation
-	  ,so.OperOrder
-	  ,'OP09'										                              as Code
+	  ,[InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)						AS TitleOperation
+      ,SemiProductId
+      ,IdProfesson																	AS [idProfesson]
+	  ,4																			AS [TypeTime]																	
+	  ,MAP.CategoryOperation
+      ,SO.OperOrder
+	  ,MAP.Code								                              as Code
 	  ,ROW_NUMBER() over(partition by [IdSemiProduct] order by so.OperOrder) * 10 as NPP
 	  ,KTOPChild
-	  ,ctvf.REL
-	  ,1 -- 1 - значит это автоматически замапленные ТМ
-  FROM @routes
-  CROSS APPLY [InputData].[ctvf_GetAltRouteForFirstFloor](IdRoute) as ctvf
-  INNER JOIN [SupportData].[SequenceOperations] as SO ON so.KTOP = KTOPChild
-  GROUP BY IdRout
-	  ,[InputData].[udf_GetTitleOperation] (KTOPChild, so.Title)
-      ,[IdSemiProduct]
-      ,[KPROF]
-	  ,CategoryOperation
-	  ,so.OperOrder
-	  ,KTOPChild
-	  ,ctvf.IdRule
-	  ,ctvf.REL
-   ORDER BY IdRout, so.OperOrder
+	  ,MAP.REL
+	  ,1
+  FROM [InputData].[VI_OperationsAfterMapping]										AS MAP
+
+  INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = MAP.KTOPChild
+  RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = SemiProductId
+																							AND FAS.KTOPN =  KTOPParent
+  WHERE   IdArea IN (8)
 
 	--Залив финала 1 цех
+	PRINT 'Залив финала 1 цех'
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -350,7 +361,8 @@ AS
 		,CategoryOperation
 		,Code
 
---Залив финала 1 c jump, и 2 цех и 6/1, 7/1, 8/1, 9/2 цех и 5 цех
+	--Залив финала 1 c jump, и 2 цех и 6/1, 7/1, 8/1, 9/2 цех и 5 цех
+	PRINT 'Залив финала 1 c jump, и 2 цех и 6/1, 7/1, 8/1, 9/2 цех и 5 цех'
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -378,6 +390,7 @@ AS
 		ORDER BY idRout, NPP
 
 		--Заливаем в КТОПы		TitleOperPr
+		PRINT 'Заливаем в КТОПы		TitleOperPr'
 		INSERT INTO [InputData].[OperationWithKTOP]
  		SELECT DISTINCT
 		oper.IdOperation
@@ -397,31 +410,30 @@ AS
 	TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
 	--Заливаем в нее данные для переходящих маршрутов
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
-INSERT INTO @table
-SELECT DISTINCT
-      R.IdRout
-	  ,[InputData].[udf_GetTitleOperation](FN.KTOPChild, SO.Title)					AS TitleOperation
-      ,R.SemiProductId
-      ,FN.KPROF																		AS [idProfesson]
+ INSERT INTO @table
+ SELECT DISTINCT
+       IdRout
+	  ,[InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)						AS TitleOperation
+      ,SemiProductId
+      ,IdProfesson																	AS [idProfesson]
 	  ,4																			AS [TypeTime]																	
-	  ,FN.CategoryOperation
+	  ,MAP.CategoryOperation
       ,SO.OperOrder
-	  ,AR.Code
-	  ,MIN(NPP) OVER(PARTITION BY  R.IdRout, [InputData].[udf_GetTitleOperation](FN.KTOPChild, SO.Title)) AS NPP
-	  ,FN.KTOPChild
-	  ,fn.REL
+	  ,MAP.Code
+	  ,MIN(NPP) OVER(PARTITION BY  IdRout, [InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)) AS NPP
+	  ,KTOPChild
+	  ,MAP.REL
 	  ,0
-  FROM [InputData].[Rout]															AS R
-  CROSS APPLY [InputData].[ctvf_GetAltRouteForSecondFloor](ParentRouteId, Areaid)	AS FN
-  INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = FN.KTOPChild
-  RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = R.SemiProductId
-																							AND FAS.KTOPN = FN.KTOPParent
-  INNER JOIN  [InputData].[Areas]													AS AR	ON AR.IdArea = R.AreaId
-  WHERE ParentRouteId IS NOT NULL 
-  AND R.AreaId IN (9,13,14,20)
+  FROM [InputData].[VI_OperationsAfterMapping]										AS MAP
+
+  INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = MAP.KTOPChild
+  RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = SemiProductId
+																							AND FAS.KTOPN =  KTOPParent
+  WHERE   IdArea IN (9,13,14,20)
  
 
  -- -- Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)
+  print 'Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)'
   DELETE FROM [SupportData].[TempOperationForMapping]
   INSERT INTO [SupportData].[TempOperationForMapping]
   SELECT [IdRout]
@@ -436,7 +448,8 @@ SELECT DISTINCT
       ,[REL]
   FROM [InputData].[VI_OperationsAfterMapping]
 
- -- залив финала  6/1, 7/1, 8/1, 9/2 цех переходящие маршруты
+    -- залив финала  6/1, 7/1, 8/1, 9/2 цех переходящие маршруты
+    print 'залив финала  6/1, 7/1, 8/1, 9/2 цех переходящие маршруты'
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -459,6 +472,7 @@ SELECT DISTINCT
 		ORDER BY idRout, NPP
 
 		----Залив Опер - ктоп
+		print 'Залив Опер - ктоп'
 		INSERT INTO OperationWithKTOP
  		SELECT DISTINCT
 		oper.IdOperation

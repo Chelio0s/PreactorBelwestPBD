@@ -7,6 +7,9 @@
       ,FN.KPROF																		AS [idProfesson]																
 	  ,FN.CategoryOperation
 	  ,AR.Code
+	  ,AR.IdArea
+	  ,FN.KTOPParent
+	  ,FN.KOBParent
 	  ,FN.KTOPChild
 	  ,FN.KOBChild
 	  ,FN.NormaTimeNew
@@ -25,6 +28,9 @@
       ,FN.KPROF																		AS [idProfesson]																
 	  ,FN.CategoryOperation
 	  ,AR.Code
+	  ,AR.IdArea
+	  ,FN.KTOPParent
+	  ,FN.KOBParent
 	  ,FN.KTOPChild
 	  ,FN.KOBChild
 	  ,FN.NormaTimeNew
