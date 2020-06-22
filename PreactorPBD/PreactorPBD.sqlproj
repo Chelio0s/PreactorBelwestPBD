@@ -332,6 +332,7 @@
     <Build Include="Views\VI_CHECK_OperationWithoutResources.sql" />
     <Build Include="Triggers\tgr_UpdateGroupKOB.sql" />
     <Build Include="Views\VI_OperationsAfterMapping.sql" />
+    <Build Include="Views\VI_CHECK_ResourcesWithoutGroups.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

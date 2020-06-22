@@ -29,5 +29,4 @@ AS
     ,IdDepartment
     ,-1
     FROM [InputData].[Departments]
-
 RETURN 0
