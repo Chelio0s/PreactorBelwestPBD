@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperationsSingleArticle]
 	@article nvarchar(99)
 AS
+	PRINT 'DELETE FROM [InputData].[Operations]'
  	DELETE [InputData].[Operations]
     FROM [InputData].[Operations]           AS op
     INNER JOIN [InputData].[Rout]           AS r  ON r.IdRout = op.RoutId
@@ -23,6 +24,7 @@ AS
 		IsMappingRule bit)
 
     --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
+	PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
   INSERT INTO @table
   SELECT DISTINCT 	
 	  r.IdRout
@@ -47,6 +49,7 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 	
 	--Все для 1 цеха (там операции строго сортированы по правилам)
+    PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'																											 
 	INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -69,6 +72,7 @@ AS
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все для 2 цеха с правилами (комбинациями), сортировка по NPP
+	PRINT 'Все для 2 цеха с правилами (комбинациями), сортировка по NPP'																											  
   INSERT INTO @table
   SELECT DISTINCT 	
 	  r.IdRout
@@ -136,6 +140,7 @@ AS
 
 
     -- 5 цех
+	  PRINT '5 цех'			  
   INSERT INTO @table
 	SELECT DISTINCT
 	  r.IdRout
@@ -323,32 +328,26 @@ AS
   INSERT INTO @table
   SELECT  DISTINCT
 	   IdRout
-	  ,[InputData].[udf_GetTitleOperation] (KTOPChild, so.Title) as [PreactorOperation]
-      ,[IdSemiProduct]
-      ,[KPROF]
+	  ,[InputData].[udf_GetTitleOperation] (KTOPChild, so.Title) as TitleOperation
+      ,SemiProductId
+      ,IdProfesson	AS [idProfesson]
       ,4 as [TypeTime]
-	  ,CategoryOperation
+	  ,MAP.CategoryOperation
 	  ,so.OperOrder
-	  ,'OP09'										                              as Code
+	  ,MAP.Code												                              as Code
 	  ,ROW_NUMBER() over(partition by [IdSemiProduct] order by so.OperOrder) * 10 as NPP
 	  ,KTOPChild
-	  ,ctvf.REL
+	  ,MAP.REL
 	  ,1 -- 1 - значит это автоматически замапленные ТМ
-  FROM @routes as r
-  CROSS APPLY [InputData].[ctvf_GetAltRouteForFirstFloor](IdRoute) as ctvf
-  INNER JOIN [SupportData].[SequenceOperations] as SO ON so.KTOP = KTOPChild
-  WHERE r.Article = @article
-  GROUP BY IdRout
-	  ,[InputData].[udf_GetTitleOperation] (KTOPChild, so.Title)
-      ,[IdSemiProduct]
-      ,[KPROF]
-	  ,CategoryOperation
-	  ,so.OperOrder
-	  ,KTOPChild
-	  ,ctvf.IdRule
-	  ,ctvf.REL
-   ORDER BY IdRout, so.OperOrder
-
+   FROM [InputData].[VI_OperationsAfterMapping]										AS MAP
+   INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = MAP.KTOPChild
+   RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = SemiProductId
+																							AND FAS.KTOPN =  KTOPParent
+   INNER JOIN [InputData].[SemiProducts] AS sp	ON sp.IdSemiProduct = MAP.SemiProductId
+  INNER JOIN [InputData].[Nomenclature] AS nom	ON nom.IdNomenclature = sp.NomenclatureID
+  INNER JOIN [InputData].[Article]		AS art	ON art.IdArticle = nom.ArticleId
+WHERE art.Title = @article  
+AND IdArea IN (8)
  --  --Все для 5 цеха  -- 5 цех пока выкидываем из балансировки
 	--INSERT INTO @table
 	--SELECT DISTINCT
@@ -369,6 +368,7 @@ AS
  -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
 	--Залив финала 1 цех
+		PRINT 'Залив финала 1 цех'								 
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -405,6 +405,7 @@ AS
 		,Code
 
 --Залив финала 1 c jump, и 2 цех и 6/1, 7/1, 8/1, 9/2 цех и 5 цех
+	PRINT 'Залив финала 1 c jump, и 2 цех и 6/1, 7/1, 8/1, 9/2 цех и 5 цех'																						   
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -433,11 +434,12 @@ AS
 		ORDER BY idRout, NPP
 
 		--Заливаем в КТОПы
+		PRINT 'Заливаем в КТОПы		TitleOperPr'											 
 		INSERT INTO [InputData].[OperationWithKTOP]
  		SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
-		,t.REL
+		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
 		FROM @table							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
@@ -459,54 +461,53 @@ AS
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
 INSERT INTO @table
 SELECT DISTINCT
-      R.IdRout
-	  ,[InputData].[udf_GetTitleOperation](FN.KTOPChild, SO.Title)					AS TitleOperation
-      ,R.SemiProductId
-      ,FN.KPROF																		AS [idProfesson]
+      IdRout
+	  ,[InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)					AS TitleOperation
+      ,SemiProductId
+      ,IdProfesson																	AS [idProfesson]
 	  ,4																			AS [TypeTime]																	
-	  ,FN.CategoryOperation
+	  ,MAP.CategoryOperation
       ,SO.OperOrder
-	  ,AR.Code
-	  ,MIN(NPP) OVER(PARTITION BY  R.IdRout, [InputData].[udf_GetTitleOperation](FN.KTOPChild, SO.Title)) AS NPP
-	  ,FN.KTOPChild
-	  ,fn.REL
+	  ,MAP.Code
+	  ,MIN(NPP) OVER(PARTITION BY  IdRout, [InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)) AS NPP
+	  ,KTOPChild
+	  ,MAP.REL
 	  ,0
-  FROM [InputData].[Rout]															AS R
-  CROSS APPLY [InputData].[ctvf_GetAltRouteForSecondFloor](ParentRouteId, Areaid)	AS FN
-  INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = FN.KTOPChild
-  RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = R.SemiProductId
-																							AND FAS.KTOPN = FN.KTOPParent
-  INNER JOIN  [InputData].[Areas]													AS AR	ON AR.IdArea = R.AreaId
-  WHERE ParentRouteId IS NOT NULL 
-  AND R.AreaId IN (9,13,14,20)
-  AND fas.Article = @article
+   FROM [InputData].[VI_OperationsAfterMapping]										AS MAP
+
+  INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = MAP.KTOPChild
+  RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = SemiProductId
+																							AND FAS.KTOPN =  KTOPParent													AS AR	ON AR.IdArea = R.AreaId
+		INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = MAP.SemiProductId
+		INNER JOIN [InputData].[Nomenclature] as n  ON n.IdNomenclature = sp.NomenclatureID
+		INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
+  WHERE IdArea IN (9,13,14,20)
+  AND art.Title = @article
 
  -- -- Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)
+	print 'Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)'																																																							
   DELETE FROM [SupportData].[TempOperationForMapping]
-  INSERT INTO [SupportData].[TempOperationForMapping]
-SELECT DISTINCT
-	  R.IdRout
-	  ,[InputData].[udf_GetTitleOperation](FN.KTOPChild, SO.Title)					AS TitleOperation
-      ,R.SemiProductId
-      ,FN.KPROF																		AS [idProfesson]																
-	  ,FN.CategoryOperation
-	  ,AR.Code
-	  ,FN.KTOPChild
-	  ,FN.KOBChild
-	  ,FN.NormaTimeNew
-	  ,FN.REL
-  FROM [InputData].[Rout]															AS R
-  CROSS APPLY [InputData].[ctvf_GetAltRouteForSecondFloor](ParentRouteId, Areaid)	AS FN
-  INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = FN.KTOPChild
-  RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = R.SemiProductId
-																							AND FAS.KTOPN = FN.KTOPParent
-  INNER JOIN  [InputData].[Areas]													AS AR	ON AR.IdArea = R.AreaId
-  WHERE ParentRouteId IS NOT NULL 
-  AND R.AreaId IN (9,13,14,20)
-  AND fas.Article = @article
-  ORDER BY R.IdRout
-
+   INSERT INTO [SupportData].[TempOperationForMapping]
+  SELECT [IdRout]
+		   
+      ,[TitleOperation]
+      ,[SemiProductId]
+      ,[idProfesson]
+      ,[CategoryOperation]
+      ,[Code]
+      ,[KTOPChild]
+      ,[KOBChild]
+      ,[NormaTimeNew]
+      ,[REL]																													   												
+  FROM [InputData].[VI_OperationsAfterMapping] AS MAP
+  NNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = MAP.SemiProductId
+		INNER JOIN [InputData].[Nomenclature] as n  ON n.IdNomenclature = sp.NomenclatureID
+		INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
+  WHERE art.Title = @article
+  
+  
  -- залив финала  6/1, 7/1, 8/1, 9/2 цех переходящие маршруты
+ print 'залив финала  6/1, 7/1, 8/1, 9/2 цех переходящие маршруты'
 	INSERT INTO [InputData].[Operations]
            ([Title]
            ,[NumberOp]
@@ -529,6 +530,7 @@ SELECT DISTINCT
 		ORDER BY idRout, NPP
 
 		----Залив Опер - ктоп
+		print 'Залив Опер - ктоп'								
 		INSERT INTO OperationWithKTOP
  		SELECT DISTINCT
 		oper.IdOperation

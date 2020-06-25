@@ -27,7 +27,7 @@ AS
 		  LEFT JOIN [SupportData].[TempMaterials]					AS	TM	ON  TM.REL = OP.REL
 																			AND ((TM.PROT <= Size AND TM.PRTO >= Size) 
 																			OR (TM.PROT IS NULL OR TM.PRTO IS NULL))
-		  LEFT JOIN [InputData].[Material]							AS MAT  ON  MAT.CodeMaterial = TM.FKGR
+		  INNER JOIN [InputData].[Material]							AS MAT  ON  MAT.CodeMaterial = TM.FKGR
 																			AND MAT.AddictionAttribute = TM.DOP
 																			AND MAT.Thickness = TM.TOL
 																			AND MAT.ColorCode = TM.KC

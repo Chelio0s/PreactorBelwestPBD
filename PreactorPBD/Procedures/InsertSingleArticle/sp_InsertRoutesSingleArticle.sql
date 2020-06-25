@@ -2,13 +2,14 @@
 	@article nvarchar(99)
 AS
 
+    PRINT 'DELETE FROM [InputData].[Rout] '
 	DELETE [InputData].[Rout] 
     FROM [InputData].[Rout]                 AS r
     INNER JOIN [InputData].[SemiProducts]   AS sp ON sp.IdSemiProduct = r.SemiProductId
     INNER JOIN [InputData].[Nomenclature]   AS n  ON n.IdNomenclature = sp.NomenclatureID
     INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
     WHERE a.Title = @article
-
+  PRINT 'Инсерт ТМ с правилами для заготовки цех 2 '
   --Инсерт ТМ с правилами для заготовки цех 2
   INSERT INTO [InputData].[Rout]
              ([Title]
@@ -31,6 +32,7 @@ AS
   WHERE sp.SimpleProductId in (18,19) AND  a.Title = @article
 
   --Инсерт ТМ всех остальных для 2 цеха
+PRINT 'Инсерт ТМ всех остальных для 2 цеха '																		  
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -51,35 +53,8 @@ AS
 
 
   --Инсерт ТМ с правилами для кроя цех 1
-INSERT INTO [InputData].[Rout]
-           ([Title]
-           ,[SemiProductId]
-           ,[Priority]
-           ,[CombineId]
-		   ,AreaId
-           ,IsComplex)
 
-
-	SELECT DISTINCT
-        'ТМ с набором операций комплекс'+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ПФ ' + sp.Title + ' цех 1'  AS Title
-	  ,[SemiProductId]
-	  ,10
-	  ,[CombineRulesId]
-	  ,3
-      ,1
-  FROM [SupportData].[CombineComposition] as cc
-  INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
-  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
-  INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
-  LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
-  WHERE sp.SimpleProductId in (1) 
-  AND ((parentKTOP  IN (125,127,209,226,217,219,126) 
-		AND cc.RuleIsParent = 1) OR 
-		(childKTOP  IN (125,127,209,226,217,219,126) 
-		AND cc.RuleIsParent = 0))
-  --AND visp.IsComplex = 1 Закоментил потому что разделять ТМ все же надо
-  AND visp.TitleArticle = @article
-
+PRINT 'ТМ с правилами для 1 цеха - РЕЗАКИ '
  INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -88,7 +63,7 @@ INSERT INTO [InputData].[Rout]
 		   ,AreaId
            ,IsCutters)
   SELECT DISTINCT
-       'ТМ с набором операций резаки: '+CONVERT(NVARCHAR(10), cc.RuleId)+ 'для ПФ ' + sp.Title  + ' цех 1' AS Title
+       'ТМ с набором операций резаки: '+CONVERT(NVARCHAR(10), cc.RuleId)+ ' для ПФ ' + sp.Title  + ' цех 1' AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
@@ -107,6 +82,35 @@ INSERT INTO [InputData].[Rout]
   --AND visp.IsCutters = 1 Закоментил потому что разделять ТМ все же надо
   AND visp.TitleArticle = @article
   
+      PRINT 'ТМ с правилами для 1 цеха - КОМЛПЕКС '
+INSERT INTO [InputData].[Rout]
+           ([Title]
+           ,[SemiProductId]
+           ,[Priority]
+           ,[CombineId]
+		   ,AreaId
+           ,IsComplex)
+
+
+	SELECT DISTINCT
+        'ТМ с набором операций комплекс '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ПФ ' + sp.Title + ' цех 1'  AS Title
+	  ,[SemiProductId]
+	  ,10
+	  ,[CombineRulesId]
+	  ,3
+      ,1
+  FROM [SupportData].[CombineComposition] as cc
+  INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
+  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
+  INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
+  LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
+  WHERE sp.SimpleProductId in (1) 
+  AND ((parentKTOP  IN (125,127,209,226,217,219,126) 
+		AND cc.RuleIsParent = 1) OR 
+		(childKTOP  IN (125,127,209,226,217,219,126) 
+		AND cc.RuleIsParent = 0))
+  --AND visp.IsComplex = 1 Закоментил потому что разделять ТМ все же надо
+  AND visp.TitleArticle = @article
 
   --Инсерт ТМ для кроя для 1 цеха для остальных артикулов, у которых нет ТМ с правилами
   INSERT INTO [InputData].[Rout]
@@ -131,6 +135,7 @@ INSERT INTO [InputData].[Rout]
 
    --Инсерт ТМ всех остальных для других цехов
    --Инсерт ТМ с правилами
+   PRINT 'Инсерт ТМ всех остальных ПФ для других цехов'
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -150,6 +155,7 @@ INSERT INTO [InputData].[Rout]
   AND a.Title = @article
 
   -- Стандартный ТМ для 9/1 - тот что есть в РКВ
+	  PRINT 'Стандартный ТМ для 9/1 - тот что есть в РКВ'																			   
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -171,6 +177,7 @@ INSERT INTO [InputData].[Rout]
   AND IdArea > 8
   AND a.Title = @article
 
+  PRINT 'Стандартный ТМ 3 цеха'											
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -188,6 +195,7 @@ INSERT INTO [InputData].[Rout]
   WHERE  SimpleProductId in (20)
    AND a.Title = @article
 
+	PRINT 'Стандартный ТМ 4 цеха'											
     INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -232,6 +240,7 @@ INSERT INTO [InputData].[Rout]
   AND a.Title = @article
 
   -- создание ТМ для 6 7 8 9 цехов (стандартные ТМ) т.е. такие ТМ есть в РКВ
+  PRINT 'создание ТМ для 6 7 8 9 цехов'													 
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -254,6 +263,7 @@ print 'Создание авто переходящих маршрутов'
 ----Маппинг маршрутов для других цехов
 
  -- АВТО ТМ для 9/1  - МАППИНГ
+  print 'АВТО ТМ для 9/1  - МАППИНГ'												
   INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]
@@ -271,7 +281,7 @@ print 'Создание авто переходящих маршрутов'
   ,FIRST_VALUE(R.IdRout) OVER(PARTITION BY 'Автоматический ТМ для '+ sp.Title + ' цех 9/1' ORDER BY SemiProductId)
   FROM [InputData].[Rout]					AS R  
   INNER JOIN [InputData].[SemiProducts]		AS SP ON SP.IdSemiProduct = R.SemiProductId
-  INNER JOIN [InputData].[Nomenclature]     AS n  ON n.IdNomenclature = sp.NomenclatureID
+  INNER JOIN [InputData].[Nomenclature]     AS N  ON N.IdNomenclature = SP.NomenclatureID
   INNER JOIN [InputData].[Article]          AS a  ON a.IdArticle = n.ArticleId
   WHERE R.AreaId = 3 
   AND  SimpleProductId in (1,2,3,4,5,6,7,8,9,10,11,12,13,15) 
@@ -281,6 +291,7 @@ print 'Создание авто переходящих маршрутов'
 
 
   --Создаем маршруты для 6/1 для ПФ 2 цеха
+	print 'Создаем маршруты для 6/1 для ПФ 2 цеха'																	 
 INSERT INTO [InputData].[Rout]
            ([Title]
            ,[SemiProductId]

@@ -1,6 +1,10 @@
 ﻿CREATE PROCEDURE [InputData].[sp_CreateSemiProductFroSingleArticle]
 	@article nvarchar(99)
 AS
+DELETE sp FROM [InputData].[SemiProducts] AS sp
+  INNER JOIN [InputData].[Nomenclature] AS n ON sp.NomenclatureID = n.IdNomenclature
+  INNER JOIN [InputData].[Article] AS a ON n.ArticleId = a.IdArticle
+  WHERE a.Title = @article								  
 		INSERT INTO [InputData].[SemiProducts]
            ([Title]
            ,[NomenclatureID]
