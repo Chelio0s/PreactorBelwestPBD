@@ -8,5 +8,6 @@
     CONSTRAINT [FK_DepartComposition_ToDepartments] FOREIGN KEY ([DepartmentId]) REFERENCES [InputData].[Departments]([IdDepartment])
 	ON UPDATE CASCADE, 
     CONSTRAINT [FK_DepartComposition_ToResourcesGroup] FOREIGN KEY (ResourcesGroupId) REFERENCES [InputData].[ResourcesGroup](IdResourceGroup)
-	ON DELETE CASCADE ON UPDATE CASCADE
+	ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [UK_Check_UniqueGroupInDepart] UNIQUE (DepartmentId,ResourcesGroupId)
 )

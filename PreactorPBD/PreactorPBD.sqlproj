@@ -333,6 +333,8 @@
     <Build Include="Triggers\tgr_UpdateGroupKOB.sql" />
     <Build Include="Views\VI_OperationsAfterMapping.sql" />
     <Build Include="Views\VI_CHECK_ResourcesWithoutGroups.sql" />
+    <Build Include="Triggers\tgr_UpdateDepartComposition.sql" />
+    <Build Include="Views\VI_CHECK_ResourceGroupsWithoutDepatments.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
