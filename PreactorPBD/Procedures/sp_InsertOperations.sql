@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperations]
 AS
 	--DELETE FROM [InputData].[OperationWithKTOP]
-	PRINT 'DELETE FROM [InputData].[OperationWithKTOP]'
+	PRINT 'DELETE FROM [InputData].[Operations]'
 	DELETE FROM  [InputData].[Operations]
 		DECLARE @table as table(idRout int, 
 		TitleOperPr nvarchar(99), 
@@ -33,8 +33,11 @@ AS
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE CombineId is not null and (IdSemiProduct = r.SemiProductId and KTOPN not in (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
-  AND code = 'OP01' and r.AreaId = 3
+  WHERE CombineId is not null 
+  and (IdSemiProduct = r.SemiProductId 
+  and KTOPN not in (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
+  AND code = 'OP01' 
+  and r.AreaId = 3				   
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 	--Все для 1 цеха (там операции строго сортированы по правилам)
 	PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'
@@ -53,7 +56,9 @@ AS
 	  ,0  -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE code = 'OP01' and r.AreaId = 3 and CombineId is null
+  WHERE code = 'OP01' 
+  and r.AreaId = 3 
+  and CombineId is null
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
 
   --Все для 2 цеха с правилами (комбинациями), сортировка по NPP
