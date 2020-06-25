@@ -1,6 +1,5 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperations]
 AS
-	--DELETE FROM [InputData].[OperationWithKTOP]
 	PRINT 'DELETE FROM [InputData].[Operations]'
 	DELETE FROM  [InputData].[Operations]
 		DECLARE @table as table(idRout int, 
@@ -19,130 +18,123 @@ AS
   --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
   INSERT INTO @table
-  SELECT DISTINCT 	
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,1
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE CombineId is not null 
-  and (IdSemiProduct = r.SemiProductId 
-  and KTOPN not in (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
-  AND code = 'OP01' 
-  and r.AreaId = 3				   
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-	--Все для 1 цеха (там операции строго сортированы по правилам)
-	PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'
-	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,1  --заменяем NPP на 1 чтобы убрать потом дубликаты
-	  ,KTOPN
-	  ,vi.REL
-	  ,0  -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE code = 'OP01' 
-  and r.AreaId = 3 
-  and CombineId is null
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+  SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+   FROM [InputData].[VI_OperationsWithCombines]
+   WHERE  code = 'OP01' 
+   AND AreaId = 3		
+   ORDER BY [IdSemiProduct], [OperOrder]
+
+	--Все для 1 цеха стандартные роуты (там операции строго сортированы по правилам)
+  PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'
+  INSERT INTO @table
+  SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+  FROM [InputData].[VI_OperationsStandardRoutes]
+  WHERE AreaId = 3 
+  AND Code = 'OP01'
+  ORDER BY [IdSemiProduct], [OperOrder]
 
   --Все для 2 цеха с правилами (комбинациями), сортировка по NPP
   PRINT 'Все для 2 цеха с правилами (комбинациями), сортировка по NPP'
   INSERT INTO @table
-  SELECT DISTINCT 	
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE CombineId is not null and (IdSemiProduct = r.SemiProductId and KTOPN not in (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
-  AND code = 'OP02' and r.AreaId = 4
-  ORDER BY r.IdRout, NPP
+  SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+   FROM [InputData].[VI_OperationsWithCombines]
+   WHERE  code = 'OP02' 
+   AND AreaId = 4		
+   ORDER BY IdRout, NPP
+
   --Все для 2 цеха без правил, сортировка по NPP
    PRINT 'Все для 2 цеха без правил, сортировка по NPP'
     INSERT INTO @table
-    SELECT DISTINCT 	 
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE CombineId is null AND code = 'OP02' and r.AreaId = 4
-  ORDER BY r.IdRout, NPP
+   SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+  FROM [InputData].[VI_OperationsStandardRoutes]
+  WHERE AreaId = 4 
+  AND Code = 'OP02'
+  ORDER BY IdRout, NPP
 
 --Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
 PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами '
 	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE (Code = 'OP61' and r.AreaId = 9) 
-		OR (Code = 'OP71' and r.AreaId = 13) 
-		OR (Code = 'OP81' and r.AreaId = 14)
-		OR (Code = 'OP09' and r.AreaId = 20)
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+	SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+  FROM [InputData].[VI_OperationsStandardRoutes]											  
+  WHERE    (Code = 'OP61' AND AreaId = 9) 
+		OR (Code = 'OP71' AND AreaId = 13) 
+		OR (Code = 'OP81' AND AreaId = 14)
+		OR (Code = 'OP09' AND AreaId = 20)
+  ORDER BY [IdSemiProduct], [OperOrder]
 
   -- 5 цех
   PRINT '5 цех'
   INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE (r.AreaId = 7) 
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
+	SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+  FROM [InputData].[VI_OperationsStandardRoutes]												  
+  WHERE AreaId = 7
+  ORDER BY [IdSemiProduct], [OperOrder], NPP
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
   PRINT 'Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"'
@@ -204,23 +196,22 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
   --Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами 
 	PRINT 'Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами'
 	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE ((Code = 'OP03' and r.AreaId = 5) or (Code = 'OP04' and r.AreaId = 6))
+	SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+  FROM [InputData].[VI_OperationsStandardRoutes]													  
+  WHERE ((Code = 'OP03' and AreaId = 5) or (Code = 'OP04' and AreaId = 6))
   and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+  ORDER BY [IdSemiProduct], [OperOrder]
 
     --Чистим таблицу от прошлых прыгающих ТМок
   PRINT 'Чистим таблицу от прошлых прыгающих ТМок'
@@ -278,23 +269,22 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
   --Все для 9/1 цеха кроме маршрутов с Jump
   PRINT 'Все для 9/1 цеха кроме маршрутов с Jump'
 	INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE (Code = 'OP09' and r.AreaId = 8)
+	SELECT [IdRout]
+      ,[TitlePreactorOper]
+      ,[IdSemiProduct]
+      ,[IdProfession]
+      ,[TypeTime]
+      ,[CategoryOperation]
+      ,[OperOrder]
+      ,[Code]
+      ,[NPP]
+      ,[KTOPN]
+      ,[REL]
+      ,[isMappingRule]
+  FROM [InputData].[VI_OperationsStandardRoutes]													  
+  WHERE (Code = 'OP09' and AreaId = 8)
   and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+  ORDER BY [IdSemiProduct], [OperOrder]
 
   --Все маршруты для 9/1 для которых нет операций ТМ в базе (пробуем создать операции автоматом)
   PRINT 'Все маршруты для 9/1 для которых нет операций ТМ в базе (пробуем создать операции автоматом)'
@@ -327,7 +317,6 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,MAP.REL
 	  ,1
   FROM [InputData].[VI_OperationsAfterMapping]										AS MAP
-
   INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = MAP.KTOPChild
   RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = SemiProductId
 																							AND FAS.KTOPN =  KTOPParent
@@ -355,8 +344,9 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		,0
 	FROM @table						as t
 	INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
-	WHERE Code = 'OP01' and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 
-	and r.AreaId = 3   -- поставил тут еще фильтр по цеху потому что ОП01 встречается и в ТМ 9го цеха при прыжках
+	WHERE Code = 'OP01' 
+    AND LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 
+	AND r.AreaId = 3   -- поставил тут еще фильтр по цеху потому что ОП01 встречается и в ТМ 9го цеха при прыжках
 	ORDER BY 
 		t.idRout
 		,OperOrder*10	

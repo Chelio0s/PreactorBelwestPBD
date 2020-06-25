@@ -105,6 +105,7 @@
     <Folder Include="Tables\SupportData\AltRoutes" />
     <Folder Include="Entity\MappingRules" />
     <Folder Include="Procedures\InsertSingleArticle" />
+    <Folder Include="Views\InsertOperations" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -335,6 +336,8 @@
     <Build Include="Views\VI_CHECK_ResourcesWithoutGroups.sql" />
     <Build Include="Triggers\tgr_UpdateDepartComposition.sql" />
     <Build Include="Views\VI_CHECK_ResourceGroupsWithoutDepatments.sql" />
+    <Build Include="Views\InsertOperations\VI_OperationsWithCombines.sql" />
+    <Build Include="Views\InsertOperations\VI_OperationsStandardRoutes.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

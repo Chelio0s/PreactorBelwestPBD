@@ -24,7 +24,7 @@ AS
 		IsMappingRule bit)
 
     --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
-	PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
+  PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
   INSERT INTO @table
   SELECT DISTINCT 	
 	  r.IdRout
@@ -32,7 +32,8 @@ AS
       ,vi.[IdSemiProduct]
       ,vi.[IdProfession]
       ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
+	  ,CategoryOperation
+	  , vi.[OperOrder]
 	  ,Code
 	  ,1
 	  ,KTOPN
@@ -40,9 +41,9 @@ AS
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId
-  WHERE CombineId is not null 
+  WHERE CombineId IS NOT NULL 
   AND (IdSemiProduct = r.SemiProductId 
-  AND KTOPN not in (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
+  AND KTOPN NOT IN (SELECT KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](r.IdRout)))
   AND code = 'OP01' 
   AND r.AreaId = 3
   AND vi.Article = @article
@@ -335,7 +336,7 @@ AS
 	  ,MAP.CategoryOperation
 	  ,so.OperOrder
 	  ,MAP.Code												                              as Code
-	  ,ROW_NUMBER() over(partition by [IdSemiProduct] order by so.OperOrder) * 10 as NPP
+	  ,ROW_NUMBER() over(partition by FAS.[IdSemiProduct] order by so.OperOrder) * 10 as NPP
 	  ,KTOPChild
 	  ,MAP.REL
 	  ,1 -- 1 - значит это автоматически замапленные ТМ
@@ -348,24 +349,25 @@ AS
   INNER JOIN [InputData].[Article]		AS art	ON art.IdArticle = nom.ArticleId
 WHERE art.Title = @article  
 AND IdArea IN (8)
- --  --Все для 5 цеха  -- 5 цех пока выкидываем из балансировки
-	--INSERT INTO @table
-	--SELECT DISTINCT
-	--  r.IdRout
-	--  ,[TitlePreactorOper]
-	--     ,vi.[IdSemiProduct]
-	--     ,vi.[IdProfession]
-	--     ,4 as [TypeTime]
-	--  ,CategoryOperation, vi.[OperOrder]
-	--  ,Code
-	--  ,NPP
-	--  ,KTOPN
-	--  ,1 --timemultiply
-	--  ,NULL -- idMappingRule
- -- FROM [InputData].[Rout] as r
- -- INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
- -- WHERE (Code = 'OP05' and r.AreaId = 7) 
- -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
+  -- 5 цех
+  PRINT '5 цех'
+  INSERT INTO @table
+	SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,vi.REL
+	  ,0 -- isMappingRule
+  FROM [InputData].[Rout] as r
+  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
+  WHERE (r.AreaId = 7) 
+  ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
 
 	--Залив финала 1 цех
 		PRINT 'Залив финала 1 цех'								 
@@ -477,10 +479,10 @@ SELECT DISTINCT
 
   INNER JOIN  [SupportData].[SequenceOperations]									AS SO	ON SO.KTOP = MAP.KTOPChild
   RIGHT JOIN  [InputData].[VI_OperationsWithSemiProducts_FAST]						AS FAS	ON FAS.IdSemiProduct = SemiProductId
-																							AND FAS.KTOPN =  KTOPParent													AS AR	ON AR.IdArea = R.AreaId
-		INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = MAP.SemiProductId
-		INNER JOIN [InputData].[Nomenclature] as n  ON n.IdNomenclature = sp.NomenclatureID
-		INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
+																							AND FAS.KTOPN =  KTOPParent													 
+  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = MAP.SemiProductId
+  INNER JOIN [InputData].[Nomenclature] as n  ON n.IdNomenclature = sp.NomenclatureID
+  INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
   WHERE IdArea IN (9,13,14,20)
   AND art.Title = @article
 
@@ -500,9 +502,9 @@ SELECT DISTINCT
       ,[NormaTimeNew]
       ,[REL]																													   												
   FROM [InputData].[VI_OperationsAfterMapping] AS MAP
-  NNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = MAP.SemiProductId
-		INNER JOIN [InputData].[Nomenclature] as n  ON n.IdNomenclature = sp.NomenclatureID
-		INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
+  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = MAP.SemiProductId
+  INNER JOIN [InputData].[Nomenclature] as n  ON n.IdNomenclature = sp.NomenclatureID
+  INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
   WHERE art.Title = @article
   
   
