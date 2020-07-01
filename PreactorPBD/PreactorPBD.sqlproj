@@ -106,6 +106,7 @@
     <Folder Include="Entity\MappingRules" />
     <Folder Include="Procedures\InsertSingleArticle" />
     <Folder Include="Views\InsertOperations" />
+    <Folder Include="Indexes" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -338,6 +339,8 @@
     <Build Include="Views\VI_CHECK_ResourceGroupsWithoutDepatments.sql" />
     <Build Include="Views\InsertOperations\VI_OperationsWithCombines.sql" />
     <Build Include="Views\InsertOperations\VI_OperationsStandardRoutes.sql" />
+    <Build Include="Indexes\IX_RoutAreaIdIndex.sql" />
+    <Build Include="Indexes\IX_TempOperCode.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

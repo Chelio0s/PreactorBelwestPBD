@@ -32,7 +32,7 @@ AS
       ,[isMappingRule]
    FROM [InputData].[VI_OperationsWithCombines]
    WHERE  code = 'OP01' 
-   AND AreaId = 3		
+   AND IdArea = 3		
    ORDER BY [IdSemiProduct], [OperOrder]
 
 	--Все для 1 цеха стандартные роуты (там операции строго сортированы по правилам)
@@ -72,7 +72,7 @@ AS
       ,[isMappingRule]
    FROM [InputData].[VI_OperationsWithCombines]
    WHERE  code = 'OP02' 
-   AND AreaId = 4		
+   AND IdArea = 4		
    ORDER BY IdRout, NPP
 
   --Все для 2 цеха без правил, сортировка по NPP
