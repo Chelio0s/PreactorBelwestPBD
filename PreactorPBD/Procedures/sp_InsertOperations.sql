@@ -144,8 +144,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 									  , BaseAreaId int
 									  , ChildAreaId int
 									  , KtopChildRoute int
-									  , KtopParentRoute int
-									  , REL int)
+									  , KtopParentRoute int)
   INSERT INTO @JumpSemiProducts
   SELECT
        Article
@@ -155,11 +154,11 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-	  ,vifast.REL
-  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
-  INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
-  CROSS JOIN [SupportData].[MergeRoutes]					as mr
-  WHERE (mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) or (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	    AS vifast
+  INNER JOIN [InputData].[Areas]							AS area   ON area.Code = vifast.Code
+  CROSS JOIN [SupportData].[MergeRoutes]					AS mr
+  WHERE (mr.BaseAreaId = area.IdArea AND vifast.KTOPN = mr.KtopPrentRoute) 
+  OR (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
   --тут ограничено только 3 и 4 цехом
   AND IdArea in (5,6)
   GROUP BY   
@@ -170,7 +169,6 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-	  ,vifast.REL
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ   3 и 4
@@ -186,12 +184,13 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,jump.REL
+	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout]											as r
   INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
 																	AND jump.BaseAreaId = r.AreaId
   CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	as vi
+  ORDER BY IdRout , NPP
 
   --Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами 
 	PRINT 'Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами'
@@ -209,8 +208,8 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
       ,[REL]
       ,[isMappingRule]
   FROM [InputData].[VI_OperationsStandardRoutes]													  
-  WHERE ((Code = 'OP03' and AreaId = 5) or (Code = 'OP04' and AreaId = 6))
-  and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
+  WHERE ((Code = 'OP03' AND AreaId = 5) OR (Code = 'OP04' AND AreaId = 6))
+  AND IdSemiProduct NOT IN (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
   ORDER BY [IdSemiProduct], [OperOrder]
 
     --Чистим таблицу от прошлых прыгающих ТМок
@@ -228,13 +227,12 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-	  ,vifast.REL
-  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
-  INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
-  CROSS JOIN [SupportData].[MergeRoutes]					as mr
-  WHERE (mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) or (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
-  AND IdArea in (8)
-  GROUP BY   
+   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
+   INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code
+   CROSS JOIN [SupportData].[MergeRoutes]					as mr
+   WHERE (mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) or (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
+   AND IdArea in (8)
+   GROUP BY   
        Article
 	  ,mr.IdMergeRoutes
 	  ,IdSemiProduct
@@ -242,12 +240,11 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-	  ,vifast.REL
-  HAVING COUNT(mr.IdMergeRoutes) = 2
+   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ 
   PRINT 'Залив прыгающих ТМ '
-  INSERT INTO @table
+  
   SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -258,12 +255,12 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,jump.REL
+	  ,vi.REL
 	  ,0 -- isMappingRule
-  FROM [InputData].[Rout]											as r
-  INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
+  FROM [InputData].[Rout]											AS r
+  INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = r.SemiProductId
 																	AND jump.BaseAreaId = r.AreaId
-  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	as vi
+  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	AS vi
 
 
   --Все для 9/1 цеха кроме маршрутов с Jump
