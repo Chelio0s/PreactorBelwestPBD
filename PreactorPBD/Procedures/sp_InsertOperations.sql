@@ -2,22 +2,11 @@
 AS
 	PRINT 'DELETE FROM [InputData].[Operations]'
 	DELETE FROM  [InputData].[Operations]
-		DECLARE @table as table(idRout int, 
-		TitleOperPr nvarchar(99), 
-		IdSemiProduct int, 
-		idProfesson int, 
-		TypeTime int, 
-		CategoryOperation int, 
-		OperOrder int, 
-		Code varchar(4), 
-		NPP int, 
-		KTOPN int,
-		REL int,
-		IsMappingRule bit)
+	DELETE FROM  [SupportData].[TempOperationsForInsertingOperations]
 
   --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -37,7 +26,7 @@ AS
 
 	--Все для 1 цеха стандартные роуты (там операции строго сортированы по правилам)
   PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -57,7 +46,7 @@ AS
 
   --Все для 2 цеха с правилами (комбинациями), сортировка по NPP
   PRINT 'Все для 2 цеха с правилами (комбинациями), сортировка по NPP'
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -77,7 +66,7 @@ AS
 
   --Все для 2 цеха без правил, сортировка по NPP
    PRINT 'Все для 2 цеха без правил, сортировка по NPP'
-    INSERT INTO @table
+    INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
    SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -97,7 +86,7 @@ AS
 
 --Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
 PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами '
-	INSERT INTO @table
+	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -119,7 +108,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 
   -- 5 цех
   PRINT '5 цех'
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -157,8 +146,8 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	    AS vifast
   INNER JOIN [InputData].[Areas]							AS area   ON area.Code = vifast.Code
   CROSS JOIN [SupportData].[MergeRoutes]					AS mr
-  WHERE (mr.BaseAreaId = area.IdArea AND vifast.KTOPN = mr.KtopPrentRoute) 
-  OR (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
+  WHERE ((mr.BaseAreaId = area.IdArea AND vifast.KTOPN = mr.KtopPrentRoute) 
+  OR (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute))
   --тут ограничено только 3 и 4 цехом
   AND IdArea in (5,6)
   GROUP BY   
@@ -173,7 +162,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
   
   --Залив прыгающих ТМ   3 и 4
   PRINT 'Залив прыгающих ТМ   3 и 4'
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -194,7 +183,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 
   --Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами 
 	PRINT 'Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами'
-	INSERT INTO @table
+	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -208,7 +197,8 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
       ,[REL]
       ,[isMappingRule]
   FROM [InputData].[VI_OperationsStandardRoutes]													  
-  WHERE ((Code = 'OP03' AND AreaId = 5) OR (Code = 'OP04' AND AreaId = 6))
+  WHERE ((Code = 'OP03' AND AreaId = 5) 
+  OR (Code = 'OP04' AND AreaId = 6))
   AND IdSemiProduct NOT IN (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
   ORDER BY [IdSemiProduct], [OperOrder]
 
@@ -230,7 +220,8 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
    FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
    INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code
    CROSS JOIN [SupportData].[MergeRoutes]					as mr
-   WHERE (mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) or (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute)
+   WHERE ((mr.BaseAreaId = area.IdArea and vifast.KTOPN = mr.KtopPrentRoute) 
+   OR (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute))
    AND IdArea in (8)
    GROUP BY   
        Article
@@ -244,7 +235,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
   
   --Залив прыгающих ТМ 
   PRINT 'Залив прыгающих ТМ '
-  
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -265,7 +256,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 
   --Все для 9/1 цеха кроме маршрутов с Jump
   PRINT 'Все для 9/1 цеха кроме маршрутов с Jump'
-	INSERT INTO @table
+	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -299,7 +290,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
  
   -- Маппим 1 в 9/1
   PRINT 'Маппим 1 в 9/1'
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
     SELECT  DISTINCT
 	   IdRout
 	  ,[InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)						AS TitleOperation
@@ -339,7 +330,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		,CategoryOperation
 		,Code
 		,0
-	FROM @table						as t
+	FROM [SupportData].[TempOperationsForInsertingOperations]						as t
 	INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
 	WHERE Code = 'OP01' 
     AND LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 
@@ -366,17 +357,17 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		   ,[IsMappingRule])
 	SELECT DISTINCT
 		tt.TitleOperPr
-		,(SELECT TOP(1) NPP FROM @table as t WHERE t.TitleOperPr = tt.TitleOperPr and t.idRout = tt.idRout and t.IdSemiProduct = tt.IdSemiProduct) as NPP
+		,(SELECT TOP(1) NPP FROM [SupportData].[TempOperationsForInsertingOperations] as t WHERE t.TitleOperPr = tt.TitleOperPr and t.idRout = tt.idRout and t.IdSemiProduct = tt.IdSemiProduct) as NPP
 		,idRout
 		,idProfesson
 		,TypeTime
 		,CategoryOperation
 		,Code
 		,IsMappingRule
-		FROM @table as tt
+		FROM [SupportData].[TempOperationsForInsertingOperations] as tt
 		WHERE Code  in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04', 'OP05') and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
 		and idrout not in (SELECT DISTINCT t.idRout
-							FROM @table						as t
+							FROM [SupportData].[TempOperationsForInsertingOperations]						as t
 							INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
 							WHERE Code = 'OP01' and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 and r.AreaId = 3  )
 		ORDER BY idRout, NPP
@@ -388,7 +379,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		oper.IdOperation
 		,t.KTOPN
 		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
-		FROM @table							as t
+		FROM [SupportData].[TempOperationsForInsertingOperations]							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
 													AND oper.CategoryOperation = t.CategoryOperation
@@ -398,11 +389,11 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 
 	--Очищаем таблицу
 	print 'Заливаем операции в альт. ТМ'
-	DELETE FROM @table
+	DELETE FROM [SupportData].[TempOperationsForInsertingOperations]
 	TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
 	--Заливаем в нее данные для переходящих маршрутов
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
- INSERT INTO @table
+ INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
  SELECT DISTINCT
        IdRout
 	  ,[InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)						AS TitleOperation
@@ -460,7 +451,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		,CategoryOperation
 		,Code
 		,1
-		FROM @table as tt
+		FROM [SupportData].[TempOperationsForInsertingOperations] as tt
 		ORDER BY idRout, NPP
 
 		----Залив Опер - ктоп
@@ -470,10 +461,9 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		oper.IdOperation
 		,t.KTOPN
 		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
-		FROM @table							as t
+		FROM [SupportData].[TempOperationsForInsertingOperations]							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
 													AND oper.CategoryOperation = t.CategoryOperation
 		WHERE oper.Code in ('OP61', 'OP71', 'OP81', 'OP09')
-
 RETURN 0
