@@ -2,7 +2,7 @@
 AS
 	PRINT 'DELETE FROM [InputData].[Operations]'
 	DELETE FROM  [InputData].[Operations]
-	DELETE FROM  [SupportData].[TempOperationsForInsertingOperations]
+	TRUNCATE TABLE [SupportData].[TempOperationsForInsertingOperations]
 
   --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
@@ -84,7 +84,7 @@ AS
   AND Code = 'OP02'
   ORDER BY IdRout, NPP
 
---Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
+--Все для 5 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
 PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами '
 	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT [IdRout]
@@ -104,26 +104,8 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		OR (Code = 'OP71' AND AreaId = 13) 
 		OR (Code = 'OP81' AND AreaId = 14)
 		OR (Code = 'OP09' AND AreaId = 20)
+        OR (AreaId = 7) -- 5 цех
   ORDER BY [IdSemiProduct], [OperOrder]
-
-  -- 5 цех
-  PRINT '5 цех'
-  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
-	SELECT [IdRout]
-      ,[TitlePreactorOper]
-      ,[IdSemiProduct]
-      ,[IdProfession]
-      ,[TypeTime]
-      ,[CategoryOperation]
-      ,[OperOrder]
-      ,[Code]
-      ,[NPP]
-      ,[KTOPN]
-      ,[REL]
-      ,[isMappingRule]
-  FROM [InputData].[VI_OperationsStandardRoutes]												  
-  WHERE AreaId = 7
-  ORDER BY [IdSemiProduct], [OperOrder], NPP
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
   PRINT 'Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"'

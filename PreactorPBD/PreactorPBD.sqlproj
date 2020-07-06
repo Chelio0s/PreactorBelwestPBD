@@ -342,6 +342,7 @@
     <Build Include="Indexes\IX_RoutAreaIdIndex.sql" />
     <Build Include="Indexes\IX_TempOperCode.sql" />
     <Build Include="Tables\TempOperationsForInsertingOperations.sql" />
+    <Build Include="Views\MissingIndexesCost.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />
