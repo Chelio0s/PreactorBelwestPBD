@@ -105,6 +105,9 @@
     <Folder Include="Tables\SupportData\AltRoutes" />
     <Folder Include="Entity\MappingRules" />
     <Folder Include="Procedures\InsertSingleArticle" />
+    <Folder Include="Views\InsertOperations" />
+    <Folder Include="Indexes" />
+    <Folder Include="Views\Perfomance" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -333,6 +336,19 @@
     <Build Include="Triggers\tgr_UpdateGroupKOB.sql" />
     <Build Include="Views\VI_OperationsAfterMapping.sql" />
     <Build Include="Views\VI_CHECK_ResourcesWithoutGroups.sql" />
+    <Build Include="Triggers\tgr_UpdateDepartComposition.sql" />
+    <Build Include="Views\VI_CHECK_ResourceGroupsWithoutDepatments.sql" />
+    <Build Include="Views\InsertOperations\VI_OperationsWithCombines.sql" />
+    <Build Include="Views\InsertOperations\VI_OperationsStandardRoutes.sql" />
+    <Build Include="Indexes\IX_RoutAreaIdIndex.sql" />
+    <Build Include="Indexes\IX_TempOperCode.sql" />
+    <Build Include="Tables\TempOperationsForInsertingOperations.sql" />
+    <Build Include="Views\Perfomance\MissingIndexesCost.sql" />
+    <Build Include="Indexes\IX_KtopInSequenceOperation.sql" />
+    <Build Include="Indexes\IX_EntrySemiProductsSemiProdChild.sql" />
+    <Build Include="Indexes\IX_TempOperationFirst.sql" />
+    <Build Include="Indexes\IX_RouteAreaIdSemiProductId.sql" />
+    <Build Include="Indexes\Copy of IX_KtopInSequenceOperation.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

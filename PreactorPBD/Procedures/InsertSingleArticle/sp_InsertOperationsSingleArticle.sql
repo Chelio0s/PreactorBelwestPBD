@@ -10,10 +10,9 @@ AS
     INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
     WHERE a.Title = @article
 	
-	
-
     --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
+
   INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT DISTINCT 	
 	  r.IdRout
@@ -128,30 +127,6 @@ AS
 		OR (AreaId = 7))
 		AND vi.Article = @article
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
-
-    -- 5 цех
---	  PRINT '5 цех'			  
---  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
---	SELECT DISTINCT
---	  r.IdRout
---	  ,[TitlePreactorOper]
---      ,vi.[IdSemiProduct]
---      ,vi.[IdProfession]
---      ,4 as [TypeTime]
---	  ,CategoryOperation, vi.[OperOrder]
---	  ,Code
---	  ,NPP
---	  ,KTOPN
---	  ,vi.REL
---	  ,0 -- isMappingRule
---  FROM [InputData].[Rout] as r
---  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId	
---  WHERE (r.AreaId = 7) 
---  AND vi.Article = @article
---  ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
-
-
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
   DECLARE @JumpSemiProducts as table (Article nvarchar(99)
@@ -337,25 +312,6 @@ AS
   INNER JOIN [InputData].[Article]		AS art	ON art.IdArticle = nom.ArticleId
 WHERE art.Title = @article  
 AND IdArea IN (8)
-  -- 5 цех
- -- PRINT '5 цех'
- -- INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
---	SELECT DISTINCT
---	  r.IdRout
---	  ,[TitlePreactorOper]
- --     ,vi.[IdSemiProduct]
- --     ,vi.[IdProfession]
- --     ,4 as [TypeTime]
---	  ,CategoryOperation, vi.[OperOrder]
---	  ,Code
---	  ,NPP
---	  ,KTOPN
---	  ,vi.REL
---	  ,0 -- isMappingRule
- -- FROM [InputData].[Rout] as r
- -- INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
- -- WHERE (r.AreaId = 7) 
- -- ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
 
 	--Залив финала 1 цех
 		PRINT 'Залив финала 1 цех'								 
@@ -440,9 +396,7 @@ AND IdArea IN (8)
 		INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
 		WHERE oper.Code in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04', 'OP05')
 		AND art.Title = @article
-		
-
-
+                                                
 	--Очищаем таблицу
 	print 'Заливаем операции в альт. ТМ'
 	DELETE FROM [SupportData].[TempOperationsForInsertingOperations]

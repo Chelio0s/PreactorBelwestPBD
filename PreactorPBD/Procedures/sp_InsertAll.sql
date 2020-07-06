@@ -3,8 +3,8 @@ AS
 
 BEGIN
 	
-	
-	print 'Артикул - модель таблицы'
+	PRINT GETDATE()
+	PRINT 'Артикул - модель таблицы'
 	
 	SET STATISTICS TIME ON  
 	EXEC [SupportData].[sp_InsertArticleModels]
@@ -157,5 +157,7 @@ BEGIN
 	SET STATISTICS TIME ON  
 	EXEC [InputData].sp_InsertSpecifications					-- заполняем спецификации
 	SET STATISTICS TIME OFF 
+
+
 END
 RETURN 0
