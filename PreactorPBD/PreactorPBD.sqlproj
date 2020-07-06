@@ -107,6 +107,7 @@
     <Folder Include="Procedures\InsertSingleArticle" />
     <Folder Include="Views\InsertOperations" />
     <Folder Include="Indexes" />
+    <Folder Include="Views\Perfomance" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ResourcesGroup.sql" />
@@ -342,7 +343,12 @@
     <Build Include="Indexes\IX_RoutAreaIdIndex.sql" />
     <Build Include="Indexes\IX_TempOperCode.sql" />
     <Build Include="Tables\TempOperationsForInsertingOperations.sql" />
-    <Build Include="Views\MissingIndexesCost.sql" />
+    <Build Include="Views\Perfomance\MissingIndexesCost.sql" />
+    <Build Include="Indexes\IX_KtopInSequenceOperation.sql" />
+    <Build Include="Indexes\IX_EntrySemiProductsSemiProdChild.sql" />
+    <Build Include="Indexes\IX_TempOperationFirst.sql" />
+    <Build Include="Indexes\IX_RouteAreaIdSemiProductId.sql" />
+    <Build Include="Indexes\Copy of IX_KtopInSequenceOperation.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

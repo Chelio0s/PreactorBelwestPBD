@@ -11,6 +11,6 @@
 	[Code]				VARCHAR(4) NOT NULL, 
 	[NPP]				INT NOT NULL, 
 	[KTOPN]				INT NOT NULL,
-	[REL]				INT NOT NULL,
+	[REL]				NCHAR(15) NOT NULL,
 	[IsMappingRule]		bit NOT NULL
 )

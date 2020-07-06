@@ -371,7 +371,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 
 	--Очищаем таблицу
 	print 'Заливаем операции в альт. ТМ'
-	DELETE FROM [SupportData].[TempOperationsForInsertingOperations]
+	TRUNCATE TABLE [SupportData].[TempOperationsForInsertingOperations]
 	TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
 	--Заливаем в нее данные для переходящих маршрутов
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
@@ -399,7 +399,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 
  -- -- Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)
   print 'Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)'
-  DELETE FROM [SupportData].[TempOperationForMapping]
+  TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
   INSERT INTO [SupportData].[TempOperationForMapping]
   SELECT [IdRout]
       ,[TitleOperation]

@@ -21,10 +21,13 @@ public partial class UserDefinedFunctions
         using (SqlConnection sqlConnection
             = new SqlConnection(conStr))
         {
-            SqlCommand command = new SqlCommand($"SELECT * " +
-                                                   "FROM[InputData].[VI_RoutWithOperationsRoutRules] " +
-                                                   $"WHERE IdRout = {IdRoute} " +
-                                                   $"and RuleId is not null", sqlConnection);
+            SqlCommand command = new SqlCommand($@"SELECT [IdRout]
+                                                         ,[SemiProductId]
+                                                         ,[RuleId]
+                                                         ,[RuleIsParent] 
+                                                   FROM[InputData].[VI_RoutWithOperationsRoutRules]
+                                                   WHERE IdRout = {IdRoute}
+                                                   AND RuleId IS NOT NULL", sqlConnection);
             sqlConnection.Open();
             var reader = command.ExecuteReader();
 
@@ -68,7 +71,7 @@ public partial class UserDefinedFunctions
                 ruleOperBig.RuleIsParent = ruleOper.RuleIsParent;
 
                 var bit = ruleOperBig.RuleIsParent ? 0 : 1;
-                selectOperationsCommand.CommandText = $"SELECT * FROM [InputData].[udf_GetOperationsRule] " +
+                selectOperationsCommand.CommandText = $"SELECT KTOP FROM [InputData].[udf_GetOperationsRule] " +
                                                       $"({ruleOperBig.RuleId},{bit})";
 
                 var readerOpers = selectOperationsCommand.ExecuteReader();
@@ -77,9 +80,9 @@ public partial class UserDefinedFunctions
                 {
                     if (ruleOperBig.RuleIsParent)
                     {
-                        ruleOperBig.ParentOperations.Add(Convert.ToInt32(readerOpers[1]));
+                        ruleOperBig.ParentOperations.Add(Convert.ToInt32(readerOpers[0]));
                     }
-                    else ruleOperBig.ChildOperations.Add(Convert.ToInt32(readerOpers[1]));
+                    else ruleOperBig.ChildOperations.Add(Convert.ToInt32(readerOpers[0]));
                 }
                 readerOpers.Close();
             }

@@ -22,9 +22,9 @@ public partial class UserDefinedFunctions
         using (SqlConnection sqlConnection
             = new SqlConnection("context connection=true"))
         {
-            SqlCommand command = new SqlCommand($"SELECT TOP(1) SimpleProductId " +
-                                                $"FROM [InputData].[SemiProducts] " +
-                                                $"WHERE IdSemiProduct = {IdSemiProduct} ", sqlConnection);
+            SqlCommand command = new SqlCommand($@"SELECT TOP(1) SimpleProductId 
+                                                    FROM [InputData].[SemiProducts] 
+                                                    WHERE IdSemiProduct = {IdSemiProduct} ", sqlConnection);
 
 
             sqlConnection.Open();
@@ -36,13 +36,17 @@ public partial class UserDefinedFunctions
 
             if (simpleProductId == null)
             {
-                command = new SqlCommand($"SELECT * FROM [InputData].[udf_GetRulesForSemiProduct] " +
-                                         $"({IdSemiProduct}, {default})", sqlConnection);
+                command = new SqlCommand($@" SELECT IdSemiProduct
+												   ,IdRoutRule
+												   ,RuleGroupId FROM [InputData].[udf_GetRulesForSemiProduct] 
+                                                    ({IdSemiProduct}, NULL)", sqlConnection);
             }
             else
             {
-                command = new SqlCommand($"SELECT * FROM [InputData].[udf_GetRulesForSemiProduct] " +
-                                         $"({IdSemiProduct}, {simpleProductId})", sqlConnection);
+                command = new SqlCommand($@" SELECT IdSemiProduct
+                                                 , IdRoutRule
+                                                 , RuleGroupId FROM[InputData].[udf_GetRulesForSemiProduct] 
+                                                 ({IdSemiProduct}, {simpleProductId})", sqlConnection);
             }
 
             reader = command.ExecuteReader();

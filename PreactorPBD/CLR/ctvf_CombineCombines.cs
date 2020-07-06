@@ -22,8 +22,10 @@ public partial class UserDefinedFunctions
         using (SqlConnection sqlConnection
             = new SqlConnection("context connection=true"))
         {
-            SqlCommand command = new SqlCommand($"SELECT * FROM [InputData].[ctvf_CombineRules] " +
-                                                     $"({IdSemiProduct})", sqlConnection);
+            SqlCommand command = new SqlCommand($@"SELECT IDRoutRule
+                                                        , IdCombine
+                                                        , GroupId
+                                                        FROM [InputData].[ctvf_CombineRules]({IdSemiProduct})", sqlConnection);
             sqlConnection.Open();
             var reader = command.ExecuteReader();
             List<CombineResult> list = new List<CombineResult>();
