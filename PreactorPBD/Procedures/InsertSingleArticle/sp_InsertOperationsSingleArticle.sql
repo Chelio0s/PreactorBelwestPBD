@@ -10,22 +10,10 @@ AS
     INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
     WHERE a.Title = @article
 	
-	DECLARE @table as table(idRout int, 
-		TitleOperPr nvarchar(99), 
-		IdSemiProduct int, 
-		idProfesson int, 
-		TypeTime int, 
-		CategoryOperation int, 
-		OperOrder int, 
-		Code varchar(4), 
-		NPP int, 
-		KTOPN int,
-		REL int,
-		IsMappingRule bit)
-
     --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
-  INSERT INTO @table
+
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT DISTINCT 	
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -51,7 +39,7 @@ AS
 	
 	--Все для 1 цеха (там операции строго сортированы по правилам)
     PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'																											 
-	INSERT INTO @table
+	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -74,7 +62,7 @@ AS
 
   --Все для 2 цеха с правилами (комбинациями), сортировка по NPP
 	PRINT 'Все для 2 цеха с правилами (комбинациями), сортировка по NPP'																											  
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT DISTINCT 	
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -95,7 +83,7 @@ AS
   AND vi.Article = @article
   ORDER BY r.IdRout, NPP
   --Все для 2 цеха без правил, сортировка по NPP
-    INSERT INTO @table
+    INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
     SELECT DISTINCT 	 
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -116,8 +104,8 @@ AS
   AND vi.Article = @article
   ORDER BY r.IdRout, NPP
 
---Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
-	INSERT INTO @table
+--Все для 5 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
+	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -132,36 +120,13 @@ AS
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout] as r
   INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE (Code = 'OP61' and r.AreaId = 9) 
+  WHERE ((Code = 'OP61' and r.AreaId = 9) 
 		OR (Code = 'OP71' and r.AreaId = 13) 
 		OR (Code = 'OP81' and r.AreaId = 14)
 		OR (Code = 'OP09' and r.AreaId = 20)
+		OR (AreaId = 7))
 		AND vi.Article = @article
   ORDER BY vi.[IdSemiProduct], vi.[OperOrder]
-
-
-    -- 5 цех
-	  PRINT '5 цех'			  
-  INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId	
-  WHERE (r.AreaId = 7) 
-  AND vi.Article = @article
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
-
-
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
   DECLARE @JumpSemiProducts as table (Article nvarchar(99)
@@ -170,8 +135,7 @@ AS
 									  , BaseAreaId int
 									  , ChildAreaId int
 									  , KtopChildRoute int
-									  , KtopParentRoute int
-									  , REL int)
+									  , KtopParentRoute int)
   INSERT INTO @JumpSemiProducts
   SELECT
        Article
@@ -181,7 +145,6 @@ AS
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-	  ,vifast.REL
   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
   INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
   CROSS JOIN [SupportData].[MergeRoutes]					as mr
@@ -201,7 +164,7 @@ AS
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ   3 и 4
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -221,7 +184,7 @@ AS
   WHERE jump.Article = @article
 
   --Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами 
-	INSERT INTO @table
+	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -253,7 +216,7 @@ AS
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-	  ,vifast.REL
+
   FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	as vifast
   INNER JOIN [InputData].[Areas]							as area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
   CROSS JOIN [SupportData].[MergeRoutes]					as mr
@@ -272,7 +235,7 @@ AS
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ 
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -292,7 +255,7 @@ AS
   WHERE jump.Article = @article
 
   --Все для 9/1 цеха кроме маршрутов с Jump
-	INSERT INTO @table
+	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT DISTINCT
 	  r.IdRout
 	  ,[TitlePreactorOper]
@@ -326,7 +289,7 @@ AS
   AND art.Title = @article
  
   -- Маппим 1 в 9/1
-  INSERT INTO @table
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT  DISTINCT
 	   IdRout
 	  ,[InputData].[udf_GetTitleOperation] (KTOPChild, so.Title) as TitleOperation
@@ -349,25 +312,6 @@ AS
   INNER JOIN [InputData].[Article]		AS art	ON art.IdArticle = nom.ArticleId
 WHERE art.Title = @article  
 AND IdArea IN (8)
-  -- 5 цех
-  PRINT '5 цех'
-  INSERT INTO @table
-	SELECT DISTINCT
-	  r.IdRout
-	  ,[TitlePreactorOper]
-      ,vi.[IdSemiProduct]
-      ,vi.[IdProfession]
-      ,4 as [TypeTime]
-	  ,CategoryOperation, vi.[OperOrder]
-	  ,Code
-	  ,NPP
-	  ,KTOPN
-	  ,vi.REL
-	  ,0 -- isMappingRule
-  FROM [InputData].[Rout] as r
-  INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] as vi ON vi.IdSemiProduct = r.SemiProductId												  
-  WHERE (r.AreaId = 7) 
-  ORDER BY vi.[IdSemiProduct], vi.[OperOrder], vi.NPP
 
 	--Залив финала 1 цех
 		PRINT 'Залив финала 1 цех'								 
@@ -389,7 +333,7 @@ AND IdArea IN (8)
 		,CategoryOperation
 		,Code
 		,0
-	FROM @table						as t
+	FROM [SupportData].[TempOperationsForInsertingOperations]						as t
 	INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
 	INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = r.SemiProductId
 	INNER JOIN [InputData].[Nomenclature] as n  ON n.IdNomenclature = sp.NomenclatureID
@@ -419,17 +363,17 @@ AND IdArea IN (8)
 		   ,[IsMappingRule])
 	SELECT DISTINCT
 		tt.TitleOperPr
-		,(SELECT TOP(1) NPP FROM @table as t WHERE t.TitleOperPr = tt.TitleOperPr and t.idRout = tt.idRout and t.IdSemiProduct = tt.IdSemiProduct) as NPP
+		,(SELECT TOP(1) NPP FROM [SupportData].[TempOperationsForInsertingOperations] as t WHERE t.TitleOperPr = tt.TitleOperPr and t.idRout = tt.idRout and t.IdSemiProduct = tt.IdSemiProduct) as NPP
 		,idRout
 		,idProfesson
 		,TypeTime
 		,CategoryOperation
 		,Code
 		,IsMappingRule
-		FROM @table as tt
+		FROM [SupportData].[TempOperationsForInsertingOperations] as tt
 		WHERE Code  in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04', 'OP05') and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0
 		and idrout not in (SELECT DISTINCT t.idRout
-							FROM @table						as t
+							FROM [SupportData].[TempOperationsForInsertingOperations]						as t
 							INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
 							WHERE Code = 'OP01' and LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 and r.AreaId = 3  )
 		
@@ -442,7 +386,7 @@ AND IdArea IN (8)
 		oper.IdOperation
 		,t.KTOPN
 		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
-		FROM @table							as t
+		FROM [SupportData].[TempOperationsForInsertingOperations]							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
 													AND oper.CategoryOperation = t.CategoryOperation
@@ -452,16 +396,14 @@ AND IdArea IN (8)
 		INNER JOIN [InputData].[Article]	  as art ON art.IdArticle = n.ArticleId
 		WHERE oper.Code in ('OP01', 'OP02','OP61', 'OP71', 'OP81', 'OP09', 'OP03', 'OP04', 'OP05')
 		AND art.Title = @article
-		
-
-
+                                                
 	--Очищаем таблицу
 	print 'Заливаем операции в альт. ТМ'
-	DELETE FROM @table
+	DELETE FROM [SupportData].[TempOperationsForInsertingOperations]
 	TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
 	--Заливаем в нее данные для переходящих маршрутов
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
-INSERT INTO @table
+INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 SELECT DISTINCT
       IdRout
 	  ,[InputData].[udf_GetTitleOperation](KTOPChild, SO.Title)					AS TitleOperation
@@ -528,7 +470,7 @@ SELECT DISTINCT
 		,CategoryOperation
 		,Code
 		,1
-		FROM @table as tt
+		FROM [SupportData].[TempOperationsForInsertingOperations] as tt
 		ORDER BY idRout, NPP
 
 		----Залив Опер - ктоп
@@ -538,7 +480,7 @@ SELECT DISTINCT
 		oper.IdOperation
 		,t.KTOPN
 		,FIRST_VALUE(t.REL) OVER(PARTITION BY IdOperation, KTOPN ORDER BY IdOperation)
-		FROM @table							as t
+		FROM [SupportData].[TempOperationsForInsertingOperations]							as t
 		INNER JOIN [InputData].[Operations] as oper ON oper.Title = t.TitleOperPr
 													AND oper.RoutId = t.idRout
 													AND oper.CategoryOperation = t.CategoryOperation
