@@ -348,7 +348,11 @@
     <Build Include="Indexes\IX_EntrySemiProductsSemiProdChild.sql" />
     <Build Include="Indexes\IX_TempOperationFirst.sql" />
     <Build Include="Indexes\IX_RouteAreaIdSemiProductId.sql" />
-    <Build Include="Indexes\Copy of IX_KtopInSequenceOperation.sql" />
+    <Build Include="Indexes\IX_OperationsIdTitleRouteCategory.sql" />
+    <Build Include="Indexes\IX_SemiProductSimpleProductId.sql" />
+    <Build Include="Indexes\IX_ResourcesDepartmentIdKOB.sql" />
+    <Build Include="Indexes\IX_TempOperationIdNomenclature.sql" />
+    <Build Include="Indexes\Copy of IX_TempOperationIdNomenclature.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

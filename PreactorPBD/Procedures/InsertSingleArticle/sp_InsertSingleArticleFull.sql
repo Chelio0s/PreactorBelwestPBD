@@ -4,7 +4,7 @@ AS
 print 'sp_InsertToArticle'
 
 SET STATISTICS TIME ON  
-    EXEC [InputData].[sp_InsrtToArticle]                               @article = @art
+    EXEC [InputData].[sp_InsertToArticle]                               @article = @art
 SET STATISTICS TIME OFF 
 
 print 'sp_CreateNomenclatureForSingleArticle'

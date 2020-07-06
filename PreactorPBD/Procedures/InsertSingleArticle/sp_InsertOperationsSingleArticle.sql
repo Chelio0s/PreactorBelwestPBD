@@ -175,7 +175,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,jump.REL
+	  ,REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout]											as r
   INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
@@ -246,7 +246,7 @@ AS
 	  ,Code
 	  ,NPP
 	  ,KTOPN
-	  ,jump.REL
+	  ,REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout]											as r
   INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
