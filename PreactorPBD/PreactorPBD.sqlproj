@@ -352,7 +352,7 @@
     <Build Include="Indexes\IX_SemiProductSimpleProductId.sql" />
     <Build Include="Indexes\IX_ResourcesDepartmentIdKOB.sql" />
     <Build Include="Indexes\IX_TempOperationIdNomenclature.sql" />
-    <Build Include="Indexes\Copy of IX_TempOperationIdNomenclature.sql" />
+    <Build Include="Indexes\IX_TempOperationsArticleKTOPN.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

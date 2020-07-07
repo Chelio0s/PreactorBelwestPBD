@@ -24,11 +24,12 @@ SELECT [IdOperation]
 	  ,res.IdResource
 	  ,res.Title												AS ResTitle
   FROM [InputData].[Operations]									AS oper 
-  INNER JOIN [InputData].[Areas]								AS area		ON area.Code = oper.Code COLLATE Cyrillic_General_BIN
+  INNER JOIN [InputData].[Areas]								AS area		ON area.Code = oper.Code
   LEFT JOIN  [InputData].[OperationWithKTOP]					AS operktop ON oper.IdOperation = operktop.[OperationId]
   INNER JOIN [InputData].[Rout]									AS rout		ON rout.IdRout = oper.RoutId
   INNER JOIN [InputData].[SemiProducts]							AS sp		ON sp.IdSemiProduct = rout.SemiProductId
-  INNER JOIN [SupportData].[GroupKOB]							AS groupkob ON groupkob.KTOPN = [InputData].[udf_GetCorrectKTOPForArea] (operktop.KTOP, rout.AreaId)
+  INNER JOIN [SupportData].[GroupKOB]							AS groupkob ON (groupkob.KTOPN = [InputData].[udf_GetCorrectKTOPForArea] (operktop.KTOP, rout.AreaId)
+																			OR groupkob.KTOPN = operktop.KTOP)
 																			AND area.IdArea = groupkob.AreaId
   INNER JOIN [InputData].[ResourcesGroup]						AS resgr	ON resgr.IdResourceGroup = groupkob.GroupId
   INNER JOIN [InputData].[ResourcesInGroups]					AS resingr	ON resingr.GroupResourcesId = resgr.IdResourceGroup
@@ -60,7 +61,7 @@ SELECT [IdOperation]
 	  ,res.IdResource
 	  ,res.Title													AS ResTitle
   FROM [InputData].[Operations]										AS oper 
-  INNER JOIN [InputData].[Areas]									AS area		ON area.Code = oper.Code COLLATE Cyrillic_General_BIN
+  INNER JOIN [InputData].[Areas]									AS area		ON area.Code = oper.Code   
   LEFT JOIN  [InputData].[OperationWithKTOP]						AS operktop ON oper.IdOperation = operktop.[OperationId]
   INNER JOIN [InputData].[Rout]										AS rout		ON rout.IdRout = oper.RoutId
   INNER JOIN [InputData].[SemiProducts]								AS sp		ON sp.IdSemiProduct = rout.SemiProductId
@@ -99,7 +100,7 @@ SELECT [IdOperation]
 	  ,res.IdResource
 	  ,res.Title													AS ResTitle
   FROM [InputData].[Operations]										AS oper 
-  INNER JOIN [InputData].[Areas]									AS area		ON area.Code = oper.Code COLLATE Cyrillic_General_BIN
+  INNER JOIN [InputData].[Areas]									AS area		ON area.Code = oper.Code  
   LEFT JOIN  [InputData].[OperationWithKTOP]						AS operktop ON oper.IdOperation = operktop.[OperationId]
   INNER JOIN [InputData].[Rout]										AS rout		ON rout.IdRout = oper.RoutId
   INNER JOIN [InputData].[SemiProducts]								AS sp		ON sp.IdSemiProduct = rout.SemiProductId
