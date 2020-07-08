@@ -10,6 +10,8 @@ AS
     INNER JOIN [InputData].[Article]        AS a  ON a.IdArticle = n.ArticleId
     WHERE a.Title = @article
 	
+	TRUNCATE TABLE [SupportData].[TempOperationsForInsertingOperations]
+	
     --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
 
@@ -160,7 +162,7 @@ AS
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
 	  ,mr.KtopPrentRoute
-	  ,vifast.REL
+
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ   3 и 4
@@ -230,8 +232,7 @@ AS
 	  ,mr.BaseAreaId
 	  ,mr.ChildAreaId
 	  ,mr.KtopChildRoute
-	  ,mr.KtopPrentRoute
-	  ,vifast.REL
+	  ,mr.KtopPrentRoute			 
   HAVING COUNT(mr.IdMergeRoutes) = 2
   
   --Залив прыгающих ТМ 
@@ -399,7 +400,7 @@ AND IdArea IN (8)
                                                 
 	--Очищаем таблицу
 	print 'Заливаем операции в альт. ТМ'
-	DELETE FROM [SupportData].[TempOperationsForInsertingOperations]
+	TRUNCATE TABLE [SupportData].[TempOperationsForInsertingOperations]
 	TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
 	--Заливаем в нее данные для переходящих маршрутов
 	--Маршруты для 18 ПФ для которых нет операций для альтернативных цехов
@@ -430,7 +431,7 @@ SELECT DISTINCT
 
  -- -- Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)
 	print 'Залив во временную таблицу все операции которые маппили (потом пригодится при расстановке операций на оборудование)'																																																							
-  DELETE FROM [SupportData].[TempOperationForMapping]
+  TRUNCATE TABLE  [SupportData].[TempOperationForMapping]
    INSERT INTO [SupportData].[TempOperationForMapping]
   SELECT [IdRout]
 		   
