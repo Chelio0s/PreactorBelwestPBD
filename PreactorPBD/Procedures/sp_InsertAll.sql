@@ -2,162 +2,239 @@
 AS
 
 BEGIN
-	
-	PRINT GETDATE()
+	TRUNCATE TABLE [LogData].[InsertingLog]
+
+	DECLARE @timeStart datetime, @diff int
+	SET @timeStart = GETDATE()
 	PRINT 'Артикул - модель таблицы'
 	
-	SET STATISTICS TIME ON  
 	EXEC [SupportData].[sp_InsertArticleModels]
-	SET STATISTICS TIME OFF 
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[SupportData].[sp_InsertArticleModels]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Загрузка профессий'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertProfsIntoPreactor
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertProfsIntoPreactor]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertProfsIntoPreactor]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Загрузка рабочих'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertActualEmployees
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertActualEmployees]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertActualEmployees]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Загрузка рабочих в профессии'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertEmployeesInProffs
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertEmployeesInProffs]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertEmployeesInProffs]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Загрузка календарей работы цехов'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertOrgUnitsCalendars
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertOrgUnitsCalendars]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertOrgUnitsCalendars]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Загрузка рабочих дней'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertWorkDays
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertWorkDays]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertWorkDays]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Загрузка оборуд.'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertEquipmentWithDelete
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertEquipmentWithDelete]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertEquipmentWithDelete]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Загрузка ремонтов'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_PutResourcesOnRepair
-	SET STATISTICS TIME OFF 
+ 
+	EXEC [InputData].[sp_PutResourcesOnRepair]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_PutResourcesOnRepair]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Включение оборуд. в группы'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_IncludeEquipmentIntoGroups
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_IncludeEquipmentIntoGroups]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_IncludeEquipmentIntoGroups]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Создание номенклатур (арт + размер)'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_CreateNomenclature
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_CreateNomenclature]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateNomenclature]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Создание ПФ'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_CreateSemiProducts
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_CreateSemiProducts]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateSemiProducts]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Включение ПФ в ПФ'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_CreateEntrySemiProducts
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_CreateEntrySemiProducts]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateEntrySemiProducts]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE()
 	
 	print 'Создание резаков'
 	
-	SET STATISTICS TIME ON  
+	 
 	EXEC [InputData].[sp_CreateCutters]
-	SET STATISTICS TIME OFF 
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateCutters]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 
-	SET STATISTICS TIME ON  
+	 
 	EXEC [InputData].[sp_CreateSecondaryConstraint_Cutters]
-	SET STATISTICS TIME OFF 
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateSecondaryConstraint_Cutters]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Созание календаря ограничений, резаки'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_CreateConstraintCalendar_Cutters
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_CreateConstraintCalendar_Cutters]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateConstraintCalendar_Cutters]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Создание компбинаций операций'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertCombines							-- инсертим комбинации всех правил для создания ТМов
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertCombines]							-- инсертим комбинации всех правил для создания ТМов
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertCombines]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Заполнение временной таблицы операций'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_FillTempOperationTable					-- заполняем вр. таблицу с опер-ми
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_FillTempOperationTable]				-- заполняем вр. таблицу с опер-ми
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_FillTempOperationTable]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Удаляем пустые ПФ  '
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_DeleteInappropriateSemiProducts			-- Удаляем пустые ПФ
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_DeleteInappropriateSemiProducts]			-- Удаляем пустые ПФ
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_DeleteInappropriateSemiProducts]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Создание маршрутов'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertRoutes							-- создаем маршруты
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertRoutes]							-- создаем маршруты
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertRoutes]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Загрузка операций'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertOperations						-- заполняем операции для продуктов
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertOperations]						-- заполняем операции для продуктов
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertOperations]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Удаляем пустые ТМ'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_DeleteInappropriateRoutes				-- Удаляем пустые ТМ
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_DeleteInappropriateRoutes]				-- Удаляем пустые ТМ
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_DeleteInappropriateRoutes]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Ставим ограничения на операции'
 	
-	SET STATISTICS TIME ON  
+	 
 	EXEC [InputData].[sp_InsertContraintsOnOperations]			-- Ставим ограничения на операции
-	SET STATISTICS TIME OFF 
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertContraintsOnOperations]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Ставим операции на рессурсы'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertOperationsInResources			   -- заливаем операции на рессурсы
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertOperationsInResources]			   -- заливаем операции на рессурсы
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertOperationsInResources]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Создание временной таблицы материаллов'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_FillTempMaterials						-- заполняем вр. таблицу с мат-ми
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_FillTempMaterials]						-- заполняем вр. таблицу с мат-ми
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_FillTempMaterials]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Загрузка мат-ов'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertMaterials
-	SET STATISTICS TIME OFF 
+	 
+	EXEC [InputData].[sp_InsertMaterials]
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMaterials]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 	
 	print 'Загрузка спецификаций'
 	
-	SET STATISTICS TIME ON  
-	EXEC [InputData].sp_InsertSpecifications					-- заполняем спецификации
-	SET STATISTICS TIME OFF 
-
-
+	 
+	EXEC [InputData].[sp_InsertSpecifications]					-- заполняем спецификации
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertSpecifications]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
 END
 RETURN 0

@@ -27,92 +27,89 @@ public partial class UserDefinedFunctions
                                                         , GroupId
                                                         FROM [InputData].[ctvf_CombineRules]({IdSemiProduct})", sqlConnection);
             sqlConnection.Open();
-            var reader = command.ExecuteReader();
-            List<CombineResult> list = new List<CombineResult>();
-            while (reader.Read())
+            using (var reader = command.ExecuteReader())
             {
-                list.Add(new CombineResult(
-                    Convert.ToInt32(reader[1]),
-                    Convert.ToInt32(reader[0]),
-                    Convert.ToInt32(reader[2])));
-            }
-     
-            //Группируем все по группам и помещаем в спец. листы
-
-            var groups = list.GroupBy(x => x.GroupId);
-
-            List<List<CombineData<CombineItem>>> dataList = new List<List<CombineData<CombineItem>>>();
-            foreach (var gr in groups)
-            {
-                var combineDatas = new List<CombineData<CombineItem>>();
-
-                foreach (var d2 in gr)
+                List<CombineResult> list = new List<CombineResult>();
+                if (!reader.HasRows)
+                    return null;
+                while (reader.Read())
                 {
-                    var cd = new CombineData<CombineItem>();
-                    cd.Data.Add(new CombineItem()
-                    {
-                        IdRoutRule = d2.IdRule,
-                        IsParent = false,
-                        IdCombine = d2.IdCombine
-                    });
-                    combineDatas.Add(cd);
-                    cd = new CombineData<CombineItem>();
-                    cd.Data.Add(new CombineItem()
-                    {
-                        IdRoutRule = d2.IdRule,
-                        IsParent = true,
-                        IdCombine = d2.IdCombine
-                    });
-                    combineDatas.Add(cd);
-
+                    list.Add(new CombineResult(
+                        Convert.ToInt32(reader[1]),
+                        Convert.ToInt32(reader[0]),
+                        Convert.ToInt32(reader[2])));
                 }
 
-                dataList.Add(combineDatas);
+                //Группируем все по группам и помещаем в спец. листы
 
-            }
+                var groups = list.GroupBy(x => x.GroupId);
 
-            if (dataList.Count == 0)
-            {
-                return null;
-            }
-
-            List<CombineData<CombineItem>> finalCombine;
-
-            if (dataList.Count > 1)
-            {
-                List<CombineData<CombineItem>> tempCombine = null;
-                for (int i = 0; i < dataList.Count; i++)
+                List<List<CombineData<CombineItem>>> dataList = new List<List<CombineData<CombineItem>>>();
+                foreach (var gr in groups)
                 {
-                    if (i < dataList.Count - 1)
+                    var combineDatas = new List<CombineData<CombineItem>>();
+
+                    foreach (var d2 in gr)
                     {
-                        tempCombine = i == 0
-                            ? dataList[i].Combine(dataList[i + 1]).ToList()
-                            : tempCombine.Combine(dataList[i + 1]).ToList();
+                        var cd = new CombineData<CombineItem>();
+                        cd.Data.Add(new CombineItem()
+                        {
+                            IdRoutRule = d2.IdRule,
+                            IsParent = false,
+                            IdCombine = d2.IdCombine
+                        });
+                        combineDatas.Add(cd);
+                        cd = new CombineData<CombineItem>();
+                        cd.Data.Add(new CombineItem()
+                        {
+                            IdRoutRule = d2.IdRule,
+                            IsParent = true,
+                            IdCombine = d2.IdCombine
+                        });
+                        combineDatas.Add(cd);
+                    }
+                    dataList.Add(combineDatas);
+                }
+
+                if (dataList.Count == 0)
+                    return null;
+
+                List<CombineData<CombineItem>> finalCombine;
+
+                if (dataList.Count > 1)
+                {
+                    List<CombineData<CombineItem>> tempCombine = null;
+                    for (int i = 0; i < dataList.Count; i++)
+                    {
+                        if (i < dataList.Count - 1)
+                        {
+                            tempCombine = i == 0
+                                ? dataList[i].Combine(dataList[i + 1]).ToList()
+                                : tempCombine.Combine(dataList[i + 1]).ToList();
+                        }
+                    }
+
+                    finalCombine = tempCombine;
+                }
+                else finalCombine = dataList[0];
+
+                int counter = 0;
+                foreach (var f in finalCombine)
+                {
+                    counter++;
+                    foreach (var data in f.Data)
+                    {
+
+                        resultList.Add(new CombineItemResult()
+                        {
+                            IdCombine = counter,
+                            IdRule = data.IdRoutRule,
+                            IsParent = data.IsParent
+                        });
                     }
                 }
-
-                finalCombine = tempCombine;
+                return resultList;
             }
-            else finalCombine = dataList[0];
-
-            int counter = 0;
-            foreach (var f in finalCombine)
-            {
-                counter++;
-                foreach (var data in f.Data)
-                {
-
-                    resultList.Add(new CombineItemResult()
-                    {
-                        IdCombine = counter,
-                        IdRule = data.IdRoutRule,
-                        IsParent = data.IsParent
-                    });
-                }
-            }
-
-
-            return resultList;
         }
     }
 

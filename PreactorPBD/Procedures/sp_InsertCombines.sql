@@ -3,8 +3,9 @@ AS
 	
 	DELETE FROM [SupportData].[CombineRules]
 
-	DECLARE @FilteredTable as table (IdSemiProduct int NOT NULL)
-    INSERT INTO @FilteredTable
+	TRUNCATE TABLE [SupportData].[TempFilteredSemiProducts]
+    INSERT INTO [SupportData].[TempFilteredSemiProducts]
+
     SELECT [IdSemiProduct]
     FROM [InputData].[SemiProducts] as sp
     --Просееваем заведомо не нужные ПФ (для которых нет RULES)
@@ -20,10 +21,9 @@ SELECT   sp.[IdSemiProduct]
 		,cc.IDRoutRule
 		,cc.IdCombine
 		,cc.IsParent
-
   FROM [InputData].[SemiProducts] as sp
-  INNER JOIN @FilteredTable as filtered ON filtered.IdSemiProduct = sp.IdSemiProduct
-  OUTER APPLY [InputData].[ctvf_CombineCombines](sp.[IdSemiProduct]) as cc
+  INNER JOIN [SupportData].[TempFilteredSemiProducts] as filtered ON filtered.IdSemiProduct = sp.IdSemiProduct
+  OUTER APPLY [InputData].[ctvf_CombineCombines](filtered.[IdSemiProduct]) as cc
  
   INSERT INTO [SupportData].[CombineRules]
            ([SemiProductId]

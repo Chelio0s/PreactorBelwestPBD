@@ -8,7 +8,7 @@
     [Nomenclature] NCHAR(20) NOT NULL, 
     [Size] FLOAT NOT NULL, 
     [KPO] NCHAR(15) NOT NULL, 
-    [Code] NCHAR(5) NOT NULL, 
+    [Code] VARCHAR(5) NOT NULL, 
     [KTOPN] SMALLINT NOT NULL, 
     [NTOP] NVARCHAR(99) NOT NULL, 
     [PONEOB] BIT NOT NULL, 

@@ -1,0 +1,7 @@
+﻿CREATE TABLE [LogData].[InsertingLog]
+(
+	[Id]				INT NOT NULL PRIMARY KEY IDENTITY,
+	[Title]				NVARCHAR(99) NOT NULL,
+	[ExecutedDate]		DATETIME NOT NULL DEFAULT GETDATE(),
+	[DurationMs]		INT NOT NULL
+)

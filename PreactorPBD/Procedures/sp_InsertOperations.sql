@@ -66,7 +66,7 @@ AS
 
   --Все для 2 цеха без правил, сортировка по NPP
    PRINT 'Все для 2 цеха без правил, сортировка по NPP'
-    INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
+   INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
    SELECT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
@@ -109,14 +109,9 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
   PRINT 'Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"'
-  DECLARE @JumpSemiProducts as table (Article nvarchar(99)
-									  , IdMergeRoutes int
-									  , IdSemiProduct int
-									  , BaseAreaId int
-									  , ChildAreaId int
-									  , KtopChildRoute int
-									  , KtopParentRoute int)
-  INSERT INTO @JumpSemiProducts
+  
+  TRUNCATE TABLE [SupportData].[TempJumpSemiProduct]
+  INSERT INTO [SupportData].[TempJumpSemiProduct]
   SELECT
        Article
 	  ,mr.IdMergeRoutes
@@ -158,9 +153,9 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout]											as r
-  INNER JOIN @JumpSemiProducts										as jump ON jump.IdSemiProduct = r.SemiProductId
+  INNER JOIN [SupportData].[TempJumpSemiProduct]					as jump ON jump.IdSemiProduct = r.SemiProductId
 																	AND jump.BaseAreaId = r.AreaId
-  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	as vi
+  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](jump.IdSemiProduct)	as vi
   ORDER BY IdRout , NPP
 
   --Все для 3 и 4 цеха кроме маршрутов с Jump - стандарт, подготовлено технологами 
@@ -181,16 +176,16 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
   FROM [InputData].[VI_OperationsStandardRoutes]													  
   WHERE ((Code = 'OP03' AND AreaId = 5) 
   OR (Code = 'OP04' AND AreaId = 6))
-  AND IdSemiProduct NOT IN (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
+  AND IdSemiProduct NOT IN (SELECT  j.IdSemiProduct FROM [SupportData].[TempJumpSemiProduct] as j)
   ORDER BY [IdSemiProduct], [OperOrder]
 
     --Чистим таблицу от прошлых прыгающих ТМок
   PRINT 'Чистим таблицу от прошлых прыгающих ТМок'
-  DELETE FROM @JumpSemiProducts
+  TRUNCATE TABLE [SupportData].[TempJumpSemiProduct]
 
   PRINT 'Выборка таких маршрутов 9/1 цеха, которые могут "прыгать из цеха в цех"'
    --Выборка таких маршрутов 9/1 цеха, которые могут "прыгать из цеха в цех"
-  INSERT INTO @JumpSemiProducts
+  INSERT INTO [SupportData].[TempJumpSemiProduct]
   SELECT
        Article
 	  ,mr.IdMergeRoutes
@@ -231,9 +226,9 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 	  ,vi.REL
 	  ,0 -- isMappingRule
   FROM [InputData].[Rout]											AS r
-  INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = r.SemiProductId
+  INNER JOIN [SupportData].[TempJumpSemiProduct]					AS jump ON jump.IdSemiProduct = r.SemiProductId
 																	AND jump.BaseAreaId = r.AreaId
-  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](r.SemiProductId)	AS vi
+  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](jump.IdSemiProduct)	AS vi
 
 
   --Все для 9/1 цеха кроме маршрутов с Jump
@@ -253,7 +248,7 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
       ,[isMappingRule]
   FROM [InputData].[VI_OperationsStandardRoutes]													  
   WHERE (Code = 'OP09' and AreaId = 8)
-  and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM @JumpSemiProducts as j)
+  and IdSemiProduct not in (SELECT  j.IdSemiProduct FROM [SupportData].[TempJumpSemiProduct] as j)
   ORDER BY [IdSemiProduct], [OperOrder]
 
   --Все маршруты для 9/1 для которых нет операций ТМ в базе (пробуем создать операции автоматом)

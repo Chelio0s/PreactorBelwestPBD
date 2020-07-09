@@ -19,11 +19,12 @@ SELECT  DISTINCT
 		,OBR.MOB
 		,KOLD
 		,KOLN
-FROM  [$(RKV)].[$(RKV_SCAL)].dbo. F160013		as F13 
-	INNER JOIN [$(RKV)].[$(PLANT)].dbo.drive	as D		on F13.MOD=D.MOD
+FROM  [$(RKV)].[$(RKV_SCAL)].dbo. F160013		AS F13 
+	INNER JOIN [$(RKV)].[$(PLANT)].dbo.drive	AS D		ON F13.MOD=D.MOD
 	-- DRIVE0 должен быть большими буквами, не трогать
-	INNER JOIN [$(RKV)].[$(PLANT)].dbo.DRIVE0	as ART		on D.REL=ART.REL and F13.ART=ART.ART
-	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_top2	as OP		on OP.KTOP=D.KTOPN
-	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_prof2	as P		on P.KPROF=OP.KPROF
-	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_obor2	as OBR		on OBR.KOB = D.KOB
-WHERE  D.NORMA <> 0
+	INNER JOIN [$(RKV)].[$(PLANT)].dbo.DRIVE0	AS ART		ON D.REL=ART.REL AND F13.ART=ART.ART
+	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_top2	AS OP		ON OP.KTOP=D.KTOPN
+	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_prof2	AS P		ON P.KPROF=OP.KPROF
+	INNER JOIN [$(RKV)].[$(PLANT)].dbo.s_obor2	AS OBR		ON OBR.KOB = D.KOB
+	INNER JOIN [$(RKV)].[$(PLANT)].dbo.[status] AS ST		ON ST.MOD = D.MOD AND ST.KPO = D.KPO
+WHERE        (D.NORMA <> 0)  AND ST.PR_UD2<>3

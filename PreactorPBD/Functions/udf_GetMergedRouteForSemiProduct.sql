@@ -333,7 +333,7 @@ BEGIN
 		  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	AS vifast
 		  INNER JOIN [InputData].[Areas]									AS area ON area.Code = vifast.Code COLLATE Cyrillic_General_BIN
 		  INNER JOIN @JumpSemiProducts										AS jump ON jump.IdSemiProduct = vifast.IdSemiProduct AND area.IdArea = 3
-		 --Только на эти коды могуот отправлять в 1 цех крой
+		 --Только на эти коды могут отправлять в 1 цех крой
 		 WHERE KTOPN IN (104,204,139,203,293,118,264,120,269,257,246,235,245,159,155,233,236,234,263,237,270,191,267,272,252,248,218, 280,278,295,196,255,281,283,161,211,178,165,167,243)
 		 UNION 
 		 -- Все операции после приемки с 1 цеха 

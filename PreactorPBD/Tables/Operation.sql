@@ -7,7 +7,7 @@
     [ProfessionId]				INT				NOT NULL, 
     [TypeTimeId]				INT				NOT NULL, 
     [CategoryOperation]			INT				NOT NULL, 
-    [Code]						VARCHAR(4)		NOT NULL, 
+    [Code]						VARCHAR(5)		NOT NULL, 
     [IsMappingRule]				BIT				NOT NULL, 
     CONSTRAINT [FK_Operations_ToProfGroup] FOREIGN KEY ([ProfessionId]) REFERENCES [InputData].[Professions](IdProfession)
 	ON UPDATE CASCADE ON DELETE CASCADE, 
