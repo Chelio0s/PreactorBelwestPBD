@@ -2,46 +2,67 @@
 AS
 	
 	DELETE FROM [SupportData].[CombineRules]
-
 	TRUNCATE TABLE [SupportData].[TempFilteredSemiProducts]
-    INSERT INTO [SupportData].[TempFilteredSemiProducts]
-
-    SELECT [IdSemiProduct]
+	INSERT INTO [SupportData].[TempFilteredSemiProducts]
+    SELECT sp.[IdSemiProduct]
+		  ,vi.TitleArticle
+		  ,vi.SimpleProductId
     FROM [InputData].[SemiProducts] as sp
+	INNER JOIN [InputData].[VI_SemiProductsWithArticles] as vi ON sp.IdSemiProduct = vi.IdSemiProduct
     --Просееваем заведомо не нужные ПФ (для которых нет RULES)
     WHERE sp.SimpleProductId IN (SELECT DISTINCT
 								   [SimpleProductId]
 							  FROM [SupportData].[SequenceOperations] as sq
 							  INNER JOIN [SupportData].[OperationСomposition] as oc ON sq.KTOP = oc.KTOP)
+							  ORDER BY TitleArticle, sp.[IdSemiProduct]
+
+
 --Таблица просеяных ТМ 
-DECLARE @combinesProducts as table (IdSemiProduct  int, Title nvarchar(99), IdRoutRule  int, IdCombine int, IsParent bit)
+DECLARE @combinesProducts as table (TitleArticle  nvarchar(199), SimpleProductId int, IdRoutRule  int, IdCombine int, IsParent bit)
 INSERT INTO @combinesProducts
-SELECT   sp.[IdSemiProduct]
-		,sp.Title
-		,cc.IDRoutRule
+SELECT 
+		TitleArticle
+		,SimpleProductId
+  		,cc.IDRoutRule
 		,cc.IdCombine
-		,cc.IsParent
-  FROM [InputData].[SemiProducts] as sp
-  INNER JOIN [SupportData].[TempFilteredSemiProducts] as filtered ON filtered.IdSemiProduct = sp.IdSemiProduct
-  OUTER APPLY [InputData].[ctvf_CombineCombines](filtered.[IdSemiProduct]) as cc
- 
+		,cc.IsParent 
+		FROM 
+  (
+		SELECT DISTINCT FIRST_VALUE(filtered.IdSemiProduct) 
+					     OVER(PARTITION BY filtered.TitleArticle, filtered.[SimpleProductId] 
+						      ORDER BY SimpleProductId) as  IdSemiProduct
+	    ,filtered.TitleArticle
+		,filtered.SimpleProductId
+  FROM  [SupportData].[TempFilteredSemiProducts] as filtered 
+  ) as q
+  CROSS APPLY [InputData].[ctvf_CombineCombines]([IdSemiProduct]) as cc
+  
+
   INSERT INTO [SupportData].[CombineRules]
            ([SemiProductId]
            ,[Number_])
-  SELECT Distinct IdSemiProduct
-  ,IdCombine FROM @combinesProducts
-  WHERE IdCombine is not null 
+
+  SELECT DISTINCT  
+  IdSemiProduct
+  ,IdCombine
+  
+  FROM @combinesProducts as cp
+  INNER JOIN [SupportData].[TempFilteredSemiProducts]  as t ON t.[SimpleProductId] = cp.SimpleProductId
+															AND t.TitleArticle = cp.TitleArticle
+ 
 
   --Заполняем Compositons
   INSERT INTO [SupportData].[CombineComposition]
            ([CombineRulesId]
            ,[RuleId]
            ,[RuleIsParent])
-  SELECT IdCombineRules
+  SELECT DISTINCT IdCombineRules
   ,IdRoutRule
   ,IsParent
-  FROM [SupportData].[CombineRules] as cr
-  INNER JOIN @combinesProducts as cp ON cp.IdSemiProduct = cr.[SemiProductId] 
-										and cp.IdCombine = cr.[Number_]
+  FROM [SupportData].[CombineRules] AS cr
+  INNER JOIN [SupportData].[TempFilteredSemiProducts] AS t ON t.IdSemiProduct = cr.SemiProductId
+  INNER JOIN @combinesProducts AS CP ON CP.TitleArticle = t.TitleArticle
+										AND t.[SimpleProductId] = cp.SimpleProductId
+										AND cp.IdCombine = cr.Number_
 
 RETURN 0

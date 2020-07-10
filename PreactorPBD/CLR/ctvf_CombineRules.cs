@@ -23,8 +23,8 @@ public partial class UserDefinedFunctions
             = new SqlConnection("context connection=true"))
         {
             SqlCommand command = new SqlCommand($@"SELECT TOP(1) SimpleProductId 
-                                                    FROM [InputData].[SemiProducts] 
-                                                    WHERE IdSemiProduct = {IdSemiProduct} ", sqlConnection);
+                                                         FROM [InputData].[SemiProducts] 
+                                                         WHERE IdSemiProduct = {IdSemiProduct} ", sqlConnection);
 
 
             sqlConnection.Open();
@@ -34,22 +34,17 @@ public partial class UserDefinedFunctions
                 simpleProductId = int.Parse(reader[0].ToString());
             reader.Close();
 
-            if (simpleProductId == null)
-            {
-                command = new SqlCommand($@" SELECT IdSemiProduct
+            command = simpleProductId == null ? new SqlCommand($@" SELECT IdSemiProduct
 												   ,IdRoutRule
 												   ,RuleGroupId FROM [InputData].[udf_GetRulesForSemiProduct] 
-                                                    ({IdSemiProduct}, NULL)", sqlConnection);
-            }
-            else
-            {
-                command = new SqlCommand($@" SELECT IdSemiProduct
+                                                    ({IdSemiProduct}, NULL)", sqlConnection) 
+                                               : new SqlCommand($@" SELECT IdSemiProduct
                                                  , IdRoutRule
                                                  , RuleGroupId FROM[InputData].[udf_GetRulesForSemiProduct] 
                                                  ({IdSemiProduct}, {simpleProductId})", sqlConnection);
-            }
 
             reader = command.ExecuteReader();
+
             List<RoutRules> list = new List<RoutRules>();
             while (reader.Read())
             {
@@ -60,20 +55,15 @@ public partial class UserDefinedFunctions
 
             var groups = list.GroupBy(x => x.RuleGroupId);
 
-            List<List<CombineData<RoutRule>>> dataList = new List<List<CombineData<RoutRule>>>();
-            foreach (var gr in groups)
-            {
-                var combineDatas = gr.Select(x => new CombineData<RoutRule>()
-                {
-                    Data = { new RoutRule(x.IdRoutRule, x.RuleGroupId) }
-                }).ToList();
-                dataList.Add(combineDatas);
-            }
+            List<List<CombineData<RoutRule>>> dataList 
+                = groups.Select(gr => 
+                    gr.Select(x => new CombineData<RoutRule>()
+                        {Data = {new RoutRule(x.IdRoutRule, x.RuleGroupId)}})
+                        .ToList())
+                    .ToList();
 
             if (dataList.Count == 0)
-            {
                 return null;
-            }
 
             List<CombineData<RoutRule>> finalCombine;
 
@@ -93,13 +83,11 @@ public partial class UserDefinedFunctions
             }
             else finalCombine = dataList[0];
 
-            int counter = 0;
+            var counter = 0;
             foreach (var f in finalCombine)
             {
-                foreach (var data in f.Data)
-                {
-                    resultList.Add(new CombineResult(counter, data.IdRoutRule, data.GroupId));
-                }
+                resultList
+                    .AddRange(f.Data.Select(data => new CombineResult(counter, data.IdRoutRule, data.GroupId)));
 
                 counter++;
             }
