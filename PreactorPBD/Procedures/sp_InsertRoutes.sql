@@ -14,16 +14,15 @@ INSERT INTO [InputData].[Rout]
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-
-SELECT DISTINCT
-       'ТМ с набором операций '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ПФ ' + sp.Title + ' цех 2'  AS Title
+  SELECT DISTINCT
+      'ТМ с набором операций '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ' + sp.Title + ' цех 2'  AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
 	  ,4
-  FROM [SupportData].[CombineComposition] as cc
-  INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
-  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
+  FROM [SupportData].[CombineComposition]	AS cc
+  INNER JOIN [SupportData].[CombineRules]	AS cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
+  INNER JOIN [InputData].[SemiProducts]		AS sp ON sp.IdSemiProduct = [SemiProductId]
   WHERE sp.SimpleProductId in (18,19)
 
   --Инсерт ТМ всех остальных для 2 цеха
@@ -34,13 +33,13 @@ SELECT DISTINCT
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-  SELECT 'Стандартный ТМ для ПФ '+ sp.Title + ' цех 2'
+  SELECT 'Стандартный ТМ для '+ sp.Title + ' цех 2'
   , IdSemiProduct
   ,10
   ,NULL
   ,4
-  FROM [InputData].[SemiProducts] as sp
-  WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (18, 19)
+  FROM [InputData].[SemiProducts] AS sp
+  WHERE IdSemiProduct NOT IN (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) AND SimpleProductId in (18, 19)
 
 --ТМ с правилами для 1 цеха - РЕЗАКИ
 PRINT 'ТМ с правилами для 1 цеха - РЕЗАКИ '
@@ -52,17 +51,17 @@ INSERT INTO [InputData].[Rout]
 		   ,AreaId
            ,IsCutters)
 SELECT DISTINCT
-       'ТМ с набором операций резаки: '+CONVERT(NVARCHAR(10), cc.RuleId)+ ' для ПФ ' + sp.Title  + ' цех 1' AS Title
+       'ТМ с набором операций резаки: '+CONVERT(NVARCHAR(10), cc.RuleId)+ ' для ' + sp.Title  + ' цех 1' AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
 	  ,3
       ,1
-  FROM [SupportData].[CombineComposition] as cc
-  INNER JOIN [SupportData].[CombineRules] as cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
-  INNER JOIN [InputData].[SemiProducts] as sp ON sp.IdSemiProduct = [SemiProductId]
-  INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
-  LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
+  FROM [SupportData].[CombineComposition]				AS cc
+  INNER JOIN [SupportData].[CombineRules]				AS cr   ON cc.[CombineRulesId] = cr.[IdCombineRules]
+  INNER JOIN [InputData].[SemiProducts]					AS sp   ON sp.IdSemiProduct = [SemiProductId]
+  INNER JOIN [InputData].[VI_SemiProductsWithArticles]	AS visp ON visp.IdSemiProduct = SemiProductId
+  LEFT JOIN [InputData].[VI_RulesWithOperations]		AS vi	ON vi.IdRule = cc.RuleId
   WHERE sp.SimpleProductId in (1) 
   AND ((parentKTOP NOT IN (125,127,209,226,217,219,126) 
 		AND cc.RuleIsParent = 1) OR 
@@ -79,7 +78,7 @@ SELECT DISTINCT
 		   ,AreaId
            ,IsComplex)
   SELECT DISTINCT
-        'ТМ с набором операций комплекс '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ПФ ' + sp.Title + ' цех 1'  AS Title
+        'ТМ с набором операций комплекс '+CONVERT(NVARCHAR(10), cc.RuleId) +'/'+ CONVERT(NVARCHAR(10), cc.RuleIsParent) + ' для ' + sp.Title + ' цех 1'  AS Title
 	  ,[SemiProductId]
 	  ,10
 	  ,[CombineRulesId]
@@ -91,7 +90,7 @@ SELECT DISTINCT
   INNER JOIN [InputData].[VI_SemiProductsWithArticles] as visp ON visp.IdSemiProduct = SemiProductId
   LEFT JOIN [InputData].[VI_RulesWithOperations] as vi ON vi.IdRule = cc.RuleId
   WHERE sp.SimpleProductId in (1) 
-   AND ((parentKTOP  IN (125,127,209,226,217,219,126) 
+  AND  ((parentKTOP  IN (125,127,209,226,217,219,126) 
 		AND cc.RuleIsParent = 1) OR 
 		(childKTOP  IN (125,127,209,226,217,219,126) 
 		AND cc.RuleIsParent = 0))
@@ -105,13 +104,13 @@ SELECT DISTINCT
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-  SELECT 'Стандартный ТМ для ПФ '+ sp.Title + ' цех 1'
+  SELECT 'Стандартный ТМ для '+ sp.Title + ' цех 1'
   , IdSemiProduct
   ,10
   ,NULL
   ,3
   FROM [InputData].[SemiProducts] as sp
-  WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (1)
+  WHERE IdSemiProduct NOT IN (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) and SimpleProductId in (1)
 
  
 
@@ -123,11 +122,11 @@ INSERT INTO [InputData].[Rout]
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-  SELECT 'Стандартный ТМ для  ПФ '+ sp.Title + ' цех 1'
-  , IdSemiProduct
-  ,10
-  ,NULL
-  ,3
+  SELECT 'Стандартный ТМ для '+ sp.Title + ' цех 1'
+		,IdSemiProduct
+		,10
+		,NULL
+		,3
   FROM [InputData].[SemiProducts] as sp
   WHERE IdSemiProduct not in (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) 
   AND SimpleProductId in (2,3,4,5,6,7,8,9,10,11,12,13,14,15,17)
@@ -140,7 +139,7 @@ INSERT INTO [InputData].[Rout]
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-  SELECT DISTINCT 'Стандартный ТМ для ПФ '+ sp.Title +  ' цех 9/1'
+  SELECT DISTINCT 'Стандартный ТМ для '+ sp.Title +  ' цех 9/1'
   , vi.IdSemiProduct
   ,10
   ,NULL
@@ -158,7 +157,7 @@ INSERT INTO [InputData].[Rout]
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-  SELECT 'Стандартный ТМ для ПФ '+ sp.Title + ' цех 3'
+  SELECT 'Стандартный ТМ для '+ sp.Title + ' цех 3'
   , IdSemiProduct
   ,10
   ,NULL
@@ -174,7 +173,7 @@ INSERT INTO [InputData].[Rout]
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-  SELECT 'Стандартный ТМ для ПФ '+ sp.Title + ' цех 4'
+  SELECT 'Стандартный ТМ для '+ sp.Title + ' цех 4'
   , IdSemiProduct
   ,10
   ,NULL
@@ -190,7 +189,7 @@ INSERT INTO [InputData].[Rout]
            ,[Priority]
            ,[CombineId]
 		   ,AreaId)
-  SELECT 'Стандартный ТМ для ПФ '+ sp.Title + ' цех 5'
+  SELECT 'Стандартный ТМ для '+ sp.Title + ' цех 5'
   , IdSemiProduct
   ,10
   ,NULL
@@ -216,7 +215,7 @@ INSERT INTO [InputData].[Rout]
            ,[CombineId]
            ,[AreaId])
   SELECT DISTINCT 
-  'Cтандартный маршрут для цеха ' + area.Title+ ' для ПФ: '+ sp.Title COLLATE Cyrillic_General_BIN
+  'Cтандартный маршрут для цеха ' + area.Title+ ' для: '+ sp.Title COLLATE Cyrillic_General_BIN
      ,vi.IdSemiProduct
      ,10
 	 ,NULL
@@ -239,7 +238,7 @@ print 'Создание авто переходящих маршрутов'
 		   ,AreaId
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
-  SELECT DISTINCT 'Автоматический ТМ для ПФ '+ sp.Title + ' цех 9/1'
+  SELECT DISTINCT 'Автоматический ТМ для '+ sp.Title + ' цех 9/1'
   ,SemiProductId 
   ,10
   ,NULL
@@ -266,7 +265,7 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут ' + COALESCE(RuleTitle, '') + ' для цеха 6/1 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут ' + COALESCE(RuleTitle, '') + ' для цеха 6/1 для: '+ sp.Title 
 , SemiProductId
 , 10
 , CombineId
@@ -303,7 +302,7 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут '  + COALESCE(RuleTitle, '') +  ' для цеха 7/1 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут '  + COALESCE(RuleTitle, '') +  ' для цеха 7/1 для: '+ sp.Title 
 , SemiProductId
 , 10
 , CombineId
@@ -341,7 +340,7 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут ' + COALESCE(RuleTitle, '') +  ' для цеха 8/1 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут ' + COALESCE(RuleTitle, '') +  ' для цеха 8/1 для: '+ sp.Title 
 , SemiProductId
 , 10
 , CombineId
@@ -379,7 +378,7 @@ INSERT INTO [InputData].[Rout]
 		   ,IsAutoGenerated
 		   ,ParentRouteId)
 SELECT DISTINCT
-'Альтернативный авто маршрут '  + COALESCE(RuleTitle, '') +   ' для цеха 9/2 для ПФ: '+ sp.Title 
+'Альтернативный авто маршрут '  + COALESCE(RuleTitle, '') +   ' для цеха 9/2 для: '+ sp.Title 
 , SemiProductId
 , 10
 , CombineId
@@ -409,10 +408,10 @@ WHERE  ICan = 1
 print 'Удаляем лишние не согласованные между собой автомаршруты'
 DELETE [InputData].[Rout] 
 FROM [InputData].[Rout]	as rout
-INNER JOIN [InputData].[VI_SemiProductsWithArticles]		as visp ON visp.IdSemiProduct = rout.SemiProductId
-INNER JOIN [InputData].[VI_MissedAutoRoutesBetween9and92] as  vi ON vi.articlefirst = visp.TitleArticle 
-																	OR vi.articlesecond = visp.TitleArticle
-																	AND (vi.AreaFirst = rout.AreaId or vi.areasecond = rout.AreaId)
+INNER JOIN [InputData].[VI_SemiProductsWithArticles]		AS  visp ON  visp.IdSemiProduct = rout.SemiProductId
+INNER JOIN [InputData].[VI_MissedAutoRoutesBetween9and92]   AS  vi   ON  vi.articlefirst = visp.TitleArticle 
+																	 OR  vi.articlesecond = visp.TitleArticle
+																	 AND (vi.AreaFirst = rout.AreaId or vi.areasecond = rout.AreaId)
 WHERE IsAutoGenerated = 1
 PRINT GETDATE()
 RETURN 0

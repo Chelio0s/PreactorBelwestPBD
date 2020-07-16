@@ -17,10 +17,13 @@ AS
 							  ORDER BY TitleArticle, sp.[IdSemiProduct]
 
 
---Таблица просеяных ТМ 
-DECLARE @combinesProducts as table (TitleArticle  nvarchar(199), SimpleProductId int, IdRoutRule  int, IdCombine int, IsParent bit)
-INSERT INTO @combinesProducts
-SELECT 
+--Таблица просеяных ТМ, дергаем CLR только для 1 SemiProduct в [TempFilteredSemiProducts]
+--так как по сути у артикула 5-7 одинаковых SP отличающихся только размером
+--а значит можно получить резульаты CLR на SimpleProduct + Article
+
+  DECLARE @combinesProducts as table (TitleArticle  nvarchar(199), SimpleProductId int, IdRoutRule  int, IdCombine int, IsParent bit)
+  INSERT INTO @combinesProducts
+  SELECT 
 		TitleArticle
 		,SimpleProductId
   		,cc.IDRoutRule
@@ -33,24 +36,19 @@ SELECT
 						      ORDER BY SimpleProductId) as  IdSemiProduct
 	    ,filtered.TitleArticle
 		,filtered.SimpleProductId
-  FROM  [SupportData].[TempFilteredSemiProducts] as filtered 
+  FROM  [SupportData].[TempFilteredSemiProducts] AS filtered 
   ) as q
-  CROSS APPLY [InputData].[ctvf_CombineCombines]([IdSemiProduct]) as cc
-  
+  CROSS APPLY [InputData].[ctvf_CombineCombines]([IdSemiProduct]) AS cc
 
   INSERT INTO [SupportData].[CombineRules]
            ([SemiProductId]
            ,[Number_])
-
   SELECT DISTINCT  
   IdSemiProduct
   ,IdCombine
-  
   FROM @combinesProducts as cp
-  INNER JOIN [SupportData].[TempFilteredSemiProducts]  as t ON t.[SimpleProductId] = cp.SimpleProductId
+  INNER JOIN [SupportData].[TempFilteredSemiProducts]  AS t ON t.[SimpleProductId] = cp.SimpleProductId
 															AND t.TitleArticle = cp.TitleArticle
- 
-
   --Заполняем Compositons
   INSERT INTO [SupportData].[CombineComposition]
            ([CombineRulesId]
@@ -59,10 +57,9 @@ SELECT
   SELECT DISTINCT IdCombineRules
   ,IdRoutRule
   ,IsParent
-  FROM [SupportData].[CombineRules] AS cr
-  INNER JOIN [SupportData].[TempFilteredSemiProducts] AS t ON t.IdSemiProduct = cr.SemiProductId
-  INNER JOIN @combinesProducts AS CP ON CP.TitleArticle = t.TitleArticle
-										AND t.[SimpleProductId] = cp.SimpleProductId
-										AND cp.IdCombine = cr.Number_
-
+  FROM [SupportData].[CombineRules]						AS cr
+  INNER JOIN [SupportData].[TempFilteredSemiProducts]	AS t ON t.IdSemiProduct = cr.SemiProductId
+  INNER JOIN @combinesProducts							AS CP ON CP.TitleArticle = t.TitleArticle
+														AND t.[SimpleProductId] = cp.SimpleProductId
+														AND cp.IdCombine = cr.Number_
 RETURN 0

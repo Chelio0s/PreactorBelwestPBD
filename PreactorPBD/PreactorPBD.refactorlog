@@ -868,4 +868,60 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="SpecificOrgUnit" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f6d794a8-b8e2-40a8-b56a-5bbf5022654d" ChangeDateTime="07/13/2020 06:46:30">
+    <Property Name="ElementName" Value="[SupportData].[BannedOperationsForMappingTo9_1].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[BannedOperationsForMappingTo9_1]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdBanndedKtop" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7b876f17-a550-4a07-ab84-05e9cd10fe14" ChangeDateTime="07/13/2020 06:46:42">
+    <Property Name="ElementName" Value="[SupportData].[BannedOperationsForMappingTo9_1].[IdBanndedKtop]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[BannedOperationsForMappingTo9_1]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BanndedKtop" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="38ebf229-ad91-4574-bbaf-134f88285f40" ChangeDateTime="07/13/2020 06:55:32">
+    <Property Name="ElementName" Value="[SupportData].[BannedOperationsForMappingTo9_1].[InsertDate]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[BannedOperationsForMappingTo9_1]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="InsertedDate" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c17e212f-4038-48b9-b05c-581e72ccf425" ChangeDateTime="07/15/2020 06:22:39">
+    <Property Name="ElementName" Value="[SupportData].[MacroOperations].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[MacroOperations]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdMacroOperation" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f71a695a-bd69-480f-8a2d-eb8a166ed510" ChangeDateTime="07/15/2020 06:30:18">
+    <Property Name="ElementName" Value="[SupportData].[MacroOperationWithKtop].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[MacroOperationWithKtop]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdMacroKtop" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="dc8339c6-afe6-44f6-af7b-4d62c0e706fd" ChangeDateTime="07/15/2020 06:30:47">
+    <Property Name="ElementName" Value="[SupportData].[MacroOperationWithKtop].[Date]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[MacroOperationWithKtop]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Datechanged" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="17490689-2966-4726-af87-d61e63f78a42" ChangeDateTime="07/15/2020 06:30:52">
+    <Property Name="ElementName" Value="[SupportData].[MacroOperationWithKtop].[Datechanged]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[MacroOperationWithKtop]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DateChanged" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="358168c4-3060-4008-b832-fc610608bc43" ChangeDateTime="07/15/2020 06:31:40">
+    <Property Name="ElementName" Value="[SupportData].[MacroOperationWithKtop].[IdMacroKtop]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[MacroOperationWithKtop]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MacroOperationId" />
+  </Operation>
 </Operations>
