@@ -90,8 +90,7 @@ SELECT
 	INNER JOIN	[$(RKV)].[$(PLANT)].dbo.DRIVE0		AS ART	ON D.REL=ART.REL and F13.ART=ART.ART
 	INNER JOIN	[$(RKV)].[$(PLANT)].dbo.drive1		AS M	ON D.REL=M.REL
 	INNER JOIN	[$(RKV)].[$(PLANT)].dbo.s_top2		AS OP	ON OP.KTOP=D.KTOPN
-	WHERE S.PR_UD2=0  --признак закрытия ТМ, т.е. пронормирован и утвержден
-	AND D.NORMA<>0  
+	WHERE D.NORMA<>0  
 	 
  )  AS TEMP												ON TEMP.ART = P.ART 
 														AND TEMP.FKGR = P.FKGR
@@ -101,7 +100,7 @@ SELECT
  AND P.PR_MAT = 1
  AND FABR2.FNGR2 IS NULL
  
- UNION 
+UNION 
 SELECT 
 	TEMP.REL
 	,P.ART
@@ -143,8 +142,7 @@ SELECT
 	INNER JOIN	[$(RKV)].[$(PLANT)].dbo.DRIVE0		AS ART	ON D.REL=ART.REL and F13.ART=ART.ART
 	INNER JOIN	[$(RKV)].[$(PLANT)].dbo.drive1		AS M	ON D.REL=M.REL
 	INNER JOIN	[$(RKV)].[$(PLANT)].dbo.s_top2		AS OP	ON OP.KTOP=D.KTOPN
-	WHERE S.PR_UD2=0  --признак закрытия ТМ, т.е. пронормирован и утвержден
-	AND D.NORMA<>0  
+	WHERE  D.NORMA<>0  
 	 
  )  AS TEMP												ON TEMP.ART = P.ART 
 														AND TEMP.FKGR = P.FKGR

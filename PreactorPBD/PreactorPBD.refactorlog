@@ -924,4 +924,25 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="MacroOperationId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="48bd2ca5-ecaa-4abf-8e36-1de50a54ce0b" ChangeDateTime="07/16/2020 11:33:15">
+    <Property Name="ElementName" Value="[InputData].[BigOperationsGroups].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[InputData].[BigOperationsGroups]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdBigOperationsGroup" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf5078e1-b975-43f9-8bd1-9f5dd4523c54" ChangeDateTime="08/03/2020 09:23:03">
+    <Property Name="ElementName" Value="[SupportData].[RuleGroup].[ForSemiProduct]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[RuleGroup]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ForSimpleProduct" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="41f1eed0-be2d-46f0-a9ab-060d5ab352a8" ChangeDateTime="08/04/2020 12:47:08">
+    <Property Name="ElementName" Value="[SupportData].[TempOperationsWithMacro].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[TempOperationsWithMacro]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdOperation" />
+  </Operation>
 </Operations>

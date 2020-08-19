@@ -18,5 +18,5 @@ AS
 	, RROT
 	, RRTO
 	, IdArticle 
-	FROM    [InputData].[VI_MaterialsFromRKV_SLOW]
+	FROM  [InputData].[VI_MaterialsFromRKV_SLOW]
 RETURN 0

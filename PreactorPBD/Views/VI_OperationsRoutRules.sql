@@ -2,10 +2,11 @@
 CREATE VIEW [InputData].[VI_OperationsRoutRules]
 	AS 
 	SELECT DISTINCT [IdRule]
-	  ,co.[Title] as parentTitle
-	  ,co1.Title as childTitle
-	  ,oc.KTOP as KTOPParent
-	  ,oc1.KTOP as KTOPChild
+	  ,co.[Title]		as parentTitle
+	  ,co1.Title		as childTitle
+	  ,oc.KTOP			as KTOPParent
+	  ,oc1.KTOP			as KTOPChild
+	  ,rr.RulePriority	as RulePriority
   FROM [SupportData].[RoutRoules] as rr
   INNER JOIN [SupportData].[ComposeOperation] as co ON co.[idComposeOper] = rr.[OperationParentId]
   INNER JOIN [SupportData].[ComposeOperation] as co1 ON co1.[idComposeOper] = rr.[OperationChildId]

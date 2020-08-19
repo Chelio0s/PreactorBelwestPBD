@@ -2,7 +2,7 @@
 AS
 
 BEGIN
-	TRUNCATE TABLE [LogData].[InsertingLog]
+	--TRUNCATE TABLE [LogData].[InsertingLog]
 
 	DECLARE @timeStart datetime, @diff int
 	SET @timeStart = GETDATE()
@@ -236,5 +236,32 @@ BEGIN
 	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertSpecifications]',
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
+	print 'Загрузка материаллов из НСИ'
+	EXEC [InputData].[sp_InsertMissedMaterials]					-- заполняем материалы которые грузим из НСИ
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMissedMaterials]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
+
+	SET @timeStart = GETDATE() 
+
+	print 'Загрузка спецификаций'
+	EXEC [InputData].[sp_InsertMissedSpecifications]				-- заполняем спецификации из НСИ
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMissedSpecifications]',
+									   @timeMs = @diff
+ 
+	
+	
+
+	TRUNCATE TABLE [SupportData].[TempOperationsWithMacro]
+	INSERT INTO [SupportData].[TempOperationsWithMacro]
+	SELECT [IdOperation]
+      ,[OperTitle]
+      ,[MacroTitle]
+	  ,[KTOP]
+      ,[AreaId]
+    FROM [InputData].[VI_OperationsWithMacro]
+
 END
 RETURN 0

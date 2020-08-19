@@ -26,7 +26,7 @@
 							FROM [InputData].[Rout] as xr
 							INNER JOIN [InputData].[VI_OperationsWithSemiProducts_FAST] AS xvi ON xvi.IdSemiProduct = xr.SemiProductId
 							--Отсев ТМ в каторых есть операции, которые сразу отваливаются и не переходят автоматом в ц 9/1
-							INNER JOIN [SupportData].[BannedOperationsForMappingTo9_1]  as ban	ON ban.[BannedKtop] = xvi.KTOPN
+							INNER JOIN [SupportData].[BannedOperationsForMappingTo9_1]  AS ban	ON ban.[BannedKtop] = xvi.KTOPN
 							WHERE CombineId IS NOT NULL 
 							AND (IdSemiProduct = xr.SemiProductId 
 							AND KTOPN not in (SELECT fn.KTOP FROM [InputData].[ctvf_GetDisableOperationsForRout](xr.IdRout) AS fn)))

@@ -362,6 +362,18 @@
     <Build Include="Tables\SupportData\MappingRoutes\BannedOperationsForMappingTo9_1.sql" />
     <Build Include="Tables\SupportData\MacroOperations.sql" />
     <Build Include="Tables\SupportData\MacroOperationWithKtop.sql" />
+    <Build Include="Tables\SupportData\BigOperationsGroups.sql" />
+    <Build Include="Tables\SupportData\BigOperationsGroupWithKtop.sql" />
+    <Build Include="Views\VI_OperationsWithBigGroup.sql" />
+    <Build Include="Views\VI_OperationsWithMacro.sql" />
+    <Build Include="Views\VI_CHECK_ExistingAllOperationsForJump2To1.sql" />
+    <Build Include="Tables\SupportData\TempOperationsWithMacro.sql" />
+    <Build Include="Maintenance\Servers\NSI.sql" />
+    <Build Include="Views\VI_ArticlesWithoutMaterials.sql" />
+    <Build Include="Views\VI_MissingMaterialsFromNSI.sql" />
+    <Build Include="Procedures\sp_InsertMissedMaterials.sql" />
+    <Build Include="Procedures\sp_InsertMissedSpecifications.sql" />
+    <Build Include="Views\VI_CHECK_AreThereOperationsInArticle.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

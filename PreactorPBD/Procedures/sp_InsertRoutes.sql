@@ -23,7 +23,7 @@ INSERT INTO [InputData].[Rout]
   FROM [SupportData].[CombineComposition]	AS cc
   INNER JOIN [SupportData].[CombineRules]	AS cr ON cc.[CombineRulesId] = cr.[IdCombineRules]
   INNER JOIN [InputData].[SemiProducts]		AS sp ON sp.IdSemiProduct = [SemiProductId]
-  WHERE sp.SimpleProductId in (18,19)
+  WHERE sp.SimpleProductId in (18)
 
   --Инсерт ТМ всех остальных для 2 цеха
   PRINT 'Инсерт ТМ всех остальных для 2 цеха '
@@ -39,7 +39,8 @@ INSERT INTO [InputData].[Rout]
   ,NULL
   ,4
   FROM [InputData].[SemiProducts] AS sp
-  WHERE IdSemiProduct NOT IN (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) AND SimpleProductId in (18, 19)
+  WHERE IdSemiProduct NOT IN (SELECT DISTINCT SemiProductId FROM [InputData].[Rout]) 
+  AND SimpleProductId in (18)
 
 --ТМ с правилами для 1 цеха - РЕЗАКИ
 PRINT 'ТМ с правилами для 1 цеха - РЕЗАКИ '
@@ -248,8 +249,8 @@ print 'Создание авто переходящих маршрутов'
   FROM [InputData].[Rout]					AS R  
   INNER JOIN [InputData].[SemiProducts]		AS SP ON SP.IdSemiProduct = R.SemiProductId
   INNER JOIN [InputData].[Nomenclature]		AS N  ON N.IdNomenclature = SP.NomenclatureID
-  WHERE R.AreaId = 3 
-  AND  SimpleProductId in (1,2,3,4,5,6,7,8,9,10,11,12,13,15) 
+  WHERE R.AreaId = 3
+  --отсев тех ПФ для которых ТМ уже составили технологи
   AND (SemiProductId NOT IN (SELECT ROUT.SemiProductId FROM [InputData].[Rout] AS ROUT WHERE ROUT.AreaId = 8))
   AND [InputData].[udf_CanIMapFirstFloorRoute](R.IdRout) = CONVERT(bit, 'true')
  

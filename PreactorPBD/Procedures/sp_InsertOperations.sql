@@ -1,8 +1,8 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertOperations]
 AS
-	PRINT 'DELETE FROM [InputData].[Operations]'
-	DELETE FROM  [InputData].[Operations]
-	TRUNCATE TABLE [SupportData].[TempOperationsForInsertingOperations]
+  PRINT 'DELETE FROM [InputData].[Operations]'
+  DELETE FROM  [InputData].[Operations]
+  TRUNCATE TABLE [SupportData].[TempOperationsForInsertingOperations]
 
   --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
@@ -20,8 +20,10 @@ AS
       ,[REL]
       ,[isMappingRule]
    FROM [InputData].[VI_OperationsWithCombines]
-   WHERE  code = 'OP01' 
-   AND IdArea = 3		
+   WHERE  (code = 'OP01' 
+   AND IdArea = 3)
+   -- OR (code = 'OP02' AND SimpleProductId = 10) по идее не должно быть комбинаций для стельки (ПФ 10) 
+   -- потому что комбинации (пока) есть только для кроя верха
    ORDER BY [IdSemiProduct], [OperOrder]
 
 	--Все для 1 цеха стандартные роуты (там операции строго сортированы по правилам)
@@ -40,11 +42,59 @@ AS
       ,[REL]
       ,[isMappingRule]
   FROM [InputData].[VI_OperationsStandardRoutes]
-  WHERE AreaId = 3 
-  AND Code = 'OP01'
+  WHERE (code = 'OP01' AND AreaId = 3)
+  OR (code = 'OP09' AND SimpleProductId = 10) -- учитываем раскрой стельки в цехе 9/1
+  OR (code = 'OP02' AND SimpleProductId = 10) -- учитывает то, что ПФ 10 может отправится на одну операцию в цех 2
   ORDER BY [IdSemiProduct], [OperOrder]
 
-  --Все для 2 цеха с правилами (комбинациями), сортировка по NPP
+  --JUMP для цеха N2
+  PRINT 'JUMP для цеха N2'
+  TRUNCATE TABLE [SupportData].[TempJumpSemiProduct]
+  INSERT INTO [SupportData].[TempJumpSemiProduct]
+  SELECT
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	    AS vifast
+  INNER JOIN [InputData].[Areas]							AS area   ON area.Code = vifast.Code
+  CROSS JOIN [SupportData].[MergeRoutes]					AS mr
+  WHERE ((mr.BaseAreaId = area.IdArea AND vifast.KTOPN = mr.KtopPrentRoute) 
+  OR (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute))
+  AND mr.BaseAreaId =4
+  GROUP BY   
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  HAVING COUNT(mr.IdMergeRoutes) = 2
+  -- ЗАЛИВ Jump для 2 цеха
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
+  SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,vi.REL
+	  ,0 -- isMappingRule
+  FROM [InputData].[Rout]											AS r
+  INNER JOIN [SupportData].[TempJumpSemiProduct]					AS jump ON jump.IdSemiProduct = r.SemiProductId
+																	AND jump.BaseAreaId = r.AreaId
+  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](jump.IdSemiProduct)	as vi
+  ORDER BY IdRout , NPP
+
+  --Все для 2 цеха с правилами (комбинациями), сортировка по NPP  без JUMP
   PRINT 'Все для 2 цеха с правилами (комбинациями), сортировка по NPP'
   INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
   SELECT [IdRout]
@@ -61,7 +111,9 @@ AS
       ,[isMappingRule]
    FROM [InputData].[VI_OperationsWithCombines]
    WHERE  code = 'OP02' 
-   AND IdArea = 4		
+   AND IdArea = 4
+   AND IdRout NOT IN (SELECT J.idRout FROM [SupportData].[TempOperationsForInsertingOperations] AS J
+   WHERE J.Code IN ('OP01', 'OP02'))
    ORDER BY IdRout, NPP
 
   --Все для 2 цеха без правил, сортировка по NPP
@@ -82,10 +134,59 @@ AS
   FROM [InputData].[VI_OperationsStandardRoutes]
   WHERE AreaId = 4 
   AND Code = 'OP02'
+  AND IdRout NOT IN (SELECT J.idRout FROM [SupportData].[TempOperationsForInsertingOperations] AS J
+  WHERE J.Code IN ('OP01', 'OP02'))
   ORDER BY IdRout, NPP
 
---Все для 5 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами 
-PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами '
+  --JUMP для цеха N5
+  PRINT 'JUMP для цеха N5'
+  TRUNCATE TABLE [SupportData].[TempJumpSemiProduct]
+  INSERT INTO [SupportData].[TempJumpSemiProduct]
+  SELECT
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  FROM [InputData].[VI_OperationsWithSemiProducts_FAST]	    AS vifast
+  INNER JOIN [InputData].[Areas]							AS area   ON area.Code = vifast.Code
+  CROSS JOIN [SupportData].[MergeRoutes]					AS mr
+  WHERE ((mr.BaseAreaId = area.IdArea AND vifast.KTOPN = mr.KtopPrentRoute) 
+  OR (mr.ChildAreaId = area.IdArea and vifast.KTOPN = mr.KtopChildRoute))
+  AND mr.BaseAreaId =7
+  GROUP BY   
+       Article
+	  ,mr.IdMergeRoutes
+	  ,IdSemiProduct
+	  ,mr.BaseAreaId
+	  ,mr.ChildAreaId
+	  ,mr.KtopChildRoute
+	  ,mr.KtopPrentRoute
+  HAVING COUNT(mr.IdMergeRoutes) = 2
+  -- ЗАЛИВ Jump для 5 цеха
+  INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
+  SELECT DISTINCT
+	  r.IdRout
+	  ,[TitlePreactorOper]
+      ,vi.[IdSemiProduct]
+      ,vi.[IdProfession]
+      ,4 as [TypeTime]
+	  ,CategoryOperation, vi.[OperOrder]
+	  ,Code
+	  ,NPP
+	  ,KTOPN
+	  ,vi.REL
+	  ,0 -- isMappingRule
+  FROM [InputData].[Rout]											as r
+  INNER JOIN [SupportData].[TempJumpSemiProduct]					as jump ON jump.IdSemiProduct = r.SemiProductId
+																	AND jump.BaseAreaId = r.AreaId
+  CROSS APPLY [InputData].[udf_GetMergedRouteForSemiProduct](jump.IdSemiProduct)	as vi
+  ORDER BY IdRout , NPP
+
+--Все для 5 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами  (Кроме jump 5)
+PRINT 'Все для 5 (кроме jump) 6/1 7/1 8/1 9/2 цеха - стандарт, подготовлено технологами '
 	INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
 	SELECT [IdRout]
       ,[TitlePreactorOper]
@@ -100,11 +201,14 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
       ,[REL]
       ,[isMappingRule]
   FROM [InputData].[VI_OperationsStandardRoutes]											  
-  WHERE    (Code = 'OP61' AND AreaId = 9) 
+  WHERE    ((Code = 'OP61' AND AreaId = 9) 
 		OR (Code = 'OP71' AND AreaId = 13) 
 		OR (Code = 'OP81' AND AreaId = 14)
 		OR (Code = 'OP09' AND AreaId = 20)
-        OR (AreaId = 7) -- 5 цех
+        OR (AreaId = 7)) -- 5 цех
+		AND IdSemiProduct NOT IN (SELECT IdSemiProduct 
+								  FROM  [SupportData].[TempOperationsForInsertingOperations] 
+								  WHERE Code = 'OP05')
   ORDER BY [IdSemiProduct], [OperOrder]
 
   --Выборка таких маршрутов 3 и 4 цеха, которые могут "прыгать из цеха в цех"
@@ -262,9 +366,9 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
   INNER JOIN [InputData].[SemiProducts] AS sp	ON sp.IdSemiProduct = r.SemiProductId
   INNER JOIN [InputData].[Nomenclature] AS nom	ON nom.IdNomenclature = sp.NomenclatureID
   INNER JOIN [InputData].[Article]		AS art	ON art.IdArticle = nom.ArticleId
-  WHERE  r.AreaId = 8  AND  r.IsAutoGenerated = 1
+  WHERE  r.AreaId = 8  
+  AND  r.IsAutoGenerated = 1
 
- 
   -- Маппим 1 в 9/1
   PRINT 'Маппим 1 в 9/1'
   INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
@@ -309,9 +413,11 @@ PRINT 'Все для 6/1 7/1 8/1 9/2 цеха - стандарт, подгото
 		,0
 	FROM [SupportData].[TempOperationsForInsertingOperations]						as t
 	INNER JOIN [InputData].[Rout]	as r ON t.idRout = r.IdRout 
-	WHERE Code = 'OP01' 
+	INNER JOIN [InputData].[SemiProducts] as sp  ON sp.IdSemiProduct = r.SemiProductId 
+	WHERE (Code = 'OP01' 
     AND LEN(RTRIM(LTRIM(TitleOperPr))) <> 0 
-	AND r.AreaId = 3   -- поставил тут еще фильтр по цеху потому что ОП01 встречается и в ТМ 9го цеха при прыжках
+	AND r.AreaId = 3)   -- поставил тут еще фильтр по цеху потому что ОП01 встречается и в ТМ 9го цеха при прыжках
+	OR (sp.SimpleProductId = 10 AND Code = 'OP02') -- фильтр стелек, которые еще дорабатывают во втором цехе (операция 560)
 	ORDER BY 
 		t.idRout
 		,OperOrder*10	

@@ -18,7 +18,7 @@ SELECT [IdSemiProduct]
 FROM [InputData].[SemiProducts] as sp
 --Просееваем заведомо не нужные ПФ (для которых нет RULES)
 WHERE sp.SimpleProductId IN (SELECT DISTINCT
-								   [ForSemiProduct]
+								   [ForSimpleProduct]
 							  FROM  [SupportData].[RuleGroup])
 
 

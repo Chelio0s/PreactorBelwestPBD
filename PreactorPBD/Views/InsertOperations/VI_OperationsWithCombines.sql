@@ -9,11 +9,12 @@ r.IdRout
 , vi.CategoryOperation
 , vi.OperOrder
 , vi.Code
-, 1 AS NPP
+,  NPP
 , vi.KTOPN
 , vi.REL
 , 0 AS isMappingRule
 , ar.IdArea
+, vi.SimpleProductId
 FROM            InputData.Rout AS r 
 INNER JOIN		InputData.Areas AS ar ON ar.IdArea = r.AreaId
 INNER JOIN		InputData.VI_OperationsWithSemiProducts_FAST AS vi ON vi.IdSemiProduct = r.SemiProductId 
@@ -29,11 +30,12 @@ r.IdRout
 , vi.CategoryOperation
 , vi.OperOrder
 , vi.Code
-, 1 AS NPP
+, NPP
 , vi.KTOPN
 , vi.REL
 , 0 AS isMappingRule
 , ar.IdArea
+, vi.SimpleProductId
 FROM            InputData.Rout AS r 
 INNER JOIN		InputData.Areas AS ar ON ar.IdArea = r.AreaId
 INNER JOIN		InputData.VI_OperationsWithSemiProducts_FAST AS vi ON vi.IdSemiProduct = r.SemiProductId 
