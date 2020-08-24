@@ -1,115 +1,188 @@
 ﻿CREATE PROCEDURE [InputData].[sp_InsertSingleArticleFull]
 	@art nvarchar(99)
 AS
-print 'sp_InsertToArticle'
+DECLARE @timeStart datetime, @diff int
+SET @timeStart = GETDATE()
+PRINT 'sp_InsertToArticle'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_InsertToArticle]                               @article = @art
-SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertToArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-print 'sp_CreateNomenclatureForSingleArticle'
+PRINT 'sp_CreateNomenclatureForSingleArticle'
 
-SET STATISTICS TIME ON  
+ 
     EXEC [InputData].[sp_CreateNomenclatureForSingleArticle]            @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateNomenclatureForSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-print 'sp_CreateNomenclatureForSingleArticle'
+PRINT 'sp_CreateNomenclatureForSingleArticle'
 
-SET STATISTICS TIME ON  
+ 
     EXEC [InputData].[sp_CreateSemiProductFroSingleArticle]             @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateSemiProductFroSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-print 'sp_EntriSemiProductForArticle'
+PRINT 'sp_EntriSemiProductForArticle'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_EntriSemiProductForArticle]                    @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_EntriSemiProductForArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-print 'sp_CreateCutters'
-
-SET STATISTICS TIME ON  
+PRINT 'sp_CreateCutters'
+  
     EXEC [InputData].[sp_CreateCutters]
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateCutters]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-print 'sp_CreateSecondaryConstraint_Cutters'
+PRINT 'sp_CreateSecondaryConstraint_Cutters'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_CreateSecondaryConstraint_Cutters]
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateSecondaryConstraint_Cutters]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-print 'sp_CreateConstraintCalendar_Cutters'
+PRINT 'sp_CreateConstraintCalendar_Cutters'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_CreateConstraintCalendar_Cutters]
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_CreateConstraintCalendar_Cutters]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-    print 'sp_InsertCombinesSingleArticle'
+PRINT 'sp_InsertCombinesSingleArticle'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_InsertCombinesSingleArticle]                   @article = @art
-    SET STATISTICS TIME OFF
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertCombinesSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
 
-print 'sp_FillTempOperationTableSingleArticle'
+PRINT 'sp_FillTempOperationTableSingleArticle'
 
-SET STATISTICS TIME ON  
+  
     EXEC [InputData].[sp_FillTempOperationTableSingleArticle]           @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_FillTempOperationTableSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
-print 'sp_DeleteInappropriateSemiProducts'
+PRINT 'sp_DeleteInappropriateSemiProducts'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_DeleteInappropriateSemiProducts]               -- Удаляем пустые ПФ
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_DeleteInappropriateSemiProducts]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()
 
 
-print 'sp_InsertRoutesSingleArticle'
+PRINT 'sp_InsertRoutesSingleArticle'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_InsertRoutesSingleArticle]                     @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertRoutesSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE() 
 
-print 'sp_InsertOperationsSingleArticle]'
+PRINT 'sp_InsertOperationsSingleArticle]'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_InsertOperationsSingleArticle]                 @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertOperationsSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE() 
+ 
 
-print 'sp_DeleteInappropriateRoutes'
+PRINT 'sp_DeleteInappropriateRoutes'
 
-SET STATISTICS TIME ON  
+ 
     EXEC [InputData].[sp_DeleteInappropriateRoutes]                     -- Удаляем пустые ТМ
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_DeleteInappropriateRoutes]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()  
 
-print 'sp_InsertConstraintsOnOperationsSingleArticle'
+PRINT 'sp_InsertConstraintsOnOperationsSingleArticle'
 
-SET STATISTICS TIME ON  
+  
     EXEC [InputData].[sp_InsertConstraintsOnOperationsSingleArticle]    @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertConstraintsOnOperationsSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE()  
 
-print 'sp_InsertOperationsInResourcesSingleArticle'
+PRINT 'sp_InsertOperationsInResourcesSingleArticle'
 
-SET STATISTICS TIME ON  
+ 
     EXEC [InputData].[sp_InsertOperationsInResourcesSingleArticle]      @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertOperationsInResourcesSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE() 
 
-print 'sp_FillTempMaterialsSingleArticle'
+PRINT 'sp_FillTempMaterialsSingleArticle'
 
-SET STATISTICS TIME ON  
+ 
     EXEC [InputData].[sp_FillTempMaterialsSingleArticle]                @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_FillTempMaterialsSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE() 
 
-print 'sp_InsertMaterials'
+PRINT 'sp_InsertMaterials'
 
-SET STATISTICS TIME ON  
+  
     EXEC [InputData].[sp_InsertMaterials]
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMaterials]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE() 
 
-print 'sp_InsertSpecificationsSingleArticle'
+PRINT 'sp_InsertSpecificationsSingleArticle'
 
-SET STATISTICS TIME ON  
+
     EXEC [InputData].[sp_InsertSpecificationsSingleArticle]             @article = @art
-    SET STATISTICS TIME OFF 
+    SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+    EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertSpecificationsSingleArticle]',
+									   @timeMs = @diff
+    SET @timeStart = GETDATE() 
+
+
+    PRINT 'Загрузка материаллов из НСИ'
+	EXEC [InputData].[sp_InsertMissedMaterials]					-- заполняем материалы которые грузим из НСИ
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMissedMaterials]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
+
+    PRINT 'Загрузка спецификаций из НСИ'
+	EXEC [InputData].[sp_InsertMissedSpecificationSingleArticle] @article = @art	-- заполняем спецификации из НСИ
+	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
+	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMissedMaterials]',
+									   @timeMs = @diff
+	SET @timeStart = GETDATE() 
+
+    
 
 RETURN 0
  

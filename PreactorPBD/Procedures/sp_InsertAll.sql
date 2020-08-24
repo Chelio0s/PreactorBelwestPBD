@@ -14,7 +14,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Загрузка профессий'
+	PRINT 'Загрузка профессий'
 	
 	 
 	EXEC [InputData].[sp_InsertProfsIntoPreactor]
@@ -23,7 +23,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Загрузка рабочих'
+	PRINT 'Загрузка рабочих'
 	
 	 
 	EXEC [InputData].[sp_InsertActualEmployees]
@@ -32,7 +32,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Загрузка рабочих в профессии'
+	PRINT 'Загрузка рабочих в профессии'
 	
 	 
 	EXEC [InputData].[sp_InsertEmployeesInProffs]
@@ -41,7 +41,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Загрузка календарей работы цехов'
+	PRINT 'Загрузка календарей работы цехов'
 	
 	 
 	EXEC [InputData].[sp_InsertOrgUnitsCalendars]
@@ -50,7 +50,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Загрузка рабочих дней'
+	PRINT 'Загрузка рабочих дней'
 	
 	 
 	EXEC [InputData].[sp_InsertWorkDays]
@@ -59,7 +59,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Загрузка оборуд.'
+	PRINT 'Загрузка оборуд.'
 	
 	 
 	EXEC [InputData].[sp_InsertEquipmentWithDelete]
@@ -68,7 +68,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Загрузка ремонтов'
+	PRINT 'Загрузка ремонтов'
 	
  
 	EXEC [InputData].[sp_PutResourcesOnRepair]
@@ -77,7 +77,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Включение оборуд. в группы'
+	PRINT 'Включение оборуд. в группы'
 	
 	 
 	EXEC [InputData].[sp_IncludeEquipmentIntoGroups]
@@ -86,7 +86,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Создание номенклатур (арт + размер)'
+	PRINT 'Создание номенклатур (арт + размер)'
 	
 	 
 	EXEC [InputData].[sp_CreateNomenclature]
@@ -95,7 +95,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Создание ПФ'
+	PRINT 'Создание ПФ'
 	
 	 
 	EXEC [InputData].[sp_CreateSemiProducts]
@@ -104,7 +104,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Включение ПФ в ПФ'
+	PRINT 'Включение ПФ в ПФ'
 	
 	 
 	EXEC [InputData].[sp_CreateEntrySemiProducts]
@@ -113,7 +113,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE()
 	
-	print 'Создание резаков'
+	PRINT 'Создание резаков'
 	
 	 
 	EXEC [InputData].[sp_CreateCutters]
@@ -129,7 +129,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Созание календаря ограничений, резаки'
+	PRINT 'Созание календаря ограничений, резаки'
 	
 	 
 	EXEC [InputData].[sp_CreateConstraintCalendar_Cutters]
@@ -138,7 +138,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Создание компбинаций операций'
+	PRINT 'Создание компбинаций операций'
 	
 	 
 	EXEC [InputData].[sp_InsertCombines]							-- инсертим комбинации всех правил для создания ТМов
@@ -147,7 +147,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Заполнение временной таблицы операций'
+	PRINT 'Заполнение временной таблицы операций'
 	
 	 
 	EXEC [InputData].[sp_FillTempOperationTable]				-- заполняем вр. таблицу с опер-ми
@@ -156,7 +156,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Удаляем пустые ПФ  '
+	PRINT 'Удаляем пустые ПФ  '
 	
 	 
 	EXEC [InputData].[sp_DeleteInappropriateSemiProducts]			-- Удаляем пустые ПФ
@@ -165,7 +165,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Создание маршрутов'
+	PRINT 'Создание маршрутов'
 	
 	 
 	EXEC [InputData].[sp_InsertRoutes]							-- создаем маршруты
@@ -174,7 +174,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Загрузка операций'
+	PRINT 'Загрузка операций'
 	
 	 
 	EXEC [InputData].[sp_InsertOperations]						-- заполняем операции для продуктов
@@ -183,7 +183,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Удаляем пустые ТМ'
+	PRINT 'Удаляем пустые ТМ'
 	
 	 
 	EXEC [InputData].[sp_DeleteInappropriateRoutes]				-- Удаляем пустые ТМ
@@ -192,7 +192,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Ставим ограничения на операции'
+	PRINT 'Ставим ограничения на операции'
 	
 	 
 	EXEC [InputData].[sp_InsertContraintsOnOperations]			-- Ставим ограничения на операции
@@ -201,7 +201,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Ставим операции на рессурсы'
+	PRINT 'Ставим операции на рессурсы'
 	
 	 
 	EXEC [InputData].[sp_InsertOperationsInResources]			   -- заливаем операции на рессурсы
@@ -210,7 +210,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Создание временной таблицы материаллов'
+	PRINT 'Создание временной таблицы материаллов'
 	
 	 
 	EXEC [InputData].[sp_FillTempMaterials]						-- заполняем вр. таблицу с мат-ми
@@ -219,7 +219,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Загрузка мат-ов'
+	PRINT 'Загрузка мат-ов'
 	
 	 
 	EXEC [InputData].[sp_InsertMaterials]
@@ -228,7 +228,7 @@ BEGIN
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 	
-	print 'Загрузка спецификаций'
+	PRINT 'Загрузка спецификаций'
 	
 	 
 	EXEC [InputData].[sp_InsertSpecifications]					-- заполняем спецификации
@@ -236,16 +236,16 @@ BEGIN
 	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertSpecifications]',
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
-	print 'Загрузка материаллов из НСИ'
+	PRINT 'Загрузка материаллов из НСИ'
 	EXEC [InputData].[sp_InsertMissedMaterials]					-- заполняем материалы которые грузим из НСИ
 	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
 	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMissedMaterials]',
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 
-	SET @timeStart = GETDATE() 
 
-	print 'Загрузка спецификаций'
+
+	PRINT 'Загрузка спецификаций'
 	EXEC [InputData].[sp_InsertMissedSpecifications]				-- заполняем спецификации из НСИ
 	SET @diff = DATEDIFF(ms, @timeStart, GETDATE())
 	EXEC [LogData].[WriteInsertingLog] @text = '[InputData].[sp_InsertMissedSpecifications]',
