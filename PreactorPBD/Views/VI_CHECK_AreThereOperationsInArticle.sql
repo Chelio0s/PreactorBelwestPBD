@@ -1,7 +1,8 @@
 ﻿CREATE VIEW [InputData].[VI_CHECK_AreThereOperationsInArticle]
 	AS 
 SELECT 
-	IsTopCut
+	Title as Article
+	,IsTopCut
 	,IsBlank
 	,IsFinishedShoes
 FROM 
