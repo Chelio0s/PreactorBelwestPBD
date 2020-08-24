@@ -7,7 +7,7 @@ AS
   --Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам
   PRINT 'Все для 1 цеха с правилами (комбинациями операций), сортировка по правилам'
   INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
-  SELECT [IdRout]
+  SELECT DISTINCT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
       ,[IdProfession]
@@ -29,7 +29,7 @@ AS
 	--Все для 1 цеха стандартные роуты (там операции строго сортированы по правилам)
   PRINT 'Все для 1 цеха (там операции строго сортированы по правилам)'
   INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
-  SELECT [IdRout]
+  SELECT DISTINCT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
       ,[IdProfession]
@@ -51,7 +51,7 @@ AS
   PRINT 'JUMP для цеха N2'
   TRUNCATE TABLE [SupportData].[TempJumpSemiProduct]
   INSERT INTO [SupportData].[TempJumpSemiProduct]
-  SELECT
+  SELECT DISTINCT
        Article
 	  ,mr.IdMergeRoutes
 	  ,IdSemiProduct
@@ -119,7 +119,7 @@ AS
   --Все для 2 цеха без правил, сортировка по NPP
    PRINT 'Все для 2 цеха без правил, сортировка по NPP'
    INSERT INTO [SupportData].[TempOperationsForInsertingOperations]
-   SELECT [IdRout]
+   SELECT DISTINCT [IdRout]
       ,[TitlePreactorOper]
       ,[IdSemiProduct]
       ,[IdProfession]
