@@ -182,5 +182,7 @@ PRINT 'sp_InsertSpecificationsSingleArticle'
 									   @timeMs = @diff
 	SET @timeStart = GETDATE() 
 
+    
+
 RETURN 0
  
