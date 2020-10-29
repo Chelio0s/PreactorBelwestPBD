@@ -60,6 +60,7 @@
     <Folder Include="Tables" />
     <Folder Include="CLR" />
     <Folder Include="Models" />
+    <Folder Include="Procedure" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Functions\udf_GetFullOperation.sql" />
@@ -68,6 +69,12 @@
     <Build Include="Tables\Resources.sql" />
     <Build Include="Tables\Orders.sql" />
     <Build Include="Tables\OrdersRelation.sql" />
+    <Build Include="Functions\udf_GetArticle.sql" />
+    <Build Include="Functions\udf_GetSpecification.sql" />
+    <Build Include="Tables\Operation.sql" />
+    <Build Include="Tables\Specification.sql" />
+    <Build Include="Procedure\sp_InsertAll.sql" />
+    <Build Include="Tables\Article.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BelwestDb.refactorlog" />

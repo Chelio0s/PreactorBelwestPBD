@@ -38,12 +38,6 @@ public partial class StoredProcedures
         return 0;
     }
 
-    /// <summary>
-    /// Заполнение связей между ПФ
-    /// </summary>
-    /// <param name="simpleProduct">Коллекция заказов ПФ</param>
-    /// <param name="nomeclature">Заказ на номенклатуру</param>
-    /// <param name="sqlConnection"></param>
     private static void FillRelationForSimpleProduct(List<OrderWithSp> simpleProduct, Order nomeclature, SqlConnection sqlConnection)
     {
         List<EntrySimpleProduct> entrySimpleProducts = GetEntrySimpleProducts(sqlConnection);

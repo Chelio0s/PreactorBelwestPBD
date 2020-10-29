@@ -14,15 +14,26 @@ AS
 BEGIN
 	INSERT @returntable
 	SELECT 
-r.IdRout AS RoutCode
+tabl.RoutCode AS RoutCode
 ,sp.Title AS SemiProductName
-,op.IdOperation AS OperationCode
+,owk.KTOP AS OperationCode
 ,op.NumberOp AS OperationNumber
 ,LEAD(op.NumberOp) OVER(PARTITION BY op.RoutId ORDER BY op.NumberOp) AS OperationNextNumber
 ,op.Title AS OperationName
 FROM [PreactorSDB].[InputData].[Rout] AS r
 INNER JOIN [PreactorSDB].[InputData].[SemiProducts] AS sp ON sp.IdSemiProduct = r.SemiProductId 
 INNER JOIN [PreactorSDB].[InputData].[Operations] AS op ON op.RoutId = R.IdRout
+INNER JOIN [PreactorSDB].[InputData].[OperationWithKTOP] AS owk ON owk.OperationId = op.IdOperation
+INNER JOIN [InputData].[Nomenclature] AS nom ON nom.IdNomenclature = sp.NomenclatureID
+INNER JOIN [InputData].[Article] AS art ON nom.ArticleId = art.IdArticle
+INNER JOIN [SupportData].[Orders] AS ord ON art.IdArticle = ord.ArticleId
+INNER JOIN (SELECT r.IdRout,
+			REPLACE(nom.Number_, ' ','_')+'_'+CAST(sp.SimpleProductId AS varchar(max))+'_' + CAST (ROW_NUMBER() OVER (PARTITION BY nom.IdNomenclature , sp.SimpleProductId ORDER BY IdSemiProduct) - 1 AS varchar(max)) AS [RoutCode]
+			FROM [PreactorSDB].[InputData].[Rout] AS r
+			INNER JOIN [PreactorSDB].[InputData].[SemiProducts] AS sp ON r.SemiProductId = sp.IdSemiProduct
+			INNER JOIN [InputData].[Nomenclature] AS nom ON nom.IdNomenclature = sp.NomenclatureID
+			INNER JOIN [InputData].[Article] AS art ON nom.ArticleId = art.IdArticle
+			INNER JOIN [SupportData].[Orders] AS ord ON art.IdArticle = ord.ArticleId) AS tabl ON tabl.IdRout = r.IdRout
 
 	RETURN
 END

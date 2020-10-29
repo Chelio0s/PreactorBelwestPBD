@@ -375,6 +375,7 @@
     <Build Include="Procedures\sp_InsertMissedSpecifications.sql" />
     <Build Include="Views\VI_CHECK_AreThereOperationsInArticle.sql" />
     <Build Include="Procedures\InsertSingleArticle\sp_InsertMissedSpecificationSingleArticle.sql" />
+    <Build Include="Tables\SupportData\Orders.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PreactorPBD.refactorlog" />

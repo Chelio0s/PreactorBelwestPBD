@@ -945,4 +945,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="IdOperation" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="cd2023ea-ff0e-4987-b7d0-e61d039004d7" ChangeDateTime="10/29/2020 07:28:18">
+    <Property Name="ElementName" Value="[SupportData].[Orders].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[SupportData].[Orders]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="IdOrder" />
+  </Operation>
 </Operations>
