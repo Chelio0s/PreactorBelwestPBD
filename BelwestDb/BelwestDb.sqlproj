@@ -75,6 +75,7 @@
     <Build Include="Tables\Specification.sql" />
     <Build Include="Procedure\sp_InsertAll.sql" />
     <Build Include="Tables\Article.sql" />
+    <Build Include="Tables\TechProcess.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BelwestDb.refactorlog" />
