@@ -74,11 +74,11 @@ public partial class StoredProcedures
     }
     private static int InsertOrder(Order order, SqlConnection sqlConnection)
     {
-        SqlCommand command = new SqlCommand("INSERT INTO [dbo].[Orders]" +
-            "([ArticleCode]" +
-            ",[ArticleName]" +
-            ",[ArticleVersion]" +
-            ",[CountOnOrder]" +
+        SqlCommand command = new SqlCommand("INSERT INTO [dbo].[ORDERS]" +
+            "([Codeartic]" +
+            ",[LIBARTIC]" +
+            ",[VER_ART]" +
+            ",[QTE]" +
             ",[DateStart]" +
             ",[DateEnd]" +
             ",[Priority])" +
@@ -91,7 +91,7 @@ public partial class StoredProcedures
             $",'{order.DateEnd}'" +
             $",{order.Priority})", sqlConnection);
         command.ExecuteNonQuery();
-        command = new SqlCommand("SELECT MAX(OrderCode) FROM [dbo].[Orders]", sqlConnection);
+        command = new SqlCommand("SELECT MAX(NOF) FROM [dbo].[ORDERS]", sqlConnection);
         return (int)command.ExecuteScalar();
     }
     private static List<double> GetSizes(string art, SqlConnection sqlConnection)
@@ -111,13 +111,13 @@ public partial class StoredProcedures
     }
     private static void CreateRelation(Order parent, Order child, SqlConnection sqlConnection)
     {
-        SqlCommand command = new SqlCommand("INSERT INTO [dbo].[OrdersRelation]" +
-                                            "(ParentOrderCode" +
-                                            ",ParentArticleCode" +
-                                            ",ParentArticleName" +
-                                            ",ChildOrderCode" +
-                                            ",ChildArticleCode" +
-                                            ",ChildArticleName" +
+        SqlCommand command = new SqlCommand("INSERT INTO [dbo].[LINKS]" +
+                                            "(B_P_NOF" +
+                                            ",B_P_CODEATIC" +
+                                            ",B_P_LIBARTIC" +
+                                            ",NOF" +
+                                            ",CODEARTIC" +
+                                            ",LIBARTIC" +
                                             ") VALUES (" +
                                             $" {parent.OrderCode}" +
                                             $",'{parent.ArticleCode}'" +

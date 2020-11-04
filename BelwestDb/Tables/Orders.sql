@@ -1,10 +1,10 @@
-﻿CREATE TABLE [dbo].[Orders]
+﻿CREATE TABLE [dbo].[ORDERS]
 (
-	[OrderCode] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [ArticleCode] VARCHAR(30) NOT NULL, 
-    [ArticleName] VARCHAR(50) NOT NULL, 
-    [ArticleVersion] VARCHAR(10) NOT NULL DEFAULT 00, 
-    [CountOnOrder] INT NOT NULL, 
+	[NOF] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Codeartic] VARCHAR(30) NOT NULL, 
+    [LIBARTIC] VARCHAR(50) NOT NULL, 
+    [VER_ART] INT NOT NULL DEFAULT 0, 
+    [QTE] INT NOT NULL, 
     [DateStart] DATE NOT NULL, 
     [DateEnd] DATE NOT NULL, 
     [Priority] INT NOT NULL DEFAULT 10

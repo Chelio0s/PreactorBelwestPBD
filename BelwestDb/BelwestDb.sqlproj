@@ -63,19 +63,15 @@
     <Folder Include="Procedure" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Functions\udf_GetFullOperation.sql" />
     <Build Include="Functions\udf_GetResourceFromSDB.sql" />
-    <Build Include="Functions\udf_GetTechProcess.sql" />
-    <Build Include="Tables\Resources.sql" />
-    <Build Include="Tables\Orders.sql" />
-    <Build Include="Tables\OrdersRelation.sql" />
-    <Build Include="Functions\udf_GetArticle.sql" />
-    <Build Include="Functions\udf_GetSpecification.sql" />
-    <Build Include="Tables\Operation.sql" />
-    <Build Include="Tables\Specification.sql" />
+    <Build Include="Tables\MACH.sql" />
+    <Build Include="Tables\ORDERS.sql" />
+    <Build Include="Tables\LINKS.sql" />
+    <Build Include="Tables\OPE.sql" />
+    <Build Include="Tables\BOM.sql" />
     <Build Include="Procedure\sp_InsertAll.sql" />
-    <Build Include="Tables\Article.sql" />
-    <Build Include="Tables\TechProcess.sql" />
+    <Build Include="Tables\ART.sql" />
+    <Build Include="Tables\PHAS.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="BelwestDb.refactorlog" />
